@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 import java.io.IOException;
 import java.io.FileWriter;
 import java.io.FileReader;
@@ -22,6 +21,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
  * tanto a leitura quanto a escrita dos arquivos texto.
  */
 public class GerenciadorDeArquivos {
+    private ArrayList<String[]> tarifas;
     private ArrayList<String[]> veiculos;
     private ArrayList<String[]> atendimentos;
     private ArrayList<String> logs;
@@ -30,9 +30,27 @@ public class GerenciadorDeArquivos {
      * Construtor da classe GerenciadorDeArquivos.
      */
     public GerenciadorDeArquivos() {
+        tarifas = new ArrayList<String[]>();
         veiculos = new ArrayList<String[]>();
         atendimentos = new ArrayList<String[]>();
         logs = new ArrayList<String>();
+    }
+    
+    /**
+     * Método utilizado para obter uma tarifa que foi lido do
+     * arquivo de dados.
+     * @return String[] - um vetor de campos de texto que compõem uma
+     * tarifa.
+     * @throws RuntimeException - exceção indicando falha ao remover uma
+     * tarifa.
+     */
+    public String[] removerTarifa() throws RuntimeException {
+        try {
+            return tarifas.remove(0);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(String.format("Nao foi possivel remover uma tarifa\n > %s", e.getMessage()));
+        }
     }
     
     /**
@@ -89,10 +107,16 @@ public class GerenciadorDeArquivos {
                 
                 try {
                     switch (validarCampos(campos)) {
+                        case 'T':
+                            tarifas.add(campos);
+                            
+                            break;
+                        
                         case 'V':
                             veiculos.add(campos);
                             
                             break;
+                        
                         case 'A':
                             atendimentos.add(campos);
                             
@@ -151,7 +175,10 @@ public class GerenciadorDeArquivos {
         String texto;
         
         texto = "Todos os campos devem ser separados por uma \",\".\n\n" +
-                "O primeiro campo pode ser \"veiculo\" ou \"atendimento\":\n" +
+                "O primeiro campo pode ser \"tarifa\", \"veiculo\" ou \"atendimento\":\n" +
+                " > Campos da \"tarifa\":\n" +
+                "    > O segundo campo pode ser \"fixa\" ou \"reboque\"\n" +
+                "    > O terceiro campo pode ser valor double\n" +
                 " > Campos do \"veiculo\":\n" +
                 "    > O segundo campo pode ser \"leve\" ou \"pesado\"\n" +
                 "    > O terceiro campo pode ser \"true\" ou \"false\"\n" +
@@ -174,6 +201,20 @@ public class GerenciadorDeArquivos {
     @Override
     public String toString() {
         String texto = "Gerenciador de arquivos (GDA)\n";
+        
+        texto += "\nTarifas:\n";
+        if (atendimentos.size() == 0) {
+            texto += " > Sem tarifas";
+        }
+        else {
+            for (String[] campos: tarifas) {
+                texto += " > ";
+                for (String campo: campos) {
+                    texto += campo + " ";
+                }
+                texto += "\n";
+            }
+        }
         
         texto += "\nVeiculos:\n";
         if (veiculos.size() == 0) {
@@ -214,6 +255,35 @@ public class GerenciadorDeArquivos {
         }
         
         return texto;
+    }
+    
+    /**
+     * Método responsável pela validação de uma tarifa.
+     * @param campos - um vetor de campos de texto que compõem uma
+     * tarifa.
+     * @throws RuntimeException - alguma exceção indicando que algum dos
+     * campos e invalido.
+     */
+    private static void validarTarifa(String[] campos) throws RuntimeException {
+        String log = "";
+        
+        if (campos.length != 3) {
+            throw new RuntimeException(String.format(" > A tarifa deveria ter 3 campos, nao: %s\n", campos.length));
+        }
+        if (!(campos[1].equals("fixa") || campos[1].equals("reboque"))) {
+            throw new RuntimeException(String.format(" > O segundo campo de indentificacao deveria ser \"fixa\" ou \"reboque\", nao: \"%s\"\n", campos[1]));
+        }
+        
+        try {
+            Double.parseDouble(campos[2]);
+        }
+        catch (NumberFormatException e) {
+            log += String.format(" > O terceiro campo deveria ser um valor double, nao: \"%s\"\n", campos[2]);
+        }
+        
+        if (!log.equals("")) {
+            throw new RuntimeException(log);
+        }
     }
     
     /**
@@ -276,7 +346,7 @@ public class GerenciadorDeArquivos {
             Double.parseDouble(campos[2]);
         }
         catch (NumberFormatException e) {
-            log += String.format(" > O terceiro campo deveria ser um valor double, nao: \"%s\"\n", campos[3]);
+            log += String.format(" > O terceiro campo deveria ser um valor double, nao: \"%s\"\n", campos[2]);
         }
         
         if (!log.equals("")) {
@@ -299,6 +369,11 @@ public class GerenciadorDeArquivos {
             if (campos[0].equals("")) {
                 return ' ';
             }
+            else if (campos[0].equals("tarifa")) {
+                validarTarifa(campos);
+                
+                return 'T';
+            }
             else if (campos[0].equals("veiculo")) {
                 validarVeiculo(campos);
                 
@@ -310,7 +385,7 @@ public class GerenciadorDeArquivos {
                 return 'A';
             }
             else {
-                throw new RuntimeException(String.format(" > O primeiro campo de indentificacao deveria ser \"veiculo\" ou \"atendimento\", nao: \"%s\"\n", campos[0]));
+                throw new RuntimeException(String.format(" > O primeiro campo de indentificacao deveria ser \"tarifa\", \"veiculo\" ou \"atendimento\", nao: \"%s\"\n", campos[0]));
             }
         }
         catch (RuntimeException e) {

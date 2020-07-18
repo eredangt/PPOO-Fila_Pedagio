@@ -20,6 +20,22 @@ public class TesteGDA {
         System.out.println(gda);
         
         try {
+            String[] tarifa;
+            while (true) {
+                tarifa = gda.removerTarifa();
+                for (String s: tarifa) {
+                    System.out.print(s + " ");
+                }
+                System.out.println();
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
+        System.out.println();
+        
+        try {
             String[] veiculo;
             while (true) {
                 veiculo = gda.removerVeiculo();
@@ -52,6 +68,6 @@ public class TesteGDA {
         System.out.println();
         System.out.println(gda);
         
-        gda.gerarArquivoDeFormatacao();
+        GerenciadorDeArquivos.gerarArquivoDeFormatacao();
     }
 }

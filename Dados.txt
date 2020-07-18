@@ -1,5 +1,21 @@
 alguma,coisa
 
+tarifa
+
+tarifa,fixa,2.5,10
+
+tarifa,passageiros,5.2
+
+tarifa,fixa,a
+
+tarifa,fixa,1
+
+tarifa,fixa,5.2
+
+tarifa,reboque,3
+
+tarifa,reboque,2.3
+
 veiculo
 
 veiculo,leve,false,true,4
