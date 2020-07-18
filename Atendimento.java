@@ -40,7 +40,7 @@ public abstract class Atendimento{
 	* com os atributos da classe.
 	*/
 	public String toString(){
-		return "CABINE " + getIdAtendimento() + ":\nTEMPO: " + getTempoAtendimento() + "\n";
+		return "ID ATENDIMENTO: " + getIdAtendimento() + "\nTEMPO: " + getTempoAtendimento() + "\n";
 	}
 	
 	/**
