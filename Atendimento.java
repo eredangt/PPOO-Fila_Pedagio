@@ -18,7 +18,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 * Os tipos são: atendimento por cliente e por cobrança automática.
 */
 public abstract class Atendimento {
-	private static int numeroAtendimentos;
+	private static int numeroAtendimentos = 0;
 	private int idAtendimento;
 	private double tempoAtendimento;
 	
@@ -28,7 +28,7 @@ public abstract class Atendimento {
 	* @param tempo atendimento double que define um tempo base 
 	* para as operações naquele tipo de atendimento.
 	*/
-	public Atendimento(double umTempoAtendimento) {	
+	public Atendimento(double umTempoAtendimento) {
 		tempoAtendimento = umTempoAtendimento;
 		numeroAtendimentos += 1;
 		idAtendimento = numeroAtendimentos;

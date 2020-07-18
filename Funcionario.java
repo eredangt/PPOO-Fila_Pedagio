@@ -15,7 +15,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 * Sendo uma subclasse de Atendimento.
 */
 public class Funcionario extends Atendimento {
-	private static int numeroFuncionarios;
+	private static int numeroFuncionarios = 0;
 	private int idFuncionario;
 	
 	/**
@@ -47,5 +47,15 @@ public class Funcionario extends Atendimento {
 	*/
 	protected int getIdFuncionario() {
 		return idFuncionario;
+	}
+	
+	/**
+	* Método que informa quantos objetos da classe Funcionario
+	* foram instanciados.
+	* @return int - contendo o número que representa
+	* quantos funcionario existem no sistema até o momento.
+	*/
+	protected int getNumeroFuncionarios() {
+		return numeroFuncionarios;
 	}
 }

@@ -15,7 +15,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 * Sendo uma subclasse de Atendimento.
 */
 public class Automatico extends Atendimento {
-	private static int numeroAutomaticos;
+	private static int numeroAutomaticos = 0;
 	private int idAutomatico;
 	
 	/**
@@ -47,5 +47,15 @@ public class Automatico extends Atendimento {
 	*/
 	protected int getIdAutomatico() {
 		return idAutomatico;
+	}
+	
+	/**
+	* Método que informa quantos objetos da classe Automatico
+	* foram instanciados.
+	* @return int - contendo o número que representa
+	* quantas cobranças automáticas existem no sistema até o momento.
+	*/
+	protected int getNumeroAutomaticos() {
+		return numeroAutomaticos;
 	}
 }
