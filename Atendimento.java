@@ -17,7 +17,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 * pelas classes filhas. 
 * Os tipos são: atendimento por cliente e por cobrança automática.
 */
-public abstract class Atendimento{
+public abstract class Atendimento {
 	private static int numeroAtendimentos;
 	private int idAtendimento;
 	private double tempoAtendimento;
@@ -28,7 +28,7 @@ public abstract class Atendimento{
 	* @param tempo atendimento double que define um tempo base 
 	* para as operações naquele tipo de atendimento.
 	*/
-	public Atendimento(double umTempoAtendimento){	
+	public Atendimento(double umTempoAtendimento) {	
 		tempoAtendimento = umTempoAtendimento;
 		numeroAtendimentos += 1;
 		idAtendimento = numeroAtendimentos;
@@ -39,7 +39,7 @@ public abstract class Atendimento{
 	* @return String - uma cadeia de caracteres formatada
 	* com os atributos da classe.
 	*/
-	public String toString(){
+	public String toString() {
 		return "ID ATENDIMENTO: " + getIdAtendimento() + "\nTEMPO: " + getTempoAtendimento() + "\n";
 	}
 	
@@ -49,7 +49,7 @@ public abstract class Atendimento{
 	* @return int - contendo o número que representa
 	* quantos atendimentos existem no sistema até o momento.
 	*/
-	protected int getNumeroAtendimentos(){
+	protected int getNumeroAtendimentos() {
 		return numeroAtendimentos;
 	}
 	
@@ -57,7 +57,7 @@ public abstract class Atendimento{
 	* Método que informa o identificador único de um atendimento.
 	* @return int - contendo o número que representa o Id.
 	*/
-	protected int getIdAtendimento(){
+	protected int getIdAtendimento() {
 		return idAtendimento;
 	}
 	
@@ -65,7 +65,7 @@ public abstract class Atendimento{
      * Método que informa o tempo de operação daquele atendimento.
      * @return double - contendo o número o tempo.
      */
-	protected double getTempoAtendimento(){
+	protected double getTempoAtendimento() {
 		return tempoAtendimento;
 	}
 }

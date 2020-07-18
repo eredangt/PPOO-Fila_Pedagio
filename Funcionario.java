@@ -14,7 +14,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 * Classe que representa o atendimento por FUNCIONÁRIO no pedágio.
 * Sendo uma subclasse de Atendimento.
 */
-public class Funcionario extends Atendimento{
+public class Funcionario extends Atendimento {
 	private static int numeroFuncionarios;
 	private int idFuncionario;
 	
@@ -24,7 +24,7 @@ public class Funcionario extends Atendimento{
 	* @param tempo atendimento double que define um tempo base 
 	* para as operações naquele tipo de atendimento.
 	*/
-	public Funcionario(double tempoAtendimento){
+	public Funcionario(double tempoAtendimento) {
 		super(tempoAtendimento);
 		
 		numeroFuncionarios += 1;
@@ -37,7 +37,7 @@ public class Funcionario extends Atendimento{
 	* com os atributos da classe.
 	*/
 	@Override
-	public String toString(){
+	public String toString() {
 		return super.toString() + "Identificação Funcionário: " + getIdFuncionario() + "\n";
 	}
 	
@@ -45,7 +45,7 @@ public class Funcionario extends Atendimento{
 	* Método que informa o identificador único de um funcionário.
 	* @return int - contendo o número que representa o ID.
 	*/
-	protected int getIdFuncionario(){
+	protected int getIdFuncionario() {
 		return idFuncionario;
 	}
 }

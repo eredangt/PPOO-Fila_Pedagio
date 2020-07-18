@@ -14,7 +14,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 * Classe que representa o atendimento por COBRANÇA AUTOMÁTICA no pedágio.
 * Sendo uma subclasse de Atendimento.
 */
-public class Automatico extends Atendimento{
+public class Automatico extends Atendimento {
 	private static int numeroAutomaticos;
 	private int idAutomatico;
 	
@@ -24,7 +24,7 @@ public class Automatico extends Atendimento{
 	* @param tempo atendimento double que define um tempo base 
 	* para as operações naquele tipo de atendimento.
 	*/
-	public Automatico(double tempoAtendimento){
+	public Automatico(double tempoAtendimento) {
 		super(tempoAtendimento);
 		
 		numeroAutomaticos += 1;
@@ -37,7 +37,7 @@ public class Automatico extends Atendimento{
 	* com os atributos da classe.
 	*/
 	@Override
-	public String toString(){
+	public String toString() {
 		return super.toString() + "Identificação Cobrança Automática: " + getIdAutomatico() + "\n";
 	}
 	
@@ -45,7 +45,7 @@ public class Automatico extends Atendimento{
 	* Método que informa o identificador único de uma cobrança automática.
 	* @return int - contendo o número que representa o ID.
 	*/
-	protected int getIdAutomatico(){
+	protected int getIdAutomatico() {
 		return idAutomatico;
 	}
 }
