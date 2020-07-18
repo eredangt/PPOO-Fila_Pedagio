@@ -14,7 +14,8 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
  * Classe que representa um veículo leve em uma fila de pedágio.
  * Sendo também uma subclasse de veículo.
  */
-class VeiculoLeve extends Veiculo{
+class VeiculoLeve extends Veiculo {
+	private static double tarifaReboque;
 	private boolean reboque;
 
 	/**
@@ -23,17 +24,34 @@ class VeiculoLeve extends Veiculo{
      * @param reboque booleano que define se um veículo
      * possui reboque ou não.
      */
-	public VeiculoLeve(boolean isencao, boolean reboque){
+	public VeiculoLeve(boolean isencao, boolean reboque) {
 		super(isencao);
 		this.reboque = reboque;
 	}
+
+	/**
+	 * Método que define a tarifa de reboque utilizada pelo pedágio.
+     * @param tarifaReboque um double que define a tarifa de reboque 
+     * que será utilizada no calculo da tarifa do veículo.
+	 */
+    public void setTarifaReboque(double tarifaReboque) {
+		this.tarifaReboque = tarifaReboque;
+	}
+
+	/**
+     * Método que informa o valor de tarifa de reboque utilizado pelo pedágio.
+     * @return double - contendo o valor da tarifa de reboque do pedágio.
+     */
+     public double getTarifaReboque() {
+		return tarifaReboque;
+	 }
 
     /**
      * Método que informa se um veículo possui reboque ou não.
      * @return boolean - true se o veículo possuir reboque 
      * ou false caso contrário.
      */
-	public boolean getReboque(){
+	public boolean getReboque() {
 		return reboque;
 	}
 
@@ -43,7 +61,7 @@ class VeiculoLeve extends Veiculo{
      * com os atributos da classe.
      */
 	@Override
-	public String toString(){
+	public String toString() {
 		return String.format("%s\nReboque: %s\n", super.toString(), ( getReboque() ) ? "Sim" : "Não");
 	}
 
@@ -53,7 +71,15 @@ class VeiculoLeve extends Veiculo{
 	 * ser paga pelo veículo em questão.
 	 */
 	@Override
-	public double calcularTarifa(){
-		return 0.00;
+	public double calcularTarifa() {
+		if(getIsencao()) {
+			return 0d;
+		}
+		else if(getReboque()) {
+			return getTarifaFixa() + getTarifaReboque();
+		}
+		else{
+			return getTarifaFixa();
+		}
 	}
 }

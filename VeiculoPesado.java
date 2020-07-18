@@ -14,7 +14,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
  * Classe que representa um veículo pesado em uma fila de pedágio.
  * Sendo também uma subclasse de veículo.
  */
-class VeiculoPesado extends Veiculo{
+class VeiculoPesado extends Veiculo {
 	private int numEixos;
 	
 	/**
@@ -23,7 +23,7 @@ class VeiculoPesado extends Veiculo{
      * @param numEixos inteiro que define quantos eixos tem 
      * um veículo pesado.
      */
-	public VeiculoPesado(boolean isencao, int numEixos){
+	public VeiculoPesado(boolean isencao, int numEixos) {
 		super(isencao);
 		this.numEixos = numEixos;
 	}
@@ -33,7 +33,7 @@ class VeiculoPesado extends Veiculo{
      * @return int - indicando quantos eixos tem um 
      * veículo pesado.
      */
-	public int getNumEixos(){
+	public int getNumEixos() {
 		return numEixos;
 	}
 
@@ -43,7 +43,7 @@ class VeiculoPesado extends Veiculo{
      * com os atributos da classe.
      */
 	@Override
-	public String toString(){
+	public String toString() {
 		return String.format("%s\nNúmero de Eixos: %d\n", super.toString(), getNumEixos());
 	}
 	
@@ -53,7 +53,12 @@ class VeiculoPesado extends Veiculo{
 	 * ser paga pelo veículo em questão.
 	 */
 	@Override
-	public double calcularTarifa(){
-		return 0.00;
+	public double calcularTarifa() {
+		if(getIsencao()) {
+			return 0d;
+		}
+		else{
+			return getTarifaFixa() + (getNumEixos() * getTarifaFixa() * 0.6);
+		}
 	}
 }

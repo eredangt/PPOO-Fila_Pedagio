@@ -16,8 +16,9 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
  * fornece métodos para a manipulação de seus atributos
  * pelas classes filhas.
  */
-public abstract class Veiculo{
-    private static int numeroVeiculos;
+public abstract class Veiculo {
+    private static int numeroVeiculos = 0;
+    private static double tarifaFixa;
     private int idVeiculo;
     private boolean isencao;
 
@@ -27,27 +28,41 @@ public abstract class Veiculo{
      * @param isencao booleano que define se um veículo é
      * isento de tarifa.
      */
-    public Veiculo(boolean isencao){
+    public Veiculo(boolean isencao) {
         numeroVeiculos += 1;
         idVeiculo = numeroVeiculos;
         this.isencao = isencao;
     }
 
+	/**
+	 * Método que define a tarifa fixa utilizada pelo pedágio.
+     * @param tarifaFixa um double que define a tarifa que será
+     * utilizada no calculo da tarifa do veículo.
+	 */
+    public void setTarifaFixa(double tarifaFixa) {
+		this.tarifaFixa = tarifaFixa;
+	}
+	
     /**
      * Método utilizado apenas para fins de debug.
      * @return String - uma cadeia de caracteres formatada
      * com os atributos da classe.
      */
-    public String toString(){
+    public String toString() {
         return String.format("\nVeículo: %s \nIsento: %s", getIdVeiculo(), ( (getIsencao() ) ? "Sim" : "Não"));
     }
+
+    /**
+     * Método abstrato que será sobreescrito nas classes filhas.
+     */
+    public abstract double calcularTarifa();
 
     /**
      * Método que informa se um veículo é isento de tarifa.
      * @return boolean - true se o veículo for isento de tarifa
      * ou false caso contrário.
      */
-    protected boolean getIsencao(){
+    protected boolean getIsencao() {
         return isencao;
     }
 
@@ -57,7 +72,7 @@ public abstract class Veiculo{
      * @return int - contendo o número que representa
      * quantos veículos existem no sistema até o momento.
      */
-    protected int getNumeroVeiculos(){
+    protected int getNumeroVeiculos() {
         return numeroVeiculos;
     }
 
@@ -65,12 +80,15 @@ public abstract class Veiculo{
      * Método que informa o identificador único de um veículo.
      * @return int - contendo o número que representa o Id.
      */
-    protected int getIdVeiculo(){
+    protected int getIdVeiculo() {
         return idVeiculo;
     }
 
     /**
-     * Método abstrato que será sobreescrito nas classes filhas.
+     * Método que informa o valor de tarifa fixa utilizado pelo pedágio.
+     * @return double - contendo o valor da tarifa do pedágio.
      */
-    protected abstract double calcularTarifa();
+     protected double getTarifaFixa() {
+		return tarifaFixa;
+	 }
 }
