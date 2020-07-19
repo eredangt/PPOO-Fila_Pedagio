@@ -2,7 +2,7 @@
 ---------------------------------------------------------------------------------
 Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 2020/01
 ----------------Grupo 05 - Fila de veículos em pedágio rodoviário----------------
-    Integrantes: 
+    Integrantes:
         Caio de Oliveira (10A - 201820267),
         Ismael Martins Silva (10A - 201820281),
         Layse Cristina Silva Garcia (10A - 201811177),
@@ -26,7 +26,7 @@ public abstract class Evento implements Comparable<Evento> {
         this.tempoEvento = tempoEvento;
         this.cabine = cabine;
     }
-	
+
 	/*
      * Método que informa o tempo atual do evento.
      * @return int - contendo número que representa o tempo atual do evento.
@@ -34,7 +34,11 @@ public abstract class Evento implements Comparable<Evento> {
     public int getTempoEvento() {
         return tempoEvento;
     }
-    
+
+    public Cabine getCabine() {
+        return cabine;
+    }
+
     @Override
     public int compareTo(Evento e) {
         if (tempoEvento > e.getTempoEvento()) {
