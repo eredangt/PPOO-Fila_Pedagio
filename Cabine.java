@@ -12,6 +12,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 public class Cabine {
 	private static int numeroCabines = 0;
@@ -33,11 +34,16 @@ public class Cabine {
 	}
 
 	public void enfileirarVeiculo(Veiculo v) {
-		filaVeiculos.add(v);
+		filaVeiculos.offer(v);
 	}
 
 	public Veiculo desenfileirarVeiculo() {
-		return filaVeiculos.remove();
+		try {
+			return filaVeiculos.remove();
+		}
+		catch (NoSuchElementException e) {
+			throw e;
+		}
 	}
 
 	public int calcularTamanho() {
