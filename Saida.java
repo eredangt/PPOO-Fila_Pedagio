@@ -2,7 +2,7 @@
 ---------------------------------------------------------------------------------
 Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 2020/01
 ----------------Grupo 05 - Fila de veículos em pedágio rodoviário----------------
-    Integrantes: 
+    Integrantes:
         Caio de Oliveira (10A - 201820267),
         Ismael Martins Silva (10A - 201820281),
         Layse Cristina Silva Garcia (10A - 201811177),
@@ -23,13 +23,11 @@ public class Saida extends Evento {
     public Saida(int tempoEvento, Cabine cabine) {
 		super(tempoEvento, cabine);
     }
-    
+
     /*
-     * Método que desenfileira um veiculo de uma
-     * determinada cabine passada por parâmetro.
-     * @param idCabine cabine a qual terá o veiculo removido.
-     */    
-    public void desenfileirar(int idCabine) {
+     * Método que desenfileira um veiculo.
+     */
+    public void desenfileirar() {
         filaVeiculos.remove(0);
     }
 }
