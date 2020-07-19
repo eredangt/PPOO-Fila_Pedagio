@@ -2,7 +2,7 @@
 ---------------------------------------------------------------------------------
 Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 2020/01
 ----------------Grupo 05 - Fila de veículos em pedágio rodoviário----------------
-    Integrantes: 
+    Integrantes:
         Caio de Oliveira (10A - 201820267),
         Ismael Martins Silva (10A - 201820281),
         Layse Cristina Silva Garcia (10A - 201811177),
@@ -17,7 +17,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 */
 public class Chegada extends Evento {
     private Veiculo veiculo;
-    
+
 	/*
      * Construtor da classe Chegada.
      * @param tempoEvento tempo inicial do atendimento.
@@ -28,7 +28,11 @@ public class Chegada extends Evento {
 		super(tempoEvento, cabine);
 		this.veiculo = veiculo;
     }
-    
+
+    public getVeiculo() {
+        return veiculo;
+    }
+
     /*
      * Método que enfileira um veiculo a determinada cabine.
      */
