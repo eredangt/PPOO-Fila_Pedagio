@@ -39,6 +39,14 @@ public class Cabine {
 		filaVeiculos = new LinkedList<Veiculo>();
 		this.atendimento = atendimento;
 	}
+	
+	/**
+	* Método que retorna o objeto de Atendimento.
+	* @return Atendimento - retorna o objeto do Atendimento.
+	*/
+	public Atendimento getAtendimento(){
+		return atendimento;
+	}
 
 	/**
 	* Método que informa se uma cabine é automatica.
