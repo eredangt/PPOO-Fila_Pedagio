@@ -2,7 +2,7 @@
 ---------------------------------------------------------------------------------
 Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 2020/01
 ----------------Grupo 05 - Fila de veículos em pedágio rodoviário----------------
-    Integrantes: 
+    Integrantes:
         Caio de Oliveira (10A - 201820267),
         Ismael Martins Silva (10A - 201820281),
         Layse Cristina Silva Garcia (10A - 201811177),
@@ -12,7 +12,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 
 /**
  * Classe que representa um veículo em uma fila de pedágio.
- * Ela gera um Identificador único para cada veículo e 
+ * Ela gera um Identificador único para cada veículo e
  * fornece métodos para a manipulação de seus atributos
  * pelas classes filhas.
  */
@@ -20,18 +20,18 @@ public abstract class Veiculo {
     private static int numeroVeiculos = 0;
     private static double tarifaFixa;
     private int idVeiculo;
-    private boolean isencao;
+    private boolean automatico;
 
     /**
-     * Construtor incrementa o contador de veículos e 
+     * Construtor incrementa o contador de veículos e
      * define os Id's de cada veículo a partir desse valor.
-     * @param isencao booleano que define se um veículo é
-     * isento de tarifa.
+     * @param automatico booleano que define se um veículo é
+     * automatico no atendimento da fila.
      */
-    public Veiculo(boolean isencao) {
+    public Veiculo(boolean automatico) {
         numeroVeiculos += 1;
         idVeiculo = numeroVeiculos;
-        this.isencao = isencao;
+        this.automatico = automatico;
     }
 
 	/**
@@ -42,14 +42,14 @@ public abstract class Veiculo {
     public void setTarifaFixa(double tarifaFixa) {
 		this.tarifaFixa = tarifaFixa;
 	}
-	
+
     /**
      * Método utilizado apenas para fins de debug.
      * @return String - uma cadeia de caracteres formatada
      * com os atributos da classe.
      */
     public String toString() {
-        return String.format("\nVeículo: %s \nIsento: %s", getIdVeiculo(), ( (getIsencao() ) ? "Sim" : "Não"));
+        return String.format("\nVeículo: %s \nAutomático: %s", getIdVeiculo(), ((getAutomatico()) ? "Sim" : "Não"));
     }
 
     /**
@@ -59,11 +59,11 @@ public abstract class Veiculo {
 
     /**
      * Método que informa se um veículo é isento de tarifa.
-     * @return boolean - true se o veículo for isento de tarifa
-     * ou false caso contrário.
+     * @return boolean - true se o veículo for ser atendido de
+     * forma automática ou false caso contrário.
      */
-    protected boolean getIsencao() {
-        return isencao;
+    protected boolean getAutomatico() {
+        return automatico;
     }
 
     /**

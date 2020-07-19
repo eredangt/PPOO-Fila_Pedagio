@@ -2,7 +2,7 @@
 ---------------------------------------------------------------------------------
 Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 2020/01
 ----------------Grupo 05 - Fila de veículos em pedágio rodoviário----------------
-    Integrantes: 
+    Integrantes:
         Caio de Oliveira (10A - 201820267),
         Ismael Martins Silva (10A - 201820281),
         Layse Cristina Silva Garcia (10A - 201811177),
@@ -19,19 +19,19 @@ class VeiculoLeve extends Veiculo {
 	private boolean reboque;
 
 	/**
-     * @param isencao booleano que define se um veículo é
-     * isento de tarifa.
+	* @param automatico booleano que define se um veículo é
+	* automatico no atendimento da fila.
      * @param reboque booleano que define se um veículo
      * possui reboque ou não.
      */
-	public VeiculoLeve(boolean isencao, boolean reboque) {
-		super(isencao);
+	public VeiculoLeve(boolean automatico, boolean reboque) {
+		super(automatico);
 		this.reboque = reboque;
 	}
 
 	/**
 	 * Método que define a tarifa de reboque utilizada pelo pedágio.
-     * @param tarifaReboque um double que define a tarifa de reboque 
+     * @param tarifaReboque um double que define a tarifa de reboque
      * que será utilizada no calculo da tarifa do veículo.
 	 */
     public void setTarifaReboque(double tarifaReboque) {
@@ -48,7 +48,7 @@ class VeiculoLeve extends Veiculo {
 
     /**
      * Método que informa se um veículo possui reboque ou não.
-     * @return boolean - true se o veículo possuir reboque 
+     * @return boolean - true se o veículo possuir reboque
      * ou false caso contrário.
      */
 	public boolean getReboque() {
