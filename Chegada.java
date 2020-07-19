@@ -29,7 +29,7 @@ public class Chegada extends Evento {
 		this.veiculo = veiculo;
     }
 
-    public getVeiculo() {
+    public Veiculo getVeiculo() {
         return veiculo;
     }
 
