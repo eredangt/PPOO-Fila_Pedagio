@@ -54,7 +54,7 @@ class VeiculoPesado extends Veiculo {
 	 */
 	@Override
 	public double calcularTarifa() {
-		if(getIsencao()) {
+		if(getAutomatico()) {
 			return 0d;
 		}
 		else{

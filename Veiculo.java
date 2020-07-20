@@ -18,7 +18,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
  */
 public abstract class Veiculo {
     private static int numeroVeiculos = 0;
-    private static double tarifaFixa;
+    private static double tarifaFixa = -1d;
     private int idVeiculo;
     private boolean automatico;
 
@@ -39,8 +39,8 @@ public abstract class Veiculo {
      * @param tarifaFixa um double que define a tarifa que será
      * utilizada no calculo da tarifa do veículo.
 	 */
-    public void setTarifaFixa(double tarifaFixa) {
-		this.tarifaFixa = tarifaFixa;
+    public static void setTarifaFixa(double tarifaFixa) {
+		Veiculo.tarifaFixa = tarifaFixa;
 	}
 
     /**
@@ -51,6 +51,14 @@ public abstract class Veiculo {
     public String toString() {
         return String.format("\nVeículo: %s \nAutomático: %s", getIdVeiculo(), ((getAutomatico()) ? "Sim" : "Não"));
     }
+
+    /**
+     * Método que informa o valor de tarifa fixa utilizado pelo pedágio.
+     * @return double - contendo o valor da tarifa do pedágio.
+     */
+     public static double getTarifaFixa() {
+		return tarifaFixa;
+	 }
 
     /**
      * Método abstrato que será sobreescrito nas classes filhas.
@@ -83,12 +91,4 @@ public abstract class Veiculo {
     protected int getIdVeiculo() {
         return idVeiculo;
     }
-
-    /**
-     * Método que informa o valor de tarifa fixa utilizado pelo pedágio.
-     * @return double - contendo o valor da tarifa do pedágio.
-     */
-     protected double getTarifaFixa() {
-		return tarifaFixa;
-	 }
 }

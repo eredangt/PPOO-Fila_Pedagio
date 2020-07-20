@@ -28,6 +28,6 @@ public class Saida extends Evento {
      * Método que desenfileira um veiculo.
      */
     public void desenfileirar() {
-        filaVeiculos.remove(0);
+        cabine.desenfileirarVeiculo();
     }
 }

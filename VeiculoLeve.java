@@ -15,7 +15,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
  * Sendo também uma subclasse de veículo.
  */
 class VeiculoLeve extends Veiculo {
-	private static double tarifaReboque;
+	private static double tarifaReboque = -1d;
 	private boolean reboque;
 
 	/**
@@ -34,15 +34,15 @@ class VeiculoLeve extends Veiculo {
      * @param tarifaReboque um double que define a tarifa de reboque
      * que será utilizada no calculo da tarifa do veículo.
 	 */
-    public void setTarifaReboque(double tarifaReboque) {
-		this.tarifaReboque = tarifaReboque;
+    public static void setTarifaReboque(double tarifaReboque) {
+		VeiculoLeve.tarifaReboque = tarifaReboque;
 	}
 
 	/**
      * Método que informa o valor de tarifa de reboque utilizado pelo pedágio.
      * @return double - contendo o valor da tarifa de reboque do pedágio.
      */
-     public double getTarifaReboque() {
+     public static double getTarifaReboque() {
 		return tarifaReboque;
 	 }
 
@@ -72,7 +72,7 @@ class VeiculoLeve extends Veiculo {
 	 */
 	@Override
 	public double calcularTarifa() {
-		if(getIsencao()) {
+		if(getAutomatico()) {
 			return 0d;
 		}
 		else if(getReboque()) {

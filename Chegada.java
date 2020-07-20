@@ -37,7 +37,7 @@ public class Chegada extends Evento {
      * Método que enfileira um veiculo a determinada cabine.
      */
     public Cabine enfileirar() {
-		cabine.enfileirar(veiculo);
+		cabine.enfileirarVeiculo(veiculo);
 		return cabine;
     }
 }

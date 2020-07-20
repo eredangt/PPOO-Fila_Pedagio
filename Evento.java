@@ -15,7 +15,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 */
 public abstract class Evento implements Comparable<Evento> {
     private int tempoEvento;
-    private Cabine cabine;
+    protected Cabine cabine;
 
 	/*
      * Construtor da classe Evento.
