@@ -31,7 +31,7 @@ public class Simulador {
 	private double tempoSimulacao; // Tempo real
 	private int tempoEventos;
 	private int intervaloChegada;
-	private GerenciadorDeArquivos gda;
+	private GerenciadorDeDados gdd;
 	private PriorityQueue<Evento> filaEventos;
 	private HashMap<Integer, Cabine> cabines;
 	private HashMap<Integer, Veiculo> veiculos;
@@ -50,7 +50,7 @@ public class Simulador {
 		tempoEventos = 0;
 		nomeArquivoEntrada = "Dados.txt";
 		nomeArquivoRelatorio = "Relatorio.txt";
-		gda = new GerenciadorDeArquivos();
+		gdd = new GerenciadorDeDados();
 		filaEventos = new PriorityQueue<Evento>();
 		cabines = new HashMap<Integer, Cabine>();
 		veiculos = new HashMap<Integer, Veiculo>();
@@ -63,13 +63,46 @@ public class Simulador {
 	* O método enfileirarChegadas() verifica se a fila será aleatória ou não.
 	* O método executarSimulacao() retira os eventos da fila.
 	*/
-	public void Simulacao() {
-		filaRand = gda.getFilaRand();
-		intervaloChegada = gda.getIntervaloChegada();
-		inicializarAtendimentos();
-		inicializarTarifas();
-		inicializarVeiculos();
-		inicializarCabines();
+	public void Simulacao() throws Exception {
+        try {
+            gdd.inicializarDados(nomeArquivoEntrada);
+        }
+        catch (Exception e) {
+			throw e;
+		}
+		
+		try {
+			filaRand = gdd.getFilaRand();
+			intervaloChegada = gdd.getIntervaloChegada();
+		}
+		catch (Exception e) {
+			throw e;
+		}
+
+		try {
+			while (true) {
+				Cabine novaCabine = gdd.removerCabine();
+				cabines.put(novaCabine.getIdCabine(), novaCabine);
+			}
+		}
+		catch (Exception e) {}
+
+		try {
+			while (true) {
+				Veiculo novoVeiculo = gdd.removerVeiculo();
+				veiculos.put(novoVeiculo.getIdVeiculo(), novoVeiculo);
+			}
+		}
+		catch (Exception e) {}
+
+		try {
+			while (true) {
+				Atendimento novoAtendimento = gdd.removerAtendimento();
+				atendimentos.put(novoAtendimento.getIdAtendimento(), novoAtendimento);
+			}
+		}
+		catch (Exception e) {}
+
 		enfileirarChegadas();
 		executarSimulacao();
 	}
@@ -116,24 +149,6 @@ public class Simulador {
 	*/
 	public int getIntervaloChegada() {
 		return intervaloChegada;
-	}
-
-	/**
-	* Método que inicializa as Cabines.
-	* Cria uma cabine para cada atendimento.
-	*/
-	private void inicializarCabines() {
-		try {
-			for (Map.Entry<Integer, Atendimento> atendimento : atendimentos.entrySet()) {
-				Atendimento a = atendimento.getValue();
-				Cabine novaCabine = new Cabine(a.getIdAtendimento());
-				cabines.put(novaCabine.getIdCabine(), novaCabine);
-			}
-        }
-        catch (Exception e) {
-            throw e;
-        }
-
 	}
 
 	/**
@@ -233,74 +248,6 @@ public class Simulador {
 	*/
 	private void executarSaida(Saida e) {
 		getCabine(e.getIdCabine()).desenfileirarVeiculo();
-	}
-
-	private void inicializarTarifas() {
-		try {
-			String[] tarifa;
-			while (true) {
-                tarifa = gda.removerTarifa();
-				if (Veiculo.getTarifaFixa() == -1d && tarifa[1].equals("fixa")) {
-					Veiculo.setTarifaFixa(Double.parseDouble(tarifa[2]));
-		        }
-		        else if (VeiculoLeve.getTarifaReboque() == -1d && tarifa[1].equals("reboque")) {
-					VeiculoLeve.setTarifaReboque(Double.parseDouble(tarifa[2]));
-		        }
-            }
-		}
-        catch (Exception e) {
-            throw e;
-        }
-	}
-
-	/**
-	* Método que cria os Veiculos.
-	* Incializa a tarifa e identifica os tipos de veículo no arquivo, além de
-	* inserir na Lista de Veículos, de acordo com o tipo.
-	*/
-	private void inicializarVeiculos() {
-		try {
-            String[] veiculo;
-            while (true) {
-				veiculo = gda.removerVeiculo();
-				Veiculo novoVeiculo;
-				if (veiculo[1].equals("leve")) {
-					novoVeiculo = new VeiculoLeve(Boolean.parseBoolean(veiculo[2]), Boolean.parseBoolean(veiculo[3]));
-		        }
-		        else { // if (veiculo[1].equals("pesado")) {
-					novoVeiculo = new VeiculoPesado(Boolean.parseBoolean(veiculo[2]), Integer.parseInt(veiculo[3]));
-		        }
-				veiculos.put(novoVeiculo.getIdVeiculo(), novoVeiculo);
-            }
-        }
-        catch (Exception e) {
-            throw e;
-        }
-	}
-
-	/**
-	* Método que inicia os Atendimentos.
-	* Identifica os tipos de atendimento no arquivo e
-	* insere na Lista de Atendimentosde acordo com o tipo.
-	*/
-	private void inicializarAtendimentos() {
-		try {
-            String[] atendimento;
-            while (true) {
-				atendimento = gda.removerVeiculo();
-				Atendimento novoAtendimento;
-				if (atendimento[1].equals("automatico")) {
-					novoAtendimento = new Automatico(Double.parseDouble(atendimento[2]));
-		        }
-		        else { // if (atendimento[1].equals("funcionario")) {
-					novoAtendimento = new Funcionario(Double.parseDouble(atendimento[2]));
-		        }
-				atendimentos.put(novoAtendimento.getIdAtendimento(), novoAtendimento);
-            }
-        }
-        catch (Exception e) {
-            throw e;
-        }
 	}
 
     /**

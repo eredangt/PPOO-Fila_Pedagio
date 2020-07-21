@@ -1,5 +1,27 @@
 alguma,coisa
 
+fila
+
+fila,menor,rapida
+
+fila,rapida
+
+fila,menor
+
+fila,aleatoria
+
+intervalo
+
+intervalo,1,10
+
+intervalo,grande
+
+intervalo,0
+
+intervalo,3
+
+intervalo,1
+
 tarifa
 
 tarifa,fixa,2.5,10
