@@ -49,15 +49,6 @@ public class Cabine {
 	}
 
 	/**
-	* Método que informa se uma cabine é automatica.
-	* @return boolean - true se o atendimento da cabine for
-	* automatico.
-	*/
-	public boolean ehAutomatico() {
-		return atendimento instanceof Automatico;
-	}
-
-	/**
 	* Método que informa quantos objetos da classe Cabine
 	* foram instanciados.
 	* @return int - contendo o número que representa
@@ -91,7 +82,7 @@ public class Cabine {
 	*/
 	public int desenfileirarVeiculo() {
 		try {
-			veiculoRemovido = filaVeiculos.remove();
+			Veiculo veiculoRemovido = filaVeiculos.remove();
 			return veiculoRemovido.getIdVeiculo();
 		}
 		catch (NoSuchElementException e) {

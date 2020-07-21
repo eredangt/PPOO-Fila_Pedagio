@@ -11,6 +11,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 */
 
 import java.util.PriorityQueue;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -32,9 +33,9 @@ public class Simulador {
 	private int intervaloChegada;
 	private GerenciadorDeArquivos gda;
 	private PriorityQueue<Evento> filaEventos;
-	private HashMap<int, Cabine> cabines;
-	private HashMap<int, Veiculo> veiculos;
-	private HashMap<int, Atendimento> atendimentos;
+	private HashMap<Integer, Cabine> cabines;
+	private HashMap<Integer, Veiculo> veiculos;
+	private HashMap<Integer, Atendimento> atendimentos;
 
     /**
     * Construtor cria as listas de: Lista Cabines, Lista Veículos,
@@ -51,9 +52,9 @@ public class Simulador {
 		nomeArquivoRelatorio = "Relatorio.txt";
 		gda = new GerenciadorDeArquivos();
 		filaEventos = new PriorityQueue<Evento>();
-		cabines = new HashMap<int, Cabine>();
-		veiculos = new HashMap<int, Veiculo>();
-		atendimentos = new HashMap<int, Atendimento>();
+		cabines = new HashMap<Integer, Cabine>();
+		veiculos = new HashMap<Integer, Veiculo>();
+		atendimentos = new HashMap<Integer, Atendimento>();
 	}
 
 	/**
@@ -95,15 +96,15 @@ public class Simulador {
 	*/
 	private void enfileirarChegadas() {
 		int tempoChegada = 0;
-		for (Map.Entry<int, Veiculo> veiculo : veiculos.entrySet()) {
-			v = veiculo.getValue();
+		for (Map.Entry<Integer, Veiculo> veiculo : veiculos.entrySet()) {
+			Veiculo v = veiculo.getValue();
 			if (filaRand) {
 				Cabine c = cabineAleatoria(v.getAutomatico());
-				filaEventos.add(new Chegada(tempoChegada, c.getIdCabine(), v));
+				filaEventos.add(new Chegada(tempoChegada, c.getIdCabine(), v.getIdVeiculo()));
 			}
 			else {
 				Cabine c = cabineMenorFila(v.getAutomatico());
-				filaEventos.add(new Chegada(tempoChegada, c.getIdCabine(), v));
+				filaEventos.add(new Chegada(tempoChegada, c.getIdCabine(), v.getIdVeiculo()));
 			}
 			tempoChegada += getIntervaloChegada();
 		}
@@ -123,9 +124,9 @@ public class Simulador {
 	*/
 	private void inicializarCabines() {
 		try {
-			for (Map.Entry<int, Atendimento> atendimento : atendimentos.entrySet()) {
-				a = atendimento.getValue();
-				novaCabine = new Cabine(a.getIdAtendimento);
+			for (Map.Entry<Integer, Atendimento> atendimento : atendimentos.entrySet()) {
+				Atendimento a = atendimento.getValue();
+				Cabine novaCabine = new Cabine(a.getIdAtendimento());
 				cabines.put(novaCabine.getIdCabine(), novaCabine);
 			}
         }
@@ -159,7 +160,7 @@ public class Simulador {
 
 	private void enfileirarNaCabine(int idCabine) {
 		Cabine c = getCabine(idCabine);
-		c.enfileirarVeiculo();
+		getCabine(c.getIdCabine());
 	}
 
 	private void enfileirarSaida(int tempoChegada, int idCabine) {
@@ -181,8 +182,26 @@ public class Simulador {
 		enfileirarSaida(tempo, idCabine);
 	}
 
-	private void getCabine(int idCabine) {
+	private Cabine getCabine(int idCabine) {
 		return cabines.get(idCabine);
+	}
+
+	private Atendimento getAtendimento(int idAtendimento) {
+		return atendimentos.get(idAtendimento);
+	}
+
+	private Veiculo getVeiculo(int idVeiculo) {
+		return veiculos.get(idVeiculo);
+	}
+
+	/**
+	* Método que informa se uma cabine é automatica.
+	* @param c - cabine.
+	* @return boolean - true se o atendimento da cabine for
+	* automatico.
+	*/
+	private boolean ehAutomatico(Cabine c) {
+		return getAtendimento(c.getIdAtendimento()) instanceof Automatico;
 	}
 
 	/**
@@ -198,10 +217,10 @@ public class Simulador {
 	*/
 	private int calcularTempoSaida(Chegada e) {
 		int tempoChegada = e.getTempoEvento(); // Tempo da Chegada
-		int tempoAtendimento = (int)(e.getCabine().getAtendimento().getTempoAtendimento()); // Tempo do atendimento
+		int tempoAtendimento = (int)(getAtendimento(getCabine(e.getIdCabine()).getIdAtendimento()).getTempoAtendimento()); // Tempo do atendimento
 
 		Random random = new Random();
-		Veiculo v = e.getVeiculo();
+		Veiculo v = getVeiculo(e.getIdVeiculo());
 		int tempoLocomocao = (v instanceof VeiculoLeve) ? 2 + random.nextInt(6) : 7 + random.nextInt(9);
 
 		return tempoChegada + tempoAtendimento + tempoLocomocao;
@@ -210,9 +229,10 @@ public class Simulador {
 	/**
 	* Método que executa a Saída.
 	* Assim que executo o método, retiro o elemento da fila.
+	* @param e - evento de saida.
 	*/
 	private void executarSaida(Saida e) {
-		e.desenfileirar();
+		getCabine(e.getIdCabine()).desenfileirarVeiculo();
 	}
 
 	private void inicializarTarifas() {
@@ -242,7 +262,8 @@ public class Simulador {
 		try {
             String[] veiculo;
             while (true) {
-                veiculo = gda.removerVeiculo();
+				veiculo = gda.removerVeiculo();
+				Veiculo novoVeiculo;
 				if (veiculo[1].equals("leve")) {
 					novoVeiculo = new VeiculoLeve(Boolean.parseBoolean(veiculo[2]), Boolean.parseBoolean(veiculo[3]));
 		        }
@@ -266,7 +287,8 @@ public class Simulador {
 		try {
             String[] atendimento;
             while (true) {
-                atendimento = gda.removerVeiculo();
+				atendimento = gda.removerVeiculo();
+				Atendimento novoAtendimento;
 				if (atendimento[1].equals("automatico")) {
 					novoAtendimento = new Automatico(Double.parseDouble(atendimento[2]));
 		        }
@@ -301,18 +323,18 @@ public class Simulador {
     * Método que pega uma cabine aleatoriamente.
     * @return Cabine - retorna a cabine aleatória.
     */
-	public Cabine cabineAleatoria(boolean automatico) {
+	private Cabine cabineAleatoria(boolean automatico) {
 		Cabine aleatoria;
 
 		Random random = new Random();
 		aleatoria = cabines.get(1 + random.nextInt(cabines.size() - 1));
 
 		if (automatico) {
-			while (!aleatoria.ehAutomatico()) {
+			while (!ehAutomatico(aleatoria)) {
 				aleatoria = cabines.get(1 + random.nextInt(cabines.size() - 1));
 			}
 		} else {
-			while (aleatoria.ehAutomatico()) {
+			while (ehAutomatico(aleatoria)) {
 				aleatoria = cabines.get(1 + random.nextInt(cabines.size() - 1));
 			}
 		}
@@ -324,21 +346,21 @@ public class Simulador {
     * Método que busca a menor fila entre as cabines disponíveis.
     * @return Cabine - retorna a menor fila encontrada.
     */
-	public Cabine cabineMenorFila(boolean automatico) {
+	private Cabine cabineMenorFila(boolean automatico) {
 		Cabine menorFila = null;
 
-		for (Map.Entry<int, Cabine> cabine : cabines.entrySet()) {
-			c = cabine.getValue();
-			if (c.ehAutomatico() == automatico) {
+		for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
+			Cabine c = cabine.getValue();
+			if (ehAutomatico(c) == automatico) {
 				menorFila = c;
 				break;
 			}
 		}
 
-		for (Map.Entry<int, Cabine> cabine : cabines.entrySet()) {
-			c = cabine.getValue();
+		for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
+			Cabine c = cabine.getValue();
 			if ((c.calcularTamanho() < menorFila.calcularTamanho())
-							&& (c.ehAutomatico() == automatico)) {
+							&& (ehAutomatico(c) == automatico)) {
 				menorFila = c;
 			}
 		}
