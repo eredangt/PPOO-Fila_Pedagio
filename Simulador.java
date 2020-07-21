@@ -11,7 +11,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 */
 
 import java.util.PriorityQueue;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -32,9 +32,9 @@ public class Simulador {
 	private int intervaloChegada;
 	private GerenciadorDeArquivos gda;
 	private PriorityQueue<Evento> filaEventos;
-	private ArrayList<Cabine> listaCabines;
-	private ArrayList<Veiculo> listaVeiculos;
-	private ArrayList<Atendimento> listaAtendimentos;
+	private HashMap<int, Cabine> cabines;
+	private HashMap<int, Veiculo> veiculos;
+	private HashMap<int, Atendimento> atendimentos;
 
     /**
     * Construtor cria as listas de: Lista Cabines, Lista Veículos,
@@ -51,9 +51,9 @@ public class Simulador {
 		nomeArquivoRelatorio = "Relatorio.txt";
 		gda = new GerenciadorDeArquivos();
 		filaEventos = new PriorityQueue<Evento>();
-		listaCabines = new ArrayList<Cabine>();
-		listaVeiculos = new ArrayList<Veiculo>();
-        listaAtendimentos = new ArrayList<Atendimento>();
+		cabines = new HashMap<int, Cabine>();
+		veiculos = new HashMap<int, Veiculo>();
+		atendimentos = new HashMap<int, Atendimento>();
 	}
 
 	/**
@@ -95,12 +95,15 @@ public class Simulador {
 	*/
 	private void enfileirarChegadas() {
 		int tempoChegada = 0;
-		for (Veiculo v: listaVeiculos) {
+		for (Map.Entry<int, Veiculo> veiculo : veiculos.entrySet()) {
+			v = veiculo.getValue();
 			if (filaRand) {
-				filaEventos.add(new Chegada(tempoChegada, cabineAleatoria(v.getAutomatico()), v));
+				Cabine c = cabineAleatoria(v.getAutomatico());
+				filaEventos.add(new Chegada(tempoChegada, c.getIdCabine(), v));
 			}
 			else {
-				filaEventos.add(new Chegada(tempoChegada, cabineMenorFila(v.getAutomatico()), v));
+				Cabine c = cabineMenorFila(v.getAutomatico());
+				filaEventos.add(new Chegada(tempoChegada, c.getIdCabine(), v));
 			}
 			tempoChegada += getIntervaloChegada();
 		}
@@ -120,8 +123,10 @@ public class Simulador {
 	*/
 	private void inicializarCabines() {
 		try {
-			for (Atendimento a: listaAtendimentos) {
-				listaCabines.add(new Cabine(a));
+			for (Map.Entry<int, Atendimento> atendimento : atendimentos.entrySet()) {
+				a = atendimento.getValue();
+				novaCabine = new Cabine(a.getIdAtendimento);
+				cabines.put(novaCabine.getIdCabine(), novaCabine);
 			}
         }
         catch (Exception e) {
@@ -152,6 +157,15 @@ public class Simulador {
 		}
 	}
 
+	private void enfileirarNaCabine(int idCabine) {
+		Cabine c = getCabine(idCabine);
+		c.enfileirarVeiculo();
+	}
+
+	private void enfileirarSaida(int tempoChegada, int idCabine) {
+		filaEventos.add(new Saida(tempoChegada, idCabine));
+	}
+
 	/**
 	* Método que executa a Chegada.
 	* Caleta o tempo gasto no Evento e o armazeno em uma variável.
@@ -162,8 +176,13 @@ public class Simulador {
 	*/
 	private void executarChegada(Chegada e) {
 		int tempo = calcularTempoSaida(e);
-		Cabine c = e.enfileirar();
-		filaEventos.add(new Saida(tempo, c));
+		int idCabine = e.getIdCabine();
+		enfileirarNaCabine(idCabine);
+		enfileirarSaida(tempo, idCabine);
+	}
+
+	private void getCabine(int idCabine) {
+		return cabines.get(idCabine);
 	}
 
 	/**
@@ -225,11 +244,12 @@ public class Simulador {
             while (true) {
                 veiculo = gda.removerVeiculo();
 				if (veiculo[1].equals("leve")) {
-					listaVeiculos.add(new VeiculoLeve(Boolean.parseBoolean(veiculo[2]), Boolean.parseBoolean(veiculo[3])));
+					novoVeiculo = new VeiculoLeve(Boolean.parseBoolean(veiculo[2]), Boolean.parseBoolean(veiculo[3]));
 		        }
 		        else { // if (veiculo[1].equals("pesado")) {
-					listaVeiculos.add(new VeiculoPesado(Boolean.parseBoolean(veiculo[2]), Integer.parseInt(veiculo[3])));
+					novoVeiculo = new VeiculoPesado(Boolean.parseBoolean(veiculo[2]), Integer.parseInt(veiculo[3]));
 		        }
+				veiculos.put(novoVeiculo.getIdVeiculo(), novoVeiculo);
             }
         }
         catch (Exception e) {
@@ -248,11 +268,12 @@ public class Simulador {
             while (true) {
                 atendimento = gda.removerVeiculo();
 				if (atendimento[1].equals("automatico")) {
-					listaAtendimentos.add(new Automatico(Double.parseDouble(atendimento[2])));
+					novoAtendimento = new Automatico(Double.parseDouble(atendimento[2]));
 		        }
 		        else { // if (atendimento[1].equals("funcionario")) {
-					listaAtendimentos.add(new Funcionario(Double.parseDouble(atendimento[2])));
+					novoAtendimento = new Funcionario(Double.parseDouble(atendimento[2]));
 		        }
+				atendimentos.put(novoAtendimento.getIdAtendimento(), novoAtendimento);
             }
         }
         catch (Exception e) {
@@ -284,15 +305,15 @@ public class Simulador {
 		Cabine aleatoria;
 
 		Random random = new Random();
-		aleatoria = listaCabines.get(random.nextInt(listaCabines.size() - 1));
+		aleatoria = cabines.get(1 + random.nextInt(cabines.size() - 1));
 
 		if (automatico) {
 			while (!aleatoria.ehAutomatico()) {
-				aleatoria = listaCabines.get(random.nextInt(listaCabines.size() - 1));
+				aleatoria = cabines.get(1 + random.nextInt(cabines.size() - 1));
 			}
 		} else {
 			while (aleatoria.ehAutomatico()) {
-				aleatoria = listaCabines.get(random.nextInt(listaCabines.size() - 1));
+				aleatoria = cabines.get(1 + random.nextInt(cabines.size() - 1));
 			}
 		}
 
@@ -306,14 +327,16 @@ public class Simulador {
 	public Cabine cabineMenorFila(boolean automatico) {
 		Cabine menorFila = null;
 
-		for (Cabine c : listaCabines) {
+		for (Map.Entry<int, Cabine> cabine : cabines.entrySet()) {
+			c = cabine.getValue();
 			if (c.ehAutomatico() == automatico) {
 				menorFila = c;
 				break;
 			}
 		}
 
-		for (Cabine c : listaCabines) {
+		for (Map.Entry<int, Cabine> cabine : cabines.entrySet()) {
+			c = cabine.getValue();
 			if ((c.calcularTamanho() < menorFila.calcularTamanho())
 							&& (c.ehAutomatico() == automatico)) {
 				menorFila = c;

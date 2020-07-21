@@ -20,14 +20,7 @@ public class Saida extends Evento {
      * @param tempoEvento tempo final do evento.
      * @param cabine a qual o veiculo está.
      */
-    public Saida(int tempoEvento, Cabine cabine) {
-		super(tempoEvento, cabine);
-    }
-
-    /*
-     * Método que desenfileira um veiculo.
-     */
-    public void desenfileirar() {
-        cabine.desenfileirarVeiculo();
+    public Saida(int tempoEvento, int idCabine) {
+		super(tempoEvento, idCabine);
     }
 }

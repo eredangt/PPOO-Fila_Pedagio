@@ -15,16 +15,16 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 */
 public abstract class Evento implements Comparable<Evento> {
     private int tempoEvento;
-    protected Cabine cabine;
+    protected int idCabine;
 
 	/*
      * Construtor da classe Evento.
      * @param tempoEvento tempo atual do programa.
      * @param cabine a qual o atendimento acontecerá.
      */
-    public Evento(int tempoEvento, Cabine cabine) {
+    public Evento(int tempoEvento, int idCabine) {
         this.tempoEvento = tempoEvento;
-        this.cabine = cabine;
+        this.idCabine = idCabine;
     }
 
 	/*
@@ -35,8 +35,8 @@ public abstract class Evento implements Comparable<Evento> {
         return tempoEvento;
     }
 
-    public Cabine getCabine() {
-        return cabine;
+    public int getIdCabine() {
+        return idCabine;
     }
 
     @Override

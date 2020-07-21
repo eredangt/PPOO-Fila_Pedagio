@@ -24,7 +24,7 @@ public class Cabine {
 	private static int numeroCabines = 0;
 	private int idCabine;
 	private Queue<Veiculo> filaVeiculos;
-	private Atendimento atendimento;
+	private int idAtendimento;
 
 	/**
 	* Construtor incrementa o contador de Cabines e
@@ -33,19 +33,19 @@ public class Cabine {
 	* @param atendimento - objeto que representa um tipo de
 	* atendimento.
 	*/
-	public Cabine(Atendimento atendimento) {
+	public Cabine(int idAtendimento) {
 		numeroCabines += 1;
 		idCabine = numeroCabines;
 		filaVeiculos = new LinkedList<Veiculo>();
-		this.atendimento = atendimento;
+		this.idAtendimento = idAtendimento;
 	}
-	
+
 	/**
 	* Método que retorna o objeto de Atendimento.
 	* @return Atendimento - retorna o objeto do Atendimento.
 	*/
-	public Atendimento getAtendimento(){
-		return atendimento;
+	public int getIdAtendimento(){
+		return idAtendimento;
 	}
 
 	/**
@@ -89,9 +89,10 @@ public class Cabine {
 	* @return NoSuchElementException - mensagem de erro ao remover
 	* um objeto em uma fila vazia.
 	*/
-	public Veiculo desenfileirarVeiculo() {
+	public int desenfileirarVeiculo() {
 		try {
-			return filaVeiculos.remove();
+			veiculoRemovido = filaVeiculos.remove();
+			return veiculoRemovido.getIdVeiculo();
 		}
 		catch (NoSuchElementException e) {
 			throw e;

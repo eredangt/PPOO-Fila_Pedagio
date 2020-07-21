@@ -2,7 +2,7 @@
 ---------------------------------------------------------------------------------
 Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 2020/01
 ----------------Grupo 05 - Fila de veículos em pedágio rodoviário----------------
-    Integrantes: 
+    Integrantes:
         Caio de Oliveira (10A - 201820267),
         Ismael Martins Silva (10A - 201820281),
         Layse Cristina Silva Garcia (10A - 201811177),
@@ -12,20 +12,20 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 
 /**
 * Classe que representa o atendimento em um pedágio.
-* Ela gera um Identificador único para cada tipo de atendimento e 
+* Ela gera um Identificador único para cada tipo de atendimento e
 * fornece métodos para a manipulação de seus atributos
-* pelas classes filhas. 
+* pelas classes filhas.
 * Os tipos são: atendimento por cliente e por cobrança automática.
 */
 public abstract class Atendimento {
 	private static int numeroAtendimentos = 0;
 	private int idAtendimento;
 	private double tempoAtendimento;
-	
+
 	/**
-	* Construtor incrementa o contador de atendimento e 
+	* Construtor incrementa o contador de atendimento e
 	* define os IDs de cada atendimento a partir desse valor.
-	* @param tempo atendimento double que define um tempo base 
+	* @param tempo atendimento double que define um tempo base
 	* para as operações naquele tipo de atendimento.
 	*/
 	public Atendimento(double umTempoAtendimento) {
@@ -33,7 +33,7 @@ public abstract class Atendimento {
 		numeroAtendimentos += 1;
 		idAtendimento = numeroAtendimentos;
 	}
-	
+
 	/**
 	* Método utilizado apenas para fins de debug.
 	* @return String - uma cadeia de caracteres formatada
@@ -42,7 +42,7 @@ public abstract class Atendimento {
 	public String toString() {
 		return "ID ATENDIMENTO: " + getIdAtendimento() + "\nTEMPO: " + getTempoAtendimento() + "\n";
 	}
-	
+
 	/**
 	* Método que informa quantos objetos da classe Atendimento
 	* foram instanciados.
@@ -52,7 +52,7 @@ public abstract class Atendimento {
 	protected int getNumeroAtendimentos() {
 		return numeroAtendimentos;
 	}
-	
+
 	/**
 	* Método que informa o identificador único de um atendimento.
 	* @return int - contendo o número que representa o Id.
@@ -60,7 +60,7 @@ public abstract class Atendimento {
 	protected int getIdAtendimento() {
 		return idAtendimento;
 	}
-	
+
 	 /**
      * Método que informa o tempo de operação daquele atendimento.
      * @return double - contendo o número o tempo.

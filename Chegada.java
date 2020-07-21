@@ -16,7 +16,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 * de maneira aleatória ou o encaminha à fila de menor tamanho
 */
 public class Chegada extends Evento {
-    private Veiculo veiculo;
+    private int idVeiculo;
 
 	/*
      * Construtor da classe Chegada.
@@ -24,20 +24,12 @@ public class Chegada extends Evento {
      * @param cabine que receberá o veiculo.
      * @param veiculo que será enfileirado.
      */
-    public Chegada(int tempoEvento, Cabine cabine, Veiculo veiculo) {
-		super(tempoEvento, cabine);
-		this.veiculo = veiculo;
+    public Chegada(int tempoEvento, int idCabine, int idVeiculo) {
+		super(tempoEvento, idCabine);
+		this.idVeiculo = idVeiculo;
     }
 
-    public Veiculo getVeiculo() {
-        return veiculo;
-    }
-
-    /*
-     * Método que enfileira um veiculo a determinada cabine.
-     */
-    public Cabine enfileirar() {
-		cabine.enfileirarVeiculo(veiculo);
-		return cabine;
+    public int getIdVeiculo() {
+        return idVeiculo;
     }
 }
