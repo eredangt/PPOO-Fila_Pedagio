@@ -23,7 +23,7 @@ import java.util.NoSuchElementException;
 public class Cabine {
 	private static int numeroCabines = 0;
 	private int idCabine;
-	private Queue<Veiculo> filaVeiculos;
+	private Queue<Integer> filaVeiculos;
 	private int idAtendimento;
 
 	/**
@@ -36,7 +36,7 @@ public class Cabine {
 	public Cabine(int idAtendimento) {
 		numeroCabines += 1;
 		idCabine = numeroCabines;
-		filaVeiculos = new LinkedList<Veiculo>();
+		filaVeiculos = new LinkedList<Integer>();
 		this.idAtendimento = idAtendimento;
 	}
 
@@ -69,8 +69,8 @@ public class Cabine {
 	/**
 	* Método que coloca um veículo na fila.
 	*/
-	public void enfileirarVeiculo(Veiculo v) {
-		filaVeiculos.offer(v);
+	public void enfileirarVeiculo(int idVeiculo) {
+		filaVeiculos.offer(idVeiculo);
 	}
 	/**
 	* Método que retira um veículo da fila.
@@ -80,13 +80,13 @@ public class Cabine {
 	* @return NoSuchElementException - mensagem de erro ao remover
 	* um objeto em uma fila vazia.
 	*/
-	public int desenfileirarVeiculo() {
+	public int desenfileirarVeiculo() throws Exception{
 		try {
-			Veiculo veiculoRemovido = filaVeiculos.remove();
-			return veiculoRemovido.getIdVeiculo();
+			int idVeiculoRemovido = filaVeiculos.remove();
+			return idVeiculoRemovido;
 		}
 		catch (NoSuchElementException e) {
-			throw e;
+			throw new Exception("Nenhum veiculo encontrado\n");
 		}
 	}
 
@@ -108,8 +108,8 @@ public class Cabine {
 		dadosCompletos = String.format("Número da Cabine: %s\n", getIdCabine());
 		dadosCompletos += "--------------------\n";
 
-		for (Veiculo v : filaVeiculos) {
-			dadosCompletos += v.toString();
+		for (int veiculoAtual : filaVeiculos) {
+			dadosCompletos += veiculoAtual;
 			dadosCompletos += "--------------------\n";
 		}
 

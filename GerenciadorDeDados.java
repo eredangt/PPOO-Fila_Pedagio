@@ -240,7 +240,7 @@ public class GerenciadorDeDados {
 	
 	private void criarFilaRand(String[] campos) {
 		if (filaRand == null) {
-			filaRand = campos[1] == "aleatoria";
+			filaRand = campos[1].equals("aleatoria");
 		}
 	}
 	

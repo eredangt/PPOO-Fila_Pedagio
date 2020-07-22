@@ -2,7 +2,7 @@
 ---------------------------------------------------------------------------------
 Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 2020/01
 ----------------Grupo 05 - Fila de veículos em pedágio rodoviário----------------
-    Integrantes: 
+    Integrantes:
         Caio de Oliveira (10A - 201820267),
         Ismael Martins Silva (10A - 201820281),
         Layse Cristina Silva Garcia (10A - 201811177),
@@ -11,26 +11,26 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 */
 
 /**
-* Classe que representa o atendimento por FUNCIONÁRIO no pedágio.
+* Classe que representa o atendimento por Funcionário no pedágio.
 * Sendo uma subclasse de Atendimento.
 */
 public class Funcionario extends Atendimento {
 	private static int numeroFuncionarios = 0;
 	private int idFuncionario;
-	
+
 	/**
-	* Construtor incrementa o contador de Funcionários e 
+	* Construtor incrementa o contador de Funcionários e
 	* define os IDs para cada funcionário a partir desse valor.
-	* @param tempo atendimento double que define um tempo base 
+	* @param tempo atendimento double que define um tempo base
 	* para as operações naquele tipo de atendimento.
 	*/
 	public Funcionario(double tempoAtendimento) {
 		super(tempoAtendimento);
-		
+
 		numeroFuncionarios += 1;
 		idFuncionario = numeroFuncionarios;
 	}
-	
+
 	/**
 	* Método utilizado apenas para fins de debug.
 	* @return String - uma cadeia de caracteres formatada
@@ -40,7 +40,7 @@ public class Funcionario extends Atendimento {
 	public String toString() {
 		return super.toString() + "Identificação Funcionário: " + getIdFuncionario() + "\n";
 	}
-	
+
 	/**
 	* Método que informa o identificador único de um funcionário.
 	* @return int - contendo o número que representa o ID.
@@ -48,7 +48,7 @@ public class Funcionario extends Atendimento {
 	protected int getIdFuncionario() {
 		return idFuncionario;
 	}
-	
+
 	/**
 	* Método que informa quantos objetos da classe Funcionario
 	* foram instanciados.

@@ -14,6 +14,7 @@ import java.util.PriorityQueue;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.ArrayList;
 
 /**
 * Classe que realiza a Simulação da Fila do Pedágio.
@@ -28,9 +29,12 @@ public class Simulador {
 	private String nomeArquivoEntrada;
 	private String nomeArquivoRelatorio;
     private long tempoInicial; // Tempo de execução
-	private double tempoSimulacao; // Tempo real
+    private int tempoTotalSimulado;
 	private int tempoEventos;
 	private int intervaloChegada;
+	private int numeroEventosTratados;
+	private int tamanhoMaiorFila;
+	private ArrayList<Integer> tamanhosFilas;
 	private GerenciadorDeDados gdd;
 	private PriorityQueue<Evento> filaEventos;
 	private HashMap<Integer, Cabine> cabines;
@@ -46,10 +50,13 @@ public class Simulador {
     */
 	public Simulador() {
 		tempoInicial = 0;
-		tempoSimulacao = 0d;
 		tempoEventos = 0;
+		numeroEventosTratados = 0;
+		tamanhoMaiorFila = 0;
+		tempoTotalSimulado = 0;
 		nomeArquivoEntrada = "Dados.txt";
 		nomeArquivoRelatorio = "Relatorio.txt";
+		tamanhosFilas = new ArrayList<Integer>();
 		gdd = new GerenciadorDeDados();
 		filaEventos = new PriorityQueue<Evento>();
 		cabines = new HashMap<Integer, Cabine>();
@@ -63,14 +70,14 @@ public class Simulador {
 	* O método enfileirarChegadas() verifica se a fila será aleatória ou não.
 	* O método executarSimulacao() retira os eventos da fila.
 	*/
-	public void Simulacao() throws Exception {
+	public void iniciarSimulacao() throws Exception {
         try {
             gdd.inicializarDados(nomeArquivoEntrada);
         }
         catch (Exception e) {
 			throw e;
 		}
-		
+
 		try {
 			filaRand = gdd.getFilaRand();
 			intervaloChegada = gdd.getIntervaloChegada();
@@ -103,8 +110,20 @@ public class Simulador {
 		}
 		catch (Exception e) {}
 
-		enfileirarChegadas();
-		executarSimulacao();
+		try {
+			enfileirarChegadas();
+		}
+		catch (Exception e) {
+			throw e;
+		}
+
+		try {
+			executarSimulacao();
+		}
+		catch (Exception e) {
+			throw e;
+		}
+		
 	}
 
 	/**
@@ -113,10 +132,22 @@ public class Simulador {
 	* eventos na fila de Evento.
 	*/
 	private void executarSimulacao() {
+		int tempoUltimoEvento = -1;
+		
 		while (!filaEventos.isEmpty()) {
-			Evento e = desenfilerarEvento();
+			Evento eventoAtual = desenfilerarEvento();
+			tempoUltimoEvento = eventoAtual.getTempoEvento();
 
-			executarEvento(e);
+			try {
+				executarEvento(eventoAtual);
+			}
+			catch (Exception e) {
+				throw e;
+			}
+		}
+
+		if (tempoUltimoEvento != -1) {
+			setTempoTotalSimulado(tempoUltimoEvento);
 		}
 	}
 
@@ -129,18 +160,81 @@ public class Simulador {
 	*/
 	private void enfileirarChegadas() {
 		int tempoChegada = 0;
+		ArrayList<Integer> listaTemposUsados = new ArrayList<Integer>();
+		
 		for (Map.Entry<Integer, Veiculo> veiculo : veiculos.entrySet()) {
-			Veiculo v = veiculo.getValue();
+			Veiculo veiculoAtual = veiculo.getValue();
+
+			Random random = new Random();
+			tempoChegada += random.nextInt(getIntervaloChegada());
+
+			while (listaTemposUsados.contains(tempoChegada)) {
+				tempoChegada += 1;
+			}
+			listaTemposUsados.add(tempoChegada);
+
+			Cabine cabineAtual = null;
+			
 			if (filaRand) {
-				Cabine c = cabineAleatoria(v.getAutomatico());
-				filaEventos.add(new Chegada(tempoChegada, c.getIdCabine(), v.getIdVeiculo()));
+				cabineAtual = cabineAleatoria(veiculoAtual.getAutomatico());
 			}
 			else {
-				Cabine c = cabineMenorFila(v.getAutomatico());
-				filaEventos.add(new Chegada(tempoChegada, c.getIdCabine(), v.getIdVeiculo()));
+				cabineAtual = cabineMenorFila(veiculoAtual.getAutomatico());
 			}
-			tempoChegada += getIntervaloChegada();
+			
+			Chegada eventoAtual = new Chegada(tempoChegada, cabineAtual.getIdCabine(), veiculoAtual.getIdVeiculo());
+			filaEventos.add(eventoAtual);
+			int tempo = calcularTempoSaida(eventoAtual);
+			int idCabine = eventoAtual.getIdCabine();
+			int idVeiculo = eventoAtual.getIdVeiculo();
+			enfileirarNaCabine(idCabine, idVeiculo);
 		}
+	}
+
+	private void setTempoTotalSimulado(int tempo) {
+		tempoTotalSimulado = tempo;
+	}
+
+	private int getTempoTotalSimulado() {
+		return tempoTotalSimulado;
+	}
+
+	private void incrementaNumeroEventos() {
+		numeroEventosTratados += 1;
+	}
+
+	private int getNumeroEventosTratados() {
+		return numeroEventosTratados;
+	}
+
+	private void calcularTamanhoMaiorFila() {
+		for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
+			Cabine cabineAtual = cabine.getValue();
+
+			adicionaTamanhosFila(tamanhosFilas.size());
+			if (cabineAtual.calcularTamanho() > tamanhoMaiorFila) {
+				tamanhoMaiorFila = cabineAtual.calcularTamanho();
+			}
+		}
+	}
+
+	private int getTamanhoMaiorFila() {
+		return tamanhoMaiorFila;
+	}
+
+	private void adicionaTamanhosFila(int tamanhoAntigo) {
+		tamanhosFilas.add(tamanhoAntigo);
+	}
+
+	private int calculaTamanhoMedioFila() {
+		int divisor = tamanhosFilas.size();
+
+		int somador = 0;
+		for (int tamanho : tamanhosFilas) {
+			somador += tamanho;
+		}
+
+		return (int)((float)somador/divisor);
 	}
 
 	/**
@@ -164,18 +258,24 @@ public class Simulador {
 	* Se o objeto é do tipo dinâmico Chegada, realizo o método executaChegada().
 	* Caso contrário, chamo o método executaSaida(e).
 	*/
-	private void executarEvento(Evento e) {
-		if (e instanceof Chegada) {
-			executarChegada((Chegada)e);
+	private void executarEvento(Evento eventoAtual) {
+		if (eventoAtual instanceof Chegada) {
+			Chegada c = (Chegada)eventoAtual;
+			System.out.println("Chegada, " + eventoAtual.getTempoEvento() + ", Veiculo: " + c.getIdVeiculo() + ", Cabine: " + eventoAtual.getIdCabine());
+			executarChegada((Chegada)eventoAtual);
+			
 		}
 		else {
-			executarSaida((Saida)e);
+			System.out.println("Saida, " + eventoAtual.getTempoEvento() + ", Cabine: " + eventoAtual.getIdCabine());
+			executarSaida((Saida)eventoAtual);
 		}
+		incrementaNumeroEventos();
+		calcularTamanhoMaiorFila();
 	}
 
-	private void enfileirarNaCabine(int idCabine) {
-		Cabine c = getCabine(idCabine);
-		getCabine(c.getIdCabine());
+	private void enfileirarNaCabine(int idCabine, int idVeiculo) {
+		Cabine cabineAtual = getCabine(idCabine);
+		cabineAtual.enfileirarVeiculo(idVeiculo);
 	}
 
 	private void enfileirarSaida(int tempoChegada, int idCabine) {
@@ -190,10 +290,10 @@ public class Simulador {
 	* Assim que executo o método, crio um objeto de Saída e coloco na fila
 	* o evento passado por parâmetro.
 	*/
-	private void executarChegada(Chegada e) {
-		int tempo = calcularTempoSaida(e);
-		int idCabine = e.getIdCabine();
-		enfileirarNaCabine(idCabine);
+	private void executarChegada(Chegada eventoAtual) {
+		int tempo = calcularTempoSaida(eventoAtual);
+		int idCabine = eventoAtual.getIdCabine();
+		int idVeiculo = eventoAtual.getIdVeiculo();
 		enfileirarSaida(tempo, idCabine);
 	}
 
@@ -215,8 +315,8 @@ public class Simulador {
 	* @return boolean - true se o atendimento da cabine for
 	* automatico.
 	*/
-	private boolean ehAutomatico(Cabine c) {
-		return getAtendimento(c.getIdAtendimento()) instanceof Automatico;
+	private boolean ehAutomatico(Cabine cabineAtual) {
+		return getAtendimento(cabineAtual.getIdAtendimento()) instanceof Automatico;
 	}
 
 	/**
@@ -230,13 +330,15 @@ public class Simulador {
 	* @return int - retorna o tempo final do Veículo baseado na chegada,
 	* no tempo de atendimento e na locomoção.
 	*/
-	private int calcularTempoSaida(Chegada e) {
-		int tempoChegada = e.getTempoEvento(); // Tempo da Chegada
-		int tempoAtendimento = (int)(getAtendimento(getCabine(e.getIdCabine()).getIdAtendimento()).getTempoAtendimento()); // Tempo do atendimento
+	private int calcularTempoSaida(Chegada eventoAtual) {
+		int tempoChegada = eventoAtual.getTempoEvento(); // Tempo da Chegada
+		Cabine cabineAtual = getCabine(eventoAtual.getIdCabine());
+		Atendimento atendimentoAtual = getAtendimento(cabineAtual.getIdAtendimento());
+		int tempoAtendimento = (int)(atendimentoAtual.getTempoAtendimento()); // Tempo do atendimento
 
 		Random random = new Random();
-		Veiculo v = getVeiculo(e.getIdVeiculo());
-		int tempoLocomocao = (v instanceof VeiculoLeve) ? 2 + random.nextInt(6) : 7 + random.nextInt(9);
+		Veiculo veiculoAtual = getVeiculo(eventoAtual.getIdVeiculo());
+		int tempoLocomocao = (veiculoAtual instanceof VeiculoLeve) ? 2 + random.nextInt(6) : 7 + random.nextInt(9);
 
 		return tempoChegada + tempoAtendimento + tempoLocomocao;
 	}
@@ -246,8 +348,13 @@ public class Simulador {
 	* Assim que executo o método, retiro o elemento da fila.
 	* @param e - evento de saida.
 	*/
-	private void executarSaida(Saida e) {
-		getCabine(e.getIdCabine()).desenfileirarVeiculo();
+	private void executarSaida(Saida eventoAtual) {
+		try {
+			getCabine(eventoAtual.getIdCabine()).desenfileirarVeiculo();
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
     /**
@@ -274,15 +381,15 @@ public class Simulador {
 		Cabine aleatoria;
 
 		Random random = new Random();
-		aleatoria = cabines.get(1 + random.nextInt(cabines.size() - 1));
+		aleatoria = cabines.get(1 + random.nextInt(cabines.size()));
 
 		if (automatico) {
 			while (!ehAutomatico(aleatoria)) {
-				aleatoria = cabines.get(1 + random.nextInt(cabines.size() - 1));
+				aleatoria = cabines.get(1 + random.nextInt(cabines.size()));
 			}
 		} else {
 			while (ehAutomatico(aleatoria)) {
-				aleatoria = cabines.get(1 + random.nextInt(cabines.size() - 1));
+				aleatoria = cabines.get(1 + random.nextInt(cabines.size()));
 			}
 		}
 
@@ -297,18 +404,18 @@ public class Simulador {
 		Cabine menorFila = null;
 
 		for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
-			Cabine c = cabine.getValue();
-			if (ehAutomatico(c) == automatico) {
-				menorFila = c;
+			Cabine cabineAtual = cabine.getValue();
+			if (ehAutomatico(cabineAtual) == automatico) {
+				menorFila = cabineAtual;
 				break;
 			}
 		}
 
 		for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
-			Cabine c = cabine.getValue();
-			if ((c.calcularTamanho() < menorFila.calcularTamanho())
-							&& (ehAutomatico(c) == automatico)) {
-				menorFila = c;
+			Cabine cabineAtual = cabine.getValue();
+			if ((cabineAtual.calcularTamanho() < menorFila.calcularTamanho())
+							&& (ehAutomatico(cabineAtual) == automatico)) {
+				menorFila = cabineAtual;
 			}
 		}
 

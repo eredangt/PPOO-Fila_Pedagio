@@ -1,5 +1,3 @@
-
-
 public class TesteGDD {
     public static void main(String[] args) {
         GerenciadorDeDados gdd = new GerenciadorDeDados();

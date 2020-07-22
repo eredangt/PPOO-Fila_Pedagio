@@ -40,10 +40,10 @@ public abstract class Evento implements Comparable<Evento> {
     }
 
     @Override
-    public int compareTo(Evento e) {
-        if (tempoEvento > e.getTempoEvento()) {
+    public int compareTo(Evento eventoComparado) {
+        if (this.tempoEvento > eventoComparado.getTempoEvento()) {
             return 1;
-        } else if (tempoEvento < e.getTempoEvento()) {
+        } else if (this.tempoEvento < eventoComparado.getTempoEvento()) {
             return -1;
         }
         return 0;
