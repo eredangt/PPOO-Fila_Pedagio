@@ -10,6 +10,8 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 ---------------------------------------------------------------------------------
 */
 
+import java.util.Set;
+import java.util.LinkedHashSet;
 import java.util.PriorityQueue;
 import java.util.Map;
 import java.util.HashMap;
@@ -34,9 +36,10 @@ public class Simulador {
 	private int intervaloChegada;
 	private int numeroEventosTratados;
 	private int tamanhoMaiorFila;
-	private ArrayList<Integer> tamanhosFilas;
+	private HashMap<Integer,Integer> tamanhosFilas;
 	private GerenciadorDeDados gdd;
 	private PriorityQueue<Evento> filaEventos;
+	private Set<Integer> temposEventos;
 	private HashMap<Integer, Cabine> cabines;
 	private HashMap<Integer, Veiculo> veiculos;
 	private HashMap<Integer, Atendimento> atendimentos;
@@ -56,9 +59,10 @@ public class Simulador {
 		tempoTotalSimulado = 0;
 		nomeArquivoEntrada = "Dados.txt";
 		nomeArquivoRelatorio = "Relatorio.txt";
-		tamanhosFilas = new ArrayList<Integer>();
+		tamanhosFilas = new HashMap<Integer,Integer>();
 		gdd = new GerenciadorDeDados();
 		filaEventos = new PriorityQueue<Evento>();
+		temposEventos = new LinkedHashSet<Integer>();
 		cabines = new HashMap<Integer, Cabine>();
 		veiculos = new HashMap<Integer, Veiculo>();
 		atendimentos = new HashMap<Integer, Atendimento>();
@@ -133,22 +137,34 @@ public class Simulador {
 	*/
 	private void executarSimulacao() {
 		int tempoUltimoEvento = -1;
+		int tempoExecucao = 0;
+		Evento eventoAtual;
 		
-		while (!filaEventos.isEmpty()) {
-			Evento eventoAtual = desenfilerarEvento();
-			tempoUltimoEvento = eventoAtual.getTempoEvento();
+		do {
+			tempoExecucao ++;
+			eventoAtual = filaEventos.peek();
+			
+			if (eventoAtual.getTempoEvento() == tempoExecucao) {
+				eventoAtual = desenfilerarEvento();
+				tempoUltimoEvento = eventoAtual.getTempoEvento();
+				
+				try {
+					executarEvento(eventoAtual);
+				}
+				catch (Exception e) {
+					throw e;
+				}
+			}
 
-			try {
-				executarEvento(eventoAtual);
-			}
-			catch (Exception e) {
-				throw e;
-			}
+			calcularTamanhoMaiorFila();
 		}
+		while (!filaEventos.isEmpty());
 
 		if (tempoUltimoEvento != -1) {
 			setTempoTotalSimulado(tempoUltimoEvento);
 		}
+
+		System.out.println(gerarEstatisticas());
 	}
 
 	/**
@@ -182,6 +198,7 @@ public class Simulador {
 				cabineAtual = cabineMenorFila(veiculoAtual.getAutomatico());
 			}
 			
+			temposEventos.add(tempoChegada);
 			Chegada eventoAtual = new Chegada(tempoChegada, cabineAtual.getIdCabine(), veiculoAtual.getIdVeiculo());
 			filaEventos.add(eventoAtual);
 			int tempo = calcularTempoSaida(eventoAtual);
@@ -193,6 +210,10 @@ public class Simulador {
 
 	private void setTempoTotalSimulado(int tempo) {
 		tempoTotalSimulado = tempo;
+	}
+
+	private void calculaTempoMedioFila() {
+		
 	}
 
 	private int getTempoTotalSimulado() {
@@ -211,7 +232,7 @@ public class Simulador {
 		for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
 			Cabine cabineAtual = cabine.getValue();
 
-			adicionaTamanhosFila(tamanhosFilas.size());
+			adicionaTamanhosFila(cabineAtual.calcularTamanho());
 			if (cabineAtual.calcularTamanho() > tamanhoMaiorFila) {
 				tamanhoMaiorFila = cabineAtual.calcularTamanho();
 			}
@@ -223,15 +244,21 @@ public class Simulador {
 	}
 
 	private void adicionaTamanhosFila(int tamanhoAntigo) {
-		tamanhosFilas.add(tamanhoAntigo);
+		Set<Integer> valor = tamanhosFilas.keySet();
+		if (valor.contains(tamanhoAntigo)) {
+			tamanhosFilas.put(tamanhoAntigo, tamanhosFilas.get(tamanhoAntigo) + 1);
+		}
+		else {
+			tamanhosFilas.put(tamanhoAntigo, 1);
+		}
 	}
 
 	private int calculaTamanhoMedioFila() {
 		int divisor = tamanhosFilas.size();
 
 		int somador = 0;
-		for (int tamanho : tamanhosFilas) {
-			somador += tamanho;
+		for (Map.Entry<Integer, Integer> tamanho : tamanhosFilas.entrySet()) {
+			somador += tamanho.getKey() * tamanho.getValue();
 		}
 
 		return (int)((float)somador/divisor);
@@ -270,7 +297,6 @@ public class Simulador {
 			executarSaida((Saida)eventoAtual);
 		}
 		incrementaNumeroEventos();
-		calcularTamanhoMaiorFila();
 	}
 
 	private void enfileirarNaCabine(int idCabine, int idVeiculo) {
@@ -279,6 +305,7 @@ public class Simulador {
 	}
 
 	private void enfileirarSaida(int tempoChegada, int idCabine) {
+		temposEventos.add(tempoChegada);
 		filaEventos.add(new Saida(tempoChegada, idCabine));
 	}
 
@@ -338,9 +365,15 @@ public class Simulador {
 
 		Random random = new Random();
 		Veiculo veiculoAtual = getVeiculo(eventoAtual.getIdVeiculo());
-		int tempoLocomocao = (veiculoAtual instanceof VeiculoLeve) ? 2 + random.nextInt(6) : 7 + random.nextInt(9);
 
-		return tempoChegada + tempoAtendimento + tempoLocomocao;
+		int tempoLocomocao = (veiculoAtual instanceof VeiculoLeve) ? 2 + random.nextInt(6) : 7 + random.nextInt(9);
+		
+		int tempoTotal = tempoChegada + tempoAtendimento + tempoLocomocao;
+		while (temposEventos.contains(tempoTotal)) {
+			tempoTotal ++;
+		}
+
+		return tempoTotal;
 	}
 
 	/**
@@ -362,7 +395,16 @@ public class Simulador {
     * @return String - retorna a saída final da fila.
     */
     public String gerarEstatisticas() {
-		return "";
+		String texto;
+
+		texto = String.format("Tempo total de simulacao: %d\n", getTempoTotalSimulado()) + 
+				String.format("Numero de eventos tradados: %d\n", getNumeroEventosTratados()) +
+				String.format("Tempo médio de espera na fila de atendimento: %d\n", 0) +
+				String.format("Tamanho médio da fila de atendimento: %d\n", 0) +
+				String.format("Tamanho máximo da fila de atendimento: %d\n", getTamanhoMaiorFila()) +
+				String.format("Tempo médio de atendimento de cada tipo de cliente etc: %d\n", 0);
+
+		return texto;
 	}
 
     /**

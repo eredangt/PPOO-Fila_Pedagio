@@ -10,6 +10,8 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 ---------------------------------------------------------------------------------
 */
 
+import java.util.Set;
+import java.util.LinkedHashSet;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -24,6 +26,7 @@ public class Cabine {
 	private static int numeroCabines = 0;
 	private int idCabine;
 	private Queue<Integer> filaVeiculos;
+	private Set<Integer> tamanhosFila;
 	private int idAtendimento;
 
 	/**
@@ -37,6 +40,7 @@ public class Cabine {
 		numeroCabines += 1;
 		idCabine = numeroCabines;
 		filaVeiculos = new LinkedList<Integer>();
+		tamanhosFila = new LinkedHashSet<Integer>();
 		this.idAtendimento = idAtendimento;
 	}
 
@@ -71,6 +75,7 @@ public class Cabine {
 	*/
 	public void enfileirarVeiculo(int idVeiculo) {
 		filaVeiculos.offer(idVeiculo);
+		tamanhosFila.add(filaVeiculos.size());
 	}
 	/**
 	* Método que retira um veículo da fila.
