@@ -21,6 +21,7 @@ public abstract class Veiculo {
     private static double tarifaFixa = -1d;
     private int idVeiculo;
     private boolean automatico;
+    private int tempoEspera;
 
     /**
      * Construtor incrementa o contador de veículos e
@@ -32,16 +33,32 @@ public abstract class Veiculo {
         numeroVeiculos += 1;
         idVeiculo = numeroVeiculos;
         this.automatico = automatico;
+        this.tempoEspera = -1;
     }
 
-	/**
-	 * Método que define a tarifa fixa utilizada pelo pedágio.
+    /**
+     * Método que define a tarifa fixa utilizada pelo pedágio.
      * @param tarifaFixa um double que define a tarifa que será
      * utilizada no calculo da tarifa do veículo.
-	 */
+     */
     public static void setTarifaFixa(double tarifaFixa) {
-		Veiculo.tarifaFixa = tarifaFixa;
-	}
+        Veiculo.tarifaFixa = tarifaFixa;
+    }
+
+    public void setTempoEspera(int tempo) {
+        if (tempoEspera == -1) {
+            tempoEspera = tempo;
+        }
+        else {
+            int tempoAntigo = tempoEspera;
+            tempoEspera = tempo - tempoEspera;
+            if (tempoEspera < 0) {
+                //System.out.println(tempo);
+                //System.out.println(tempoAntigo);
+                //System.out.println(tempoEspera);
+            }
+        }
+    }
 
     /**
      * Método utilizado apenas para fins de debug.
@@ -57,8 +74,12 @@ public abstract class Veiculo {
      * @return double - contendo o valor da tarifa do pedágio.
      */
      public static double getTarifaFixa() {
-		return tarifaFixa;
-	 }
+        return tarifaFixa;
+     }
+
+     public int getTempoEspera() {
+         return tempoEspera;
+     }
 
     /**
      * Método abstrato que será sobreescrito nas classes filhas.

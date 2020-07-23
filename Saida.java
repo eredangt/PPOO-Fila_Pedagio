@@ -15,12 +15,13 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 */
 public class Saida extends Evento {
 
-	/*
+    /*
      * Construtor da classe Saida.
      * @param tempoEvento tempo final do evento.
      * @param cabine a qual o veiculo está.
      */
     public Saida(int tempoEvento, int idCabine) {
-		super(tempoEvento, idCabine);
+        super(tempoEvento);
+        this.idCabine = idCabine;
     }
 }

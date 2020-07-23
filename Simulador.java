@@ -141,7 +141,7 @@ public class Simulador {
         do {
             tempoExecucao ++;
             eventoAtual = filaEventos.peek();
-            
+
             if (eventoAtual.getTempoEvento() == tempoExecucao) {
                 eventoAtual = desenfilerarEvento();
                 tempoUltimoEvento = eventoAtual.getTempoEvento();
@@ -150,11 +150,9 @@ public class Simulador {
                     executarEvento(eventoAtual);
                 }
                 catch (Exception e) {
-                    throw e;
+                    throw new RuntimeException("Erro na execução de um evento!\n" + e.getMessage());
                 }
             }
-            
-            atualizaMediaFilas();
         }
         while (!filaEventos.isEmpty());
 
@@ -187,23 +185,14 @@ public class Simulador {
             }
             listaTemposUsados.add(tempoChegada);
 
-            Cabine cabineAtual = null;
-
-            if (filaRand) {
-                cabineAtual = cabineAleatoria(veiculoAtual.getAutomatico());
-            }
-            else {
-                cabineAtual = cabineMenorFila(veiculoAtual.getAutomatico());
-            }
-
             temposEventos.add(tempoChegada);
-            Chegada eventoAtual = new Chegada(tempoChegada, cabineAtual.getIdCabine(), veiculoAtual.getIdVeiculo());
+            Chegada eventoAtual = new Chegada(tempoChegada, veiculoAtual.getIdVeiculo());
             filaEventos.add(eventoAtual);
-            int tempo = calcularTempoSaida(eventoAtual);
-            int idCabine = eventoAtual.getIdCabine();
-            int idVeiculo = eventoAtual.getIdVeiculo();
-            enfileirarNaCabine(idCabine, idVeiculo);
         }
+    }
+
+    private boolean cabineVazia(int idCabine) {
+        return getCabine(idCabine).vazia();
     }
 
     private void atualizaMediaFilas() {
@@ -249,6 +238,7 @@ public class Simulador {
             }
             catch (Exception e) {
                 System.out.println("Cabine inexistente!");
+                return -1;
             }
         }
     }
@@ -275,17 +265,22 @@ public class Simulador {
     * Caso contrário, chamo o método executaSaida(e).
     */
     private void executarEvento(Evento eventoAtual) {
-        if (eventoAtual instanceof Chegada) {
-            //Chegada c = (Chegada)eventoAtual;
-            //System.out.println("Chegada, " + eventoAtual.getTempoEvento() + ", Veiculo: " + c.getIdVeiculo() + ", Cabine: " + eventoAtual.getIdCabine());
-            executarChegada((Chegada)eventoAtual);
-
+        try {
+            if (eventoAtual instanceof Chegada) {
+                //Chegada c = (Chegada)eventoAtual;
+                //System.out.println("Chegada, " + eventoAtual.getTempoEvento() + ", Veiculo: " + c.getIdVeiculo() + ", Cabine: " + eventoAtual.getIdCabine());
+                executarChegada((Chegada)eventoAtual);
+            }
+            else {
+                int idVeiculo = executarSaida((Saida)eventoAtual);
+                //System.out.println("Saida, " + eventoAtual.getTempoEvento() + ", Veiculo: " + idVeiculo + ", Cabine: " + eventoAtual.getIdCabine());
+            }
+            incrementaNumeroEventos();
+            atualizaMediaFilas();
         }
-        else {
-            int idVeiculo = executarSaida((Saida)eventoAtual);
-            //System.out.println("Saida, " + eventoAtual.getTempoEvento() + ", Veiculo: " + idVeiculo + ", Cabine: " + eventoAtual.getIdCabine());
+        catch (Exception e) {
+            throw new RuntimeException("Erro na execução da chegada ou saída.\n" + e.getMessage());
         }
-        incrementaNumeroEventos();
     }
 
     private void enfileirarNaCabine(int idCabine, int idVeiculo) {
@@ -296,6 +291,7 @@ public class Simulador {
     private void enfileirarSaida(int tempoChegada, int idCabine) {
         temposEventos.add(tempoChegada);
         filaEventos.add(new Saida(tempoChegada, idCabine));
+        
     }
 
     /**
@@ -307,10 +303,31 @@ public class Simulador {
     * o evento passado por parâmetro.
     */
     private void executarChegada(Chegada eventoAtual) {
-        int tempo = calcularTempoSaida(eventoAtual);
-        int idCabine = eventoAtual.getIdCabine();
-        int idVeiculo = eventoAtual.getIdVeiculo();
-        enfileirarSaida(tempo, idCabine);
+        try {
+            
+            int idVeiculo = eventoAtual.getIdVeiculo();
+            Veiculo veiculoAtual = getVeiculo(idVeiculo);
+            int tempoChegada = eventoAtual.getTempoEvento();
+            veiculoAtual.setTempoEspera(tempoChegada);
+            
+            Cabine cabineAtual = null;
+            if (filaRand) {
+                cabineAtual = cabineAleatoria(veiculoAtual.getAutomatico());
+            }
+            else {
+                cabineAtual = cabineMenorFila(veiculoAtual.getAutomatico());
+            }
+            int idCabine = cabineAtual.getIdCabine();
+            eventoAtual.setIdCabine(idCabine);
+            
+            int tempo = calcularTempoSaida(eventoAtual);
+            
+            enfileirarNaCabine(idCabine, idVeiculo);
+            enfileirarSaida(tempo, idCabine);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Erro na função 'executarChegada()'.\n");
+        }
     }
 
     private Cabine getCabine(int idCabine) {
@@ -373,7 +390,14 @@ public class Simulador {
     private int executarSaida(Saida eventoAtual) {
         int idVeiculoRemovido = -1;
         try {
-            idVeiculoRemovido = getCabine(eventoAtual.getIdCabine()).desenfileirarVeiculo();
+            Cabine cabineParaRemover = getCabine(eventoAtual.getIdCabine());
+            idVeiculoRemovido = cabineParaRemover.desenfileirarVeiculo();
+            
+            Veiculo veiculoRemovido = getVeiculo(idVeiculoRemovido);
+            veiculoRemovido.setTempoEspera(eventoAtual.getTempoEvento());
+
+            String tipoVeiculo = (veiculoRemovido instanceof VeiculoLeve) ? "Leve" : "Pesado";
+            cabineParaRemover.armazenaTempo(tipoVeiculo, veiculoRemovido.getTempoEspera());
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
@@ -389,16 +413,42 @@ public class Simulador {
         String texto;
         String textoMaioresTamanhos = getTextoTamanhos("Maior");
         String textoMedioTamanhos = getTextoTamanhos("Medio");
+        String textoMedioAtendimentosTotal = getTextoMedioAtendimentos("Total");
+        String textoMedioAtendimentosEspecífico = "";
+        textoMedioAtendimentosEspecífico += getTextoMedioAtendimentos("Leve");
+        textoMedioAtendimentosEspecífico += getTextoMedioAtendimentos("Pesado");
 
         texto = String.format("Tempo total de simulacao: %d\n\n", getTempoTotalSimulado()) +
                 String.format("Numero de eventos tradados: %d\n\n", getNumeroEventosTratados()) +
-                String.format("Tempo médio de espera na fila de atendimento: %d\n\n", 0) +
-                String.format("Tamanho médio das filas de atendimento:\n\n%s\n", textoMedioTamanhos) +
-                String.format("Tamanho máximo das filas de atendimento:\n\n%s\n", textoMaioresTamanhos) +
-                String.format("Tempo médio de atendimento de cada tipo de cliente etc: %d\n\n", 0);
-                
+                String.format("Tempos médios de espera em cada fila de atendimento:\n\n%s", textoMedioAtendimentosTotal) +
+                String.format("Tamanho médio das filas de atendimento:\n\n%s", textoMedioTamanhos) +
+                String.format("Tamanho máximo das filas de atendimento:\n\n%s", textoMaioresTamanhos) +
+                String.format("Tempo médio de atendimento de cada tipo de cliente:\n\n%s", textoMedioAtendimentosEspecífico);
 
         return texto;
+    }
+
+    public String getTextoMedioAtendimentos(String abordagem) {
+        String texto = "";
+        int idCabineAtual = 0;
+        Cabine cabineAtual = null;
+        int tempo = 0;
+
+        if (abordagem.equals("Leve")) {
+            texto += "Média de tempo de espera de Veículos Leves:\n";
+        }
+        else if (abordagem.equals("Pesado")) {
+            texto += "Média de tempo de espera de Veículos Pesados:\n";
+        }
+
+        for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
+            idCabineAtual = cabine.getKey();
+            cabineAtual = cabine.getValue();
+            tempo = cabineAtual.getMediaTempoEspera(abordagem);
+
+            texto += String.format("Fila da Cabine %d: %d\n", idCabineAtual, tempo);
+        }
+        return texto + "\n";
     }
 
     public String getTextoTamanhos(String abordagem) {
@@ -410,22 +460,20 @@ public class Simulador {
             for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
                 idCabineAtual = cabine.getKey();
                 tamanho = getTamanhoMaiorFila(idCabineAtual);
-                
-                texto += String.format("Cabine %d: %d\n", idCabineAtual, tamanho);
+
+                texto += String.format("Fila da Cabine %d: %d\n", idCabineAtual, tamanho);
             }
-            texto += String.format("Tamanho máximo da maior fila : %d\n", getTamanhoMaiorFila(0));
         }
         else { // if (abordagem.equals("Medio") {
             for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
                 Cabine cabineAtual = cabine.getValue();
                 idCabineAtual = cabineAtual.getIdCabine();
                 tamanho = cabineAtual.getTamanhoMedioFila();
-                
-                texto += String.format("Cabine %d: %d\n", idCabineAtual, tamanho);
+
+                texto += String.format("Fila da Cabine %d: %d\n", idCabineAtual, tamanho);
             }
         }
-
-        return texto;
+        return texto + "\n";
     }
 
     /**

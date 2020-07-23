@@ -17,22 +17,26 @@ public abstract class Evento implements Comparable<Evento> {
     private int tempoEvento;
     protected int idCabine;
 
-	/*
+    /*
      * Construtor da classe Evento.
      * @param tempoEvento tempo atual do programa.
      * @param cabine a qual o atendimento acontecerá.
      */
-    public Evento(int tempoEvento, int idCabine) {
+    public Evento(int tempoEvento) {
         this.tempoEvento = tempoEvento;
-        this.idCabine = idCabine;
+        this.idCabine = -1;
     }
 
-	/*
+    /*
      * Método que informa o tempo atual do evento.
      * @return int - contendo número que representa o tempo atual do evento.
      */
     public int getTempoEvento() {
         return tempoEvento;
+    }
+
+    public void setIdCabine(int idCabine) {
+        this.idCabine = idCabine;
     }
 
     public int getIdCabine() {

@@ -30,6 +30,8 @@ public class Cabine {
     private Queue<Integer> filaVeiculos;
     private HashMap<Integer,Integer> tamanhosFila;
     private int idAtendimento;
+    private LinkedList<Integer> tempoEsperaLeve;
+    private LinkedList<Integer> tempoEsperaPesado;
 
     /**
     * Construtor incrementa o contador de Cabines e
@@ -43,6 +45,8 @@ public class Cabine {
         idCabine = numeroCabines;
         filaVeiculos = new LinkedList<Integer>();
         tamanhosFila = new HashMap<Integer,Integer>();
+        tempoEsperaLeve = new LinkedList<Integer>();
+        tempoEsperaPesado = new LinkedList<Integer>();
         this.idAtendimento = idAtendimento;
     }
 
@@ -72,6 +76,49 @@ public class Cabine {
         return idCabine;
     }
 
+    public boolean vazia() {
+        return filaVeiculos.isEmpty();
+    }
+
+    public void armazenaTempo(String tipoVeiculo, int tempo) {
+        if (tipoVeiculo.equals("Leve")) {
+            tempoEsperaLeve.add(tempo);
+        }
+        else {
+            tempoEsperaPesado.add(tempo);
+        }
+    }
+
+    public int getMediaTempoEspera(String tipoVeiculo) {
+        int soma = 0;
+        int tamanho = 1;
+
+        if (getTamanhoMaxFila() == 0) {
+            return 0;
+        }
+        
+        if (!tipoVeiculo.equals("Pesado")) {
+            LinkedList<Integer> listaUtilizada = tempoEsperaLeve;
+            soma += getSomaLista(listaUtilizada);
+            tamanho += listaUtilizada.size();
+        }
+        if (!tipoVeiculo.equals("Leve")) {
+            LinkedList<Integer> listaUtilizada = tempoEsperaPesado;
+            soma += getSomaLista(listaUtilizada);
+            tamanho += listaUtilizada.size();
+        }
+        return (int)(soma/(tamanho - 1));
+
+    }
+
+    private int getSomaLista(LinkedList<Integer> lista) {
+        int somador = 0;
+        for (int tempo : lista) {
+            somador += tempo;
+        }
+        return somador;
+    }
+
     /**
     * Método que coloca um veículo na fila.
     */
@@ -88,22 +135,22 @@ public class Cabine {
         else {
             tamanhosFila.put(novoTamanho, 1);
         }
-            
+
     }
 
     public int getTamanhoMedioFila() {
         int numerador = 0;
-        int denominador = 0;
+        int denominador = 1;
         for (Integer chave : tamanhosFila.keySet()) {
             Integer valor = tamanhosFila.get(chave);
 
             System.out.println("<" + chave + ", " + valor + ">");
-            
+
             numerador += (chave * valor);
 
             denominador += valor;
         }
-        return (int)(numerador/denominador);
+        return (int)(numerador/(denominador - 1));
     }
 
     public int getTamanhoMaxFila() {
@@ -112,7 +159,7 @@ public class Cabine {
         Collections.sort(sortedList);
         return sortedList.get(sortedList.size() - 1);
     }
-    
+
     /**
     * Método que retira um veículo da fila.
     * Caso ocorra a tentativa de retirar um veículo na fila vazia,

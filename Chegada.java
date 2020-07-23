@@ -18,15 +18,15 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 public class Chegada extends Evento {
     private int idVeiculo;
 
-	/*
+    /*
      * Construtor da classe Chegada.
      * @param tempoEvento tempo inicial do atendimento.
      * @param cabine que receberá o veiculo.
      * @param veiculo que será enfileirado.
      */
-    public Chegada(int tempoEvento, int idCabine, int idVeiculo) {
-		super(tempoEvento, idCabine);
-		this.idVeiculo = idVeiculo;
+    public Chegada(int tempoEvento, int idVeiculo) {
+        super(tempoEvento);
+        this.idVeiculo = idVeiculo;
     }
 
     public int getIdVeiculo() {
