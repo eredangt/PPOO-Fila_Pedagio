@@ -46,18 +46,7 @@ public abstract class Veiculo {
     }
 
     public void setTempoEspera(int tempo) {
-        if (tempoEspera == -1) {
-            tempoEspera = tempo;
-        }
-        else {
-            int tempoAntigo = tempoEspera;
-            tempoEspera = tempo - tempoEspera;
-            if (tempoEspera < 0) {
-                //System.out.println(tempo);
-                //System.out.println(tempoAntigo);
-                //System.out.println(tempoEspera);
-            }
-        }
+        tempoEspera = tempo;
     }
 
     /**

@@ -308,7 +308,6 @@ public class Simulador {
             int idVeiculo = eventoAtual.getIdVeiculo();
             Veiculo veiculoAtual = getVeiculo(idVeiculo);
             int tempoChegada = eventoAtual.getTempoEvento();
-            veiculoAtual.setTempoEspera(tempoChegada);
             
             Cabine cabineAtual = null;
             if (filaRand) {
@@ -321,7 +320,8 @@ public class Simulador {
             eventoAtual.setIdCabine(idCabine);
             
             int tempo = calcularTempoSaida(eventoAtual);
-            
+
+            veiculoAtual.setTempoEspera(tempo - tempoChegada);
             enfileirarNaCabine(idCabine, idVeiculo);
             enfileirarSaida(tempo, idCabine);
         }
@@ -392,9 +392,7 @@ public class Simulador {
         try {
             Cabine cabineParaRemover = getCabine(eventoAtual.getIdCabine());
             idVeiculoRemovido = cabineParaRemover.desenfileirarVeiculo();
-            
             Veiculo veiculoRemovido = getVeiculo(idVeiculoRemovido);
-            veiculoRemovido.setTempoEspera(eventoAtual.getTempoEvento());
 
             String tipoVeiculo = (veiculoRemovido instanceof VeiculoLeve) ? "Leve" : "Pesado";
             cabineParaRemover.armazenaTempo(tipoVeiculo, veiculoRemovido.getTempoEspera());
