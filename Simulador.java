@@ -29,13 +29,13 @@ import java.util.ArrayList;
 public class Simulador {
     private boolean filaRand;
     private String nomeArquivoEntrada;
-    private String nomeArquivoRelatorio;
-    private long tempoInicial; // Tempo de execução
+    // private String nomeArquivoRelatorio;
+    // private long tempoInicial; // Tempo de execução
     private int tempoTotalSimulado;
-    private int tempoEventos;
+    // private int tempoEventos;
     private int intervaloChegada;
     private int numeroEventosTratados;
-    private int tamanhoMaiorFila;
+    // private int tamanhoMaiorFila;
     private GerenciadorDeDados gdd;
     private PriorityQueue<Evento> filaEventos;
     private Set<Integer> temposEventos;
@@ -51,13 +51,13 @@ public class Simulador {
     * Também, cria um objeto que gerencia o arquivo.
     */
     public Simulador() {
-        tempoInicial = 0;
-        tempoEventos = 0;
+        // tempoInicial = 0;
+        // tempoEventos = 0;
         numeroEventosTratados = 0;
-        tamanhoMaiorFila = 0;
+        // tamanhoMaiorFila = 0;
         tempoTotalSimulado = 0;
         nomeArquivoEntrada = "Dados.txt";
-        nomeArquivoRelatorio = "Relatorio.txt";
+        // nomeArquivoRelatorio = "Relatorio.txt";
         gdd = new GerenciadorDeDados();
         filaEventos = new PriorityQueue<Evento>();
         temposEventos = new LinkedHashSet<Integer>();
@@ -191,10 +191,6 @@ public class Simulador {
         }
     }
 
-    private boolean cabineVazia(int idCabine) {
-        return getCabine(idCabine).vazia();
-    }
-
     private void atualizaMediaFilas() {
         for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
             Cabine cabineAtual = cabine.getValue();
@@ -272,7 +268,7 @@ public class Simulador {
                 executarChegada((Chegada)eventoAtual);
             }
             else {
-                int idVeiculo = executarSaida((Saida)eventoAtual);
+                executarSaida((Saida)eventoAtual);
                 //System.out.println("Saida, " + eventoAtual.getTempoEvento() + ", Veiculo: " + idVeiculo + ", Cabine: " + eventoAtual.getIdCabine());
             }
             incrementaNumeroEventos();

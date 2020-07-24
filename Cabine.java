@@ -12,7 +12,6 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 
 import java.util.Set;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
