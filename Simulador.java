@@ -153,6 +153,7 @@ public class Simulador {
                     throw new RuntimeException("Erro na execução de um evento!\n" + e.getMessage());
                 }
             }
+            atualizaMediaFilas();
         }
         while (!filaEventos.isEmpty());
 
@@ -272,7 +273,6 @@ public class Simulador {
                 //System.out.println("Saida, " + eventoAtual.getTempoEvento() + ", Veiculo: " + idVeiculo + ", Cabine: " + eventoAtual.getIdCabine());
             }
             incrementaNumeroEventos();
-            atualizaMediaFilas();
         }
         catch (Exception e) {
             throw new RuntimeException("Erro na execução da chegada ou saída.\n" + e.getMessage());
