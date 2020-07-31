@@ -139,7 +139,6 @@ public class Simulador {
         Evento eventoAtual;
 
         do {
-            tempoExecucao ++;
             eventoAtual = filaEventos.peek();
 
             if (eventoAtual.getTempoEvento() == tempoExecucao) {
@@ -153,6 +152,7 @@ public class Simulador {
                     throw new RuntimeException("Erro na execução de um evento!\n" + e.getMessage());
                 }
             }
+            tempoExecucao ++;
             atualizaMediaFilas();
         }
         while (!filaEventos.isEmpty());
@@ -240,6 +240,45 @@ public class Simulador {
         }
     }
 
+    private int getTamanhoMedioFilaGeral(int idCabine) {
+        if (idCabine == 0) {
+            int tamanhoMedio = 0;
+            for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
+                tamanhoMedio += cabine.getValue().getTamanhoMedioFila();
+            }
+            return tamanhoMedio/(cabines.size());
+        }
+        else {
+            try {
+                return cabines.get(idCabine).getTamanhoMedioFila();
+            }
+            catch (Exception e) {
+                System.out.println("Cabine inexistente!");
+                return -1;
+            }
+        }
+    }
+
+    private int getTempoMedioEsperaGeral(int idCabine, String abordagem) {
+        if (idCabine == 0) {
+            int tempoMedio = 0;
+            for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
+                tempoMedio += cabine.getValue().getMediaTempoEspera(abordagem);
+            }
+
+            return tempoMedio;
+        }
+        else {
+            try {
+                return cabines.get(idCabine).getMediaTempoEspera(abordagem);
+            }
+            catch (Exception e) {
+                System.out.println("Cabine inexistente!");
+                return -1;
+            }
+        }
+    }
+
     /**
     * Método que informa o intervalo de chegada.
     * @return int - reotrna o valor do intervaloChegada.
@@ -287,7 +326,7 @@ public class Simulador {
     private void enfileirarSaida(int tempoChegada, int idCabine) {
         temposEventos.add(tempoChegada);
         filaEventos.add(new Saida(tempoChegada, idCabine));
-        
+
     }
 
     /**
@@ -300,11 +339,11 @@ public class Simulador {
     */
     private void executarChegada(Chegada eventoAtual) {
         try {
-            
+
             int idVeiculo = eventoAtual.getIdVeiculo();
             Veiculo veiculoAtual = getVeiculo(idVeiculo);
             int tempoChegada = eventoAtual.getTempoEvento();
-            
+
             Cabine cabineAtual = null;
             if (filaRand) {
                 cabineAtual = cabineAleatoria(veiculoAtual.getAutomatico());
@@ -314,7 +353,7 @@ public class Simulador {
             }
             int idCabine = cabineAtual.getIdCabine();
             eventoAtual.setIdCabine(idCabine);
-            
+
             int tempo = calcularTempoSaida(eventoAtual);
 
             veiculoAtual.setTempoEspera(tempo - tempoChegada);
@@ -437,8 +476,7 @@ public class Simulador {
 
         for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
             idCabineAtual = cabine.getKey();
-            cabineAtual = cabine.getValue();
-            tempo = cabineAtual.getMediaTempoEspera(abordagem);
+            tempo = getTempoMedioEsperaGeral(idCabineAtual, abordagem);
 
             texto += String.format("Fila da Cabine %d: %d\n", idCabineAtual, tempo);
         }
@@ -460,9 +498,8 @@ public class Simulador {
         }
         else { // if (abordagem.equals("Medio") {
             for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
-                Cabine cabineAtual = cabine.getValue();
-                idCabineAtual = cabineAtual.getIdCabine();
-                tamanho = cabineAtual.getTamanhoMedioFila();
+                idCabineAtual = cabine.getKey();
+                tamanho = getTamanhoMedioFilaGeral(idCabineAtual);
 
                 texto += String.format("Fila da Cabine %d: %d\n", idCabineAtual, tamanho);
             }
