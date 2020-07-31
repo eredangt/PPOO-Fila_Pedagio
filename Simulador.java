@@ -246,7 +246,11 @@ public class Simulador {
             for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
                 tamanhoMedio += cabine.getValue().getTamanhoMedioFila();
             }
-            return tamanhoMedio/(cabines.size());
+            if (cabines.size() > 0) {
+                return tamanhoMedio/(cabines.size());
+            }
+            //Tamanho médio é 0 se não houverem cabines
+            return tamanhoMedio;
         }
         else {
             try {
@@ -265,7 +269,10 @@ public class Simulador {
             for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
                 tempoMedio += cabine.getValue().getMediaTempoEspera(abordagem);
             }
-
+            if (cabines.size() > 0) {
+                return tempoMedio/(cabines.size());
+            }
+            //Tempo médio é 0 se não houverem cabines
             return tempoMedio;
         }
         else {
