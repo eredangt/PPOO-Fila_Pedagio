@@ -34,13 +34,13 @@ public abstract class Evento implements Comparable<Evento> {
     public int getTempoEvento() {
         return tempoEvento;
     }
+    
+    public int getIdCabine() {
+        return idCabine;
+    }
 
     public void setIdCabine(int idCabine) {
         this.idCabine = idCabine;
-    }
-
-    public int getIdCabine() {
-        return idCabine;
     }
 
     @Override

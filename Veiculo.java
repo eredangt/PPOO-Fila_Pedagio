@@ -37,6 +37,20 @@ public abstract class Veiculo {
     }
 
     /**
+     * Método utilizado apenas para fins de debug.
+     * @return String - uma cadeia de caracteres formatada
+     * com os atributos da classe.
+     */
+    public String toString() {
+        return String.format("\nVeículo: %s \nAutomático: %s", getIdVeiculo(), ((getAutomatico()) ? "Sim" : "Não"));
+    }
+
+    /**
+     * Método abstrato que será sobreescrito nas classes filhas.
+     */
+    public abstract double calcularTarifa();
+
+         /**
      * Método que define a tarifa fixa utilizada pelo pedágio.
      * @param tarifaFixa um double que define a tarifa que será
      * utilizada no calculo da tarifa do veículo.
@@ -50,30 +64,16 @@ public abstract class Veiculo {
     }
 
     /**
-     * Método utilizado apenas para fins de debug.
-     * @return String - uma cadeia de caracteres formatada
-     * com os atributos da classe.
-     */
-    public String toString() {
-        return String.format("\nVeículo: %s \nAutomático: %s", getIdVeiculo(), ((getAutomatico()) ? "Sim" : "Não"));
-    }
-
-    /**
      * Método que informa o valor de tarifa fixa utilizado pelo pedágio.
      * @return double - contendo o valor da tarifa do pedágio.
      */
-     public static double getTarifaFixa() {
+    public static double getTarifaFixa() {
         return tarifaFixa;
      }
 
-     public int getTempoEspera() {
-         return tempoEspera;
-     }
-
-    /**
-     * Método abstrato que será sobreescrito nas classes filhas.
-     */
-    public abstract double calcularTarifa();
+    public int getTempoEspera() {
+        return tempoEspera;
+    }
 
     /**
      * Método que informa se um veículo é isento de tarifa.

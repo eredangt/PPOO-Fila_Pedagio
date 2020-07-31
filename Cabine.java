@@ -50,11 +50,37 @@ public class Cabine {
     }
 
     /**
+    * Método utilizado apenas para fins de debug.
+    * @return String - uma cadeia de caracteres formatada
+    * com os atributos da classe.
+    */
+    public String toString() {
+        String dadosCompletos = "";
+        dadosCompletos = String.format("Número da Cabine: %s\n", getIdCabine());
+        dadosCompletos += "--------------------\n";
+
+        for (int veiculoAtual : filaVeiculos) {
+            dadosCompletos += veiculoAtual;
+            dadosCompletos += "--------------------\n";
+        }
+
+        return dadosCompletos;
+    }
+
+    /**
     * Método que retorna o objeto de Atendimento.
     * @return Atendimento - retorna o objeto do Atendimento.
     */
     public int getIdAtendimento(){
         return idAtendimento;
+    }
+
+    /**
+    * Método que informa o identificador único de uma cabine.
+    * @return int - contendo o número que representa o ID da cabine.
+    */
+    public int getIdCabine() {
+        return idCabine;
     }
 
     /**
@@ -67,25 +93,26 @@ public class Cabine {
         return numeroCabines;
     }
 
-    /**
-    * Método que informa o identificador único de uma cabine.
-    * @return int - contendo o número que representa o ID da cabine.
-    */
-    public int getIdCabine() {
-        return idCabine;
+    public int getTamanhoMedioFila() {
+        int numerador = 0;
+        int denominador = 1;
+        for (Integer chave : tamanhosFila.keySet()) {
+            Integer valor = tamanhosFila.get(chave);
+
+            System.out.println("<" + chave + ", " + valor + ">");
+
+            numerador += (chave * valor);
+
+            denominador += valor;
+        }
+        return (int)(numerador/(denominador - 1));
     }
 
-    public boolean vazia() {
-        return filaVeiculos.isEmpty();
-    }
-
-    public void armazenaTempo(String tipoVeiculo, int tempo) {
-        if (tipoVeiculo.equals("Leve")) {
-            tempoEsperaLeve.add(tempo);
-        }
-        else {
-            tempoEsperaPesado.add(tempo);
-        }
+    public int getTamanhoMaxFila() {
+        Set<Integer> conjunto = tamanhosFila.keySet();
+        LinkedList<Integer> sortedList = new LinkedList<Integer>(conjunto);
+        Collections.sort(sortedList);
+        return sortedList.get(sortedList.size() - 1);
     }
 
     public int getMediaTempoEspera(String tipoVeiculo) {
@@ -118,13 +145,6 @@ public class Cabine {
         return somador;
     }
 
-    /**
-    * Método que coloca um veículo na fila.
-    */
-    public void enfileirarVeiculo(int idVeiculo) {
-        filaVeiculos.offer(idVeiculo);
-    }
-
     public void adicionaNovoTamanho(Integer novoTamanho) {
         Set<Integer> tamanho = tamanhosFila.keySet();
         if (tamanho.contains(novoTamanho)) {
@@ -137,26 +157,20 @@ public class Cabine {
 
     }
 
-    public int getTamanhoMedioFila() {
-        int numerador = 0;
-        int denominador = 1;
-        for (Integer chave : tamanhosFila.keySet()) {
-            Integer valor = tamanhosFila.get(chave);
-
-            System.out.println("<" + chave + ", " + valor + ">");
-
-            numerador += (chave * valor);
-
-            denominador += valor;
+    public void armazenaTempo(String tipoVeiculo, int tempo) {
+        if (tipoVeiculo.equals("Leve")) {
+            tempoEsperaLeve.add(tempo);
         }
-        return (int)(numerador/(denominador - 1));
+        else {
+            tempoEsperaPesado.add(tempo);
+        }
     }
 
-    public int getTamanhoMaxFila() {
-        Set<Integer> conjunto = tamanhosFila.keySet();
-        LinkedList<Integer> sortedList = new LinkedList<Integer>(conjunto);
-        Collections.sort(sortedList);
-        return sortedList.get(sortedList.size() - 1);
+    /**
+    * Método que coloca um veículo na fila.
+    */
+    public void enfileirarVeiculo(int idVeiculo) {
+        filaVeiculos.offer(idVeiculo);
     }
 
     /**
@@ -185,21 +199,7 @@ public class Cabine {
         return filaVeiculos.size();
     }
 
-    /**
-    * Método utilizado apenas para fins de debug.
-    * @return String - uma cadeia de caracteres formatada
-    * com os atributos da classe.
-    */
-    public String toString() {
-        String dadosCompletos = "";
-        dadosCompletos = String.format("Número da Cabine: %s\n", getIdCabine());
-        dadosCompletos += "--------------------\n";
-
-        for (int veiculoAtual : filaVeiculos) {
-            dadosCompletos += veiculoAtual;
-            dadosCompletos += "--------------------\n";
-        }
-
-        return dadosCompletos;
+    public boolean vazia() {
+        return filaVeiculos.isEmpty();
     }
 }
