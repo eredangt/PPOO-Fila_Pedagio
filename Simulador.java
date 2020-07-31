@@ -308,6 +308,20 @@ public class Simulador {
         numeroEventosTratados += 1;
     }
 
+    private void salvarEstatisticas() {
+        String estatisticas = "";
+        for (Cabine cabine: cabines.values()) {
+            estatisticas += cabine.getEstatisticas();
+        }
+
+        try {
+            GerenciadorDeArquivos.salvarArquivo("estatisticas.csv", estatisticas);
+        }
+        catch (Exception e) {
+            System.out.println("Foi aqui " + e.getMessage());
+        }
+    }
+
     /**
     * Método que executa a Simulação.
     * Enquanto minha fila de Eventos não for vazia, realizo a retirada dos
@@ -332,6 +346,10 @@ public class Simulador {
                     throw new RuntimeException("Erro na execução de um evento!\n" + e.getMessage());
                 }
             }
+            for (Cabine cabine: cabines.values()) {
+                cabine.concatenarEstatisticas(tempoExecucao);
+            }
+
             tempoExecucao ++;
             atualizaMediaFilas();
         }
@@ -341,6 +359,7 @@ public class Simulador {
             setTempoTotalSimulado(tempoUltimoEvento);
         }
 
+        salvarEstatisticas();
         System.out.println(gerarEstatisticas());
     }
 

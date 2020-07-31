@@ -31,6 +31,7 @@ public class Cabine {
     private int idAtendimento;
     private LinkedList<Integer> tempoEsperaLeve;
     private LinkedList<Integer> tempoEsperaPesado;
+    private String estatisticas;
 
     /**
     * Construtor incrementa o contador de Cabines e
@@ -47,6 +48,11 @@ public class Cabine {
         tempoEsperaLeve = new LinkedList<Integer>();
         tempoEsperaPesado = new LinkedList<Integer>();
         this.idAtendimento = idAtendimento;
+        estatisticas = "Cabine," + idCabine + "\n" +
+                       "Tempo,Tempo médio de espera dos veiculos leves," + 
+                       "Tempo médio de espera dos veiculos pesados," +
+                       "Tempo médio de espera dos veiculos," +
+                       "Tamanho médio da fila da cabine\n";
     }
 
     /**
@@ -65,6 +71,25 @@ public class Cabine {
         }
 
         return dadosCompletos;
+    }
+
+    public void concatenarEstatisticas(int tempo) {
+        int TMVL, TMVP, TMV, TMFC;
+        try {
+            TMVL = getMediaTempoEspera("Leve");
+            TMVP = getMediaTempoEspera("Pesado");
+            TMV = getMediaTempoEspera("Total");
+            TMFC = getTamanhoMaxFila();
+            
+            estatisticas += String.format("%d,%d,%d,%d,%d\n", tempo, TMVL, TMVP, TMV, TMFC);
+        }
+        catch (Exception e) {
+            System.out.println("Ta aqui " + e.getMessage());
+        }
+    }
+
+    public String getEstatisticas() {
+        return estatisticas;
     }
 
     /**
@@ -111,17 +136,20 @@ public class Cabine {
     public int getTamanhoMaxFila() {
         Set<Integer> conjunto = tamanhosFila.keySet();
         LinkedList<Integer> sortedList = new LinkedList<Integer>(conjunto);
+
+        int tamanho = sortedList.size();
+        if (tamanho == 0) {
+            return 0;
+        }
+
         Collections.sort(sortedList);
-        return sortedList.get(sortedList.size() - 1);
+
+        return sortedList.get(tamanho - 1);
     }
 
     public int getMediaTempoEspera(String tipoVeiculo) {
         int soma = 0;
-        int tamanho = 1;
-
-        if (getTamanhoMaxFila() == 0) {
-            return 0;
-        }
+        int tamanho = 0;
         
         if (!tipoVeiculo.equals("Pesado")) {
             LinkedList<Integer> listaUtilizada = tempoEsperaLeve;
@@ -133,8 +161,12 @@ public class Cabine {
             soma += getSomaLista(listaUtilizada);
             tamanho += listaUtilizada.size();
         }
-        return (int)(soma/(tamanho - 1));
+        
+        if (tamanho == 0) {
+            return 0;
+        }
 
+        return (int)(soma / tamanho);
     }
 
     private int getSomaLista(LinkedList<Integer> lista) {
