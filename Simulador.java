@@ -162,7 +162,6 @@ public class Simulador {
     public String getTextoMedioAtendimentos(String abordagem) {
         String texto = "";
         int idCabineAtual = 0;
-        Cabine cabineAtual = null;
         int tempo = 0;
 
         if (abordagem.equals("Leve")) {
@@ -253,7 +252,7 @@ public class Simulador {
             int denominador = 0;
             for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
                 cabineAtual = cabine.getValue();
-                numerador += cabineAtual.getNumeradorMediaPoderadaTamanhos();
+                numerador += cabineAtual.getNumeradorMediaPonderadaTamanhos();
                 denominador += cabineAtual.getDenominadorMediaPonderadaTamanhos();
             }
             if (denominador == 0) {

@@ -52,7 +52,8 @@ public class Cabine {
                        "Tempo,Tempo médio de espera dos veiculos leves," +
                        "Tempo médio de espera dos veiculos pesados," +
                        "Tempo médio de espera dos veiculos," +
-                       "Tamanho médio da fila da cabine\n";
+                       "Tamanho médio da fila da cabine," +
+                       "Tamanho maxímo da fila da cabine\n";
     }
 
     /**
@@ -74,15 +75,15 @@ public class Cabine {
     }
 
     public void concatenarEstatisticas(int tempo) {
-        int TMVL, TMVP, TMV, TMFC;
+        int TMVL, TMVP, TMV, TMedFC, TMaxFC;
         try {
-            TMVL = getMediaTempoEspera("Leve");
-            TMVP = getMediaTempoEspera("Pesado");
-            TMV = getMediaTempoEspera("Total");
-            //FALTA O TAMANHO MÉDIO
-            TMFC = getTamanhoMaxFila();
+            TMVL = getMediaTempoEspera("Leve"); // Tempo médio de espera dos veiculos leves
+            TMVP = getMediaTempoEspera("Pesado"); // Tempo médio de espera dos veiculos pesados
+            TMV = getMediaTempoEspera("Total"); // Tempo médio de espera dos veiculos
+            TMedFC = getTamanhoMedioFila(); // Tamanho médio da fila da cabine
+            TMaxFC = getTamanhoMedioFila(); // Tamanho maxímo da fila da cabine
 
-            estatisticas += String.format("%d,%d,%d,%d,%d\n", tempo, TMVL, TMVP, TMV, TMFC);
+            estatisticas += String.format("%d,%d,%d,%d,%d,%d\n", tempo, TMVL, TMVP, TMV, TMedFC, TMaxFC);
         }
         catch (Exception e) {
             System.out.println("Ta aqui " + e.getMessage());
@@ -119,7 +120,7 @@ public class Cabine {
         return numeroCabines;
     }
 
-    public int getNumeradorMediaPoderadaTamanhos() {
+    public int getNumeradorMediaPonderadaTamanhos() {
         int numerador = 0;
 
         for (Integer chave : tamanhosFila.keySet()) {
@@ -141,7 +142,7 @@ public class Cabine {
     }
 
     public int getTamanhoMedioFila() {
-        int numerador = getNumeradorMediaPoderadaTamanhos();
+        int numerador = getNumeradorMediaPonderadaTamanhos();
         int denominador = getDenominadorMediaPonderadaTamanhos();
         if (denominador == 0) {
             return 0;
