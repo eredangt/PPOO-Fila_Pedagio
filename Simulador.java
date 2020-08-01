@@ -247,20 +247,26 @@ public class Simulador {
     }
 
     private int getTamanhoMedioFilaGeral(int idCabine) {
+        Cabine cabineAtual = null;
         if (idCabine == 0) {
-            int tamanhoMedio = 0;
+            int numerador = 0;
+            int denominador = 0;
             for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
-                tamanhoMedio += cabine.getValue().getTamanhoMedioFila();
+                cabineAtual = cabine.getValue();
+                numerador += cabineAtual.getNumeradorMediaPoderadaTamanhos();
+                denominador += cabineAtual.getDenominadorMediaPonderadaTamanhos();
             }
-            if (cabines.size() > 0) {
-                return tamanhoMedio/(cabines.size());
+            if (denominador == 0) {
+                return 0;
             }
-            //Tamanho médio é 0 se não houverem cabines
-            return tamanhoMedio;
+            else {
+                return (int)(numerador/denominador);
+            }
         }
         else {
             try {
-                return cabines.get(idCabine).getTamanhoMedioFila();
+                cabineAtual = cabines.get(idCabine);
+                return cabineAtual.getTamanhoMedioFila();
             }
             catch (Exception e) {
                 System.out.println("Cabine inexistente!");
@@ -270,20 +276,26 @@ public class Simulador {
     }
 
     private int getTempoMedioEsperaGeral(int idCabine, String abordagem) {
+        Cabine cabineAtual = null;
         if (idCabine == 0) {
-            int tempoMedio = 0;
+            int tamanho = 0;
+            int tempos = 0;
             for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
-                tempoMedio += cabine.getValue().getMediaTempoEspera(abordagem);
+                cabineAtual = cabine.getValue();
+                tempos += cabineAtual.getSomasTempoEspera(abordagem);
+                tamanho += cabineAtual.getTamanhosListasEspecificas(abordagem);
             }
-            if (cabines.size() > 0) {
-                return tempoMedio/(cabines.size());
+            if (tamanho == 0) {
+                return 0;
             }
-            //Tempo médio é 0 se não houverem cabines
-            return tempoMedio;
+            else {
+                return (int)(tempos/tamanho);
+            }
         }
         else {
             try {
-                return cabines.get(idCabine).getMediaTempoEspera(abordagem);
+                cabineAtual = cabines.get(idCabine);
+                return cabineAtual.getMediaTempoEspera(abordagem);
             }
             catch (Exception e) {
                 System.out.println("Cabine inexistente!");

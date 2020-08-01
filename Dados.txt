@@ -1,4 +1,4 @@
-fila,menor
+fila,aleatoria
 intervalo,4
 tarifa,fixa,3
 tarifa,reboque,5
