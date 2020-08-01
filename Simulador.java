@@ -42,6 +42,7 @@ public class Simulador {
     private HashMap<Integer, Cabine> cabines;
     private HashMap<Integer, Veiculo> veiculos;
     private HashMap<Integer, Atendimento> atendimentos;
+    private String estatisticas;
 
     /**
     * Construtor cria as listas de: Lista Cabines, Lista Veículos,
@@ -64,6 +65,23 @@ public class Simulador {
         cabines = new HashMap<Integer, Cabine>();
         veiculos = new HashMap<Integer, Veiculo>();
         atendimentos = new HashMap<Integer, Atendimento>();
+        estatisticas = "Simulador\n" +
+                       "Tempo,Tempo médio de espera geral dos veiculos leves," +
+                       "Tempo médio de espera geral dos veiculos pesados," +
+                       "Tempo médio de espera geral dos veiculos," +
+                       "Tamanho médio geral das filas," +
+                       "Tamanho maxímo da maior fila\n";
+    }
+
+    private void concatenarEstatisticas(int tempo) {
+        int TMGVL, TMGVP, TMGV, TMedF, TMaxF;
+        TMGVL = getTempoMedioEsperaGeral(0, "Leve"); // Tempo médio de espera geral dos veiculos leves
+        TMGVP = getTempoMedioEsperaGeral(0, "Pesado"); // Tempo médio de espera geral dos veiculos pesados
+        TMGV = getTempoMedioEsperaGeral(0, "Total"); // Tempo médio de espera geral dos veiculos
+        TMedF = getTamanhoMedioFilaGeral(0); // Tamanho médio geral das filas
+        TMaxF = getTamanhoMaiorFila(0); // Tamanho maxímo da maior fila
+
+        estatisticas += String.format("%d,%d,%d,%d,%d,%d\n", tempo, TMGVL, TMGVP, TMGV, TMedF, TMaxF);
     }
 
     /**
@@ -320,7 +338,7 @@ public class Simulador {
     }
 
     private void salvarEstatisticas() {
-        String estatisticas = "";
+        String estatisticas = this.estatisticas;
         for (Cabine cabine: cabines.values()) {
             estatisticas += cabine.getEstatisticas();
         }
@@ -360,6 +378,7 @@ public class Simulador {
             for (Cabine cabine: cabines.values()) {
                 cabine.concatenarEstatisticas(tempoExecucao);
             }
+            concatenarEstatisticas(tempoExecucao);
 
             tempoExecucao ++;
             atualizaMediaFilas();

@@ -81,7 +81,7 @@ public class Cabine {
             TMVP = getMediaTempoEspera("Pesado"); // Tempo médio de espera dos veiculos pesados
             TMV = getMediaTempoEspera("Total"); // Tempo médio de espera dos veiculos
             TMedFC = getTamanhoMedioFila(); // Tamanho médio da fila da cabine
-            TMaxFC = getTamanhoMedioFila(); // Tamanho maxímo da fila da cabine
+            TMaxFC = getTamanhoMaxFila(); // Tamanho maxímo da fila da cabine
 
             estatisticas += String.format("%d,%d,%d,%d,%d,%d\n", tempo, TMVL, TMVP, TMV, TMedFC, TMaxFC);
         }
