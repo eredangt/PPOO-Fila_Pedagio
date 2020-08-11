@@ -20,15 +20,12 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
  * Classe responsável pelo gerenciamento de arquivos do pedágio, fazendo
  * tanto a leitura quanto a escrita dos arquivos texto.
  */
-public class GerenciadorDeArquivos {
-    private ArrayList<String> logs;
+public abstract class GerenciadorDeArquivos {
     
     /**
      * Construtor da classe GerenciadorDeArquivos.
      */
-    public GerenciadorDeArquivos() {
-        logs = new ArrayList<String>();
-    }
+    public GerenciadorDeArquivos() {}
     
     /**
      * Método responsável pela leitura do arquivo de dados.
@@ -37,8 +34,9 @@ public class GerenciadorDeArquivos {
      * @throws IOException - exceção indicando alguma falha de
      * leitura.
      */
-    public ArrayList<String[]> lerDados(String nomeArquivo) throws IOException {
+    public static ArrayList<String[]> lerDados(String nomeArquivo) throws IOException {
         ArrayList<String[]> dados = null;
+        ArrayList<String> logs = new ArrayList<String>();
 
         try (BufferedReader arqBF = new BufferedReader(new FileReader(nomeArquivo))) {
             dados = new ArrayList<String[]>();
@@ -74,6 +72,8 @@ public class GerenciadorDeArquivos {
             throw new IOException(log);
         }
 
+        salvarArquivo("log.txt", mensagemLogs(logs));
+
         return dados;
     }
     
@@ -95,16 +95,9 @@ public class GerenciadorDeArquivos {
         }
     }
     
-    /**
-     * Método utilizado apenas para fins de debug.
-     * @return String - uma cadeia de caracteres formatada com os
-     * atributos da classe.
-     */
-    @Override
-    public String toString() {
-        String texto = "Gerenciador de arquivos (GDA)\n";
+    private static String mensagemLogs(ArrayList<String> logs) {
+        String texto = "Log completo:\n";
         
-        texto += "\nLog completo:\n";
         if (logs.size() == 0) {
             texto += " > Sem logs";
         }

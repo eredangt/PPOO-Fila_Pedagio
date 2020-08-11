@@ -1,63 +1,36 @@
+import java.util.ArrayList;
+
 public class TesteGDD {
     public static void main(String[] args) {
-        GerenciadorDeDados gdd = new GerenciadorDeDados();
         String nomeArquivoDeDados = "Dados.txt";
         // String nomeArquivoDeSaida = "relatorio.txt";
         
+        ArrayList<Object> objetos = null;
         try {
-            gdd.inicializarDados(nomeArquivoDeDados);
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        try {
-            System.out.print(gdd.getFilaRand());
+            objetos = GerenciadorDeDados.inicializarDados(nomeArquivoDeDados);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
         }
         
-        System.out.println();
-        
-        try {
-            System.out.print(gdd.getIntervaloChegada());
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        
-        System.out.println();
-        
-        try {
-            while (true) {
-                System.out.print(gdd.removerCabine());
+        for (Object obj: objetos) {
+            if (obj instanceof Boolean)
+                System.out.print((Boolean) obj);
+            
+            else if (obj instanceof Integer)
+                System.out.print((Integer) obj);
+            
+            else if (obj instanceof Cabine) {
+                System.out.print((Cabine) obj);
             }
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        
-        System.out.println();
-        
-        try {
-            while (true) {
-                System.out.print(gdd.removerVeiculo());
+            
+            else if (obj instanceof Veiculo) {
+                System.out.print((Veiculo) obj);
             }
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        
-        System.out.println();
-        
-        try {
-            while (true) {
-                System.out.print(gdd.removerAtendimento());
+                
+            else if (obj instanceof Atendimento) {
+                System.out.print((Atendimento) obj);
             }
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
         }
     }
 }

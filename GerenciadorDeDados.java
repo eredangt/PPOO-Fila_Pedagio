@@ -15,25 +15,12 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 /**
  * Classe responsável pelo gerenciamento de dados do pedágio.
  */
-public class GerenciadorDeDados {
-    private GerenciadorDeArquivos gda;
-	private Boolean filaRand;
-	private int intervaloChegada;
-	private ArrayList<Cabine> cabines;
-	private ArrayList<Veiculo> veiculos;
-	private ArrayList<Atendimento> atendimentos;
+public abstract class GerenciadorDeDados {
     
     /**
      * Construtor da classe GerenciadorDeDados.
      */
-    public GerenciadorDeDados() {
-		gda = new GerenciadorDeArquivos();
-		filaRand = null;
-		intervaloChegada = -1;
-		cabines = new ArrayList<Cabine>();
-		veiculos = new ArrayList<Veiculo>();
-		atendimentos = new ArrayList<Atendimento>();
-	}
+    public GerenciadorDeDados() {}
     
     /**
      * Método responsável pela leitura do arquivo de dados.
@@ -42,25 +29,35 @@ public class GerenciadorDeDados {
      * @throws Exception - exceção indicando alguma falha de
      * leitura.
      */
-	public void inicializarDados(String nomeArquivo) throws Exception {
+	public static ArrayList<Object> inicializarDados(String nomeArquivo) throws Exception {
 		ArrayList<String[]> dados;
 		try {
-			dados = gda.lerDados(nomeArquivo);
+			dados = GerenciadorDeArquivos.lerDados(nomeArquivo);
 		}
 		catch (Exception e) {
             throw new Exception(e);
-		}
+        }
+        
+        Boolean filaRand = null;
+        Integer intervaloChegada = -1;
+        ArrayList<Object> objetos = new ArrayList<Object>();
 
 		for (String[] campos: dados) {
 			try {
 				switch (GerenciadorDeDados.validarCampos(campos)) {
-					case 'F':
-						criarFilaRand(campos);
+                    case 'F':
+                        if (filaRand == null) {
+                            filaRand = criarFilaRand(campos);
+                            objetos.add(filaRand);
+                        }
 						
 						break;
 					
 					case 'I':
-						criarIntervaloChegada(campos);
+                        if (intervaloChegada == -1) {
+                            intervaloChegada = criarIntervaloChegada(campos);
+                            objetos.add(intervaloChegada);
+                        }
 						
 						break;
 					case 'T':
@@ -69,13 +66,15 @@ public class GerenciadorDeDados {
 						break;
 					
 					case 'V':
-						criarVeiculo(campos);
+                        objetos.add(criarVeiculo(campos));
 						
 						break;
 					
 					case 'A':
-						criarAtendimento(campos);
-						
+                        Atendimento atendimento = criarAtendimento(campos);
+                        objetos.add(atendimento);
+                        objetos.add(criarCabine(atendimento.getIdAtendimento()));
+                        
 						break;
 					
 					default:
@@ -83,73 +82,9 @@ public class GerenciadorDeDados {
 				}
 			}
 			catch (Exception e) {}
-		}
-	}
-
-    /**
-     * Método utilizado para obter o tipo da fila das cabines.
-     * @return boolean - menor fila (false), fila aleatoria (true).
-     * @throws Exception - o atributo filaRand não foi inicializado.
-     */
-	public boolean getFilaRand() throws Exception {
-		if (filaRand == null) {
-			throw new Exception("O tipo de fila não foi definido\n");
-		}
-
-		return filaRand;
-	}
-
-    /**
-     * Método utilizado para obter o intervalo de tempo entre
-	 * a chegada dos carros.
-     * @return int - intervalo de tempo entre a chegada dos carros.
-     * @throws Exception - o atributo intervaloChegada não foi inicializado.
-     */
-	public int getIntervaloChegada() throws Exception {
-		if (intervaloChegada == -1) {
-			throw new Exception("O intervalo de chegada não foi definido\n");
-		}
-
-		return intervaloChegada;
-	}
-
-    /**
-     * Método utilizado para obter as cabines.
-     * @return Cabine.
-     * @throws Exception - o atributo cabines está vazio.
-     */
-	public Cabine removerCabine() throws Exception {
-		if (cabines.size() == 0) {
-			throw new Exception("Nenhuma cabine encontrada\n");
-		}
-
-		return cabines.remove(0);
-	}
-
-    /**
-     * Método utilizado para obter os veiculos.
-     * @return Veiculo.
-     * @throws Exception - o atributo veiculos está vazio.
-     */
-	public Veiculo removerVeiculo() throws Exception {
-		if (veiculos.size() == 0) {
-			throw new Exception("Nenhum veiculo encontrado\n");
-		}
-
-		return veiculos.remove(0);
-	}
-
-    /**
-     * Método utilizado para obter os atendimetos.
-     * @return Atendimento.
-     * @throws Exception - o atributo atendimentos está vazio.
-     */
-	public Atendimento removerAtendimento() throws Exception {
-		if (atendimentos.size() == 0) {
-			throw new Exception("Nenhum atendimento encontrado\n");
-		}
-
-		return atendimentos.remove(0);
+        }
+        
+        return objetos;
 	}
     
     /**
@@ -238,19 +173,15 @@ public class GerenciadorDeDados {
         }
 	}
 	
-	private void criarFilaRand(String[] campos) {
-		if (filaRand == null) {
-			filaRand = campos[1].equals("aleatoria");
-		}
+	private static Boolean criarFilaRand(String[] campos) {
+		return (Boolean) campos[1].equals("aleatoria");
 	}
 	
-	private void criarIntervaloChegada(String[] campos) {
-		if (intervaloChegada == -1) {
-			intervaloChegada = Integer.parseInt(campos[1]);
-		}
+	private static Integer criarIntervaloChegada(String[] campos) {
+		return Integer.parseInt(campos[1]);
 	}
 	
-	private void criarTarifa(String[] campos) {
+	private static void criarTarifa(String[] campos) {
 		if (Veiculo.getTarifaFixa() == -1d && campos[1].equals("fixa")) {
 			Veiculo.setTarifaFixa(Double.parseDouble(campos[2]));
 		}
@@ -259,32 +190,34 @@ public class GerenciadorDeDados {
 		}
 	}
 	
-	private void criarVeiculo(String[] campos) {
+	private static Veiculo criarVeiculo(String[] campos) {
 		Veiculo novoVeiculo;
 		if (campos[1].equals("leve")) {
 			novoVeiculo = new VeiculoLeve(Boolean.parseBoolean(campos[2]), Boolean.parseBoolean(campos[3]));
 		}
 		else { // if (veiculo[1].equals("pesado")) {
 			novoVeiculo = new VeiculoPesado(Boolean.parseBoolean(campos[2]), Integer.parseInt(campos[3]));
-		}
-		veiculos.add(novoVeiculo);
+        }
+        
+        return novoVeiculo;
 	}
 	
-	private void criarCabine(int idAtendimento) {
-		Cabine novaCabine = new Cabine(idAtendimento);
-		cabines.add(novaCabine);
+	private static Cabine criarCabine(int idAtendimento) {
+        Cabine novaCabine = new Cabine(idAtendimento);
+        
+        return novaCabine;
 	}
 	
-	private void criarAtendimento(String[] campos) {
+	private static Atendimento criarAtendimento(String[] campos) {
 		Atendimento novoAtendimento;
 		if (campos[1].equals("automatico")) {
 			novoAtendimento = new Automatico(Double.parseDouble(campos[2]));
 		}
 		else { // if (atendimento[1].equals("funcionario")) {
 			novoAtendimento = new Funcionario(Double.parseDouble(campos[2]));
-		}
-		atendimentos.add(novoAtendimento);
-		criarCabine(novoAtendimento.getIdAtendimento());
+        }
+        
+        return novoAtendimento;
 	}
     
     /**

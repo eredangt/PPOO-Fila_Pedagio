@@ -36,7 +36,6 @@ public class Simulador {
     private int intervaloChegada;
     private int numeroEventosTratados;
     // private int tamanhoMaiorFila;
-    private GerenciadorDeDados gdd;
     private PriorityQueue<Evento> filaEventos;
     private Set<Integer> temposEventos;
     private HashMap<Integer, Cabine> cabines;
@@ -59,7 +58,6 @@ public class Simulador {
         tempoTotalSimulado = 0;
         nomeArquivoEntrada = "Dados.txt";
         // nomeArquivoRelatorio = "Relatorio.txt";
-        gdd = new GerenciadorDeDados();
         filaEventos = new PriorityQueue<Evento>();
         temposEventos = new LinkedHashSet<Integer>();
         cabines = new HashMap<Integer, Cabine>();
@@ -91,44 +89,36 @@ public class Simulador {
     * O método executarSimulacao() retira os eventos da fila.
     */
     public void iniciarSimulacao() throws Exception {
+        ArrayList<Object> objetos = null;
         try {
-            gdd.inicializarDados(nomeArquivoEntrada);
+            objetos = GerenciadorDeDados.inicializarDados(nomeArquivoEntrada);
         }
         catch (Exception e) {
             throw e;
         }
 
-        try {
-            filaRand = gdd.getFilaRand();
-            intervaloChegada = gdd.getIntervaloChegada();
-        }
-        catch (Exception e) {
-            throw e;
-        }
-
-        try {
-            while (true) {
-                Cabine novaCabine = gdd.removerCabine();
+        for (Object obj: objetos) {
+            if (obj instanceof Boolean)
+                filaRand = (Boolean) obj;
+            
+            else if (obj instanceof Integer)
+                intervaloChegada = (Integer) obj;
+            
+            else if (obj instanceof Cabine) {
+                Cabine novaCabine = (Cabine) obj;
                 cabines.put(novaCabine.getIdCabine(), novaCabine);
             }
-        }
-        catch (Exception e) {}
-
-        try {
-            while (true) {
-                Veiculo novoVeiculo = gdd.removerVeiculo();
+            
+            else if (obj instanceof Veiculo) {
+                Veiculo novoVeiculo = (Veiculo) obj;
                 veiculos.put(novoVeiculo.getIdVeiculo(), novoVeiculo);
             }
-        }
-        catch (Exception e) {}
-
-        try {
-            while (true) {
-                Atendimento novoAtendimento = gdd.removerAtendimento();
+                
+            else if (obj instanceof Atendimento) {
+                Atendimento novoAtendimento = (Atendimento) obj;
                 atendimentos.put(novoAtendimento.getIdAtendimento(), novoAtendimento);
             }
         }
-        catch (Exception e) {}
 
         try {
             enfileirarChegadas();
