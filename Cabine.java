@@ -32,6 +32,7 @@ public class Cabine {
     private LinkedList<Integer> tempoEsperaLeve;
     private LinkedList<Integer> tempoEsperaPesado;
     private String estatisticas;
+    private double valorTotalGanho;
 
     /**
     * Construtor incrementa o contador de Cabines e
@@ -48,6 +49,7 @@ public class Cabine {
         tempoEsperaLeve = new LinkedList<Integer>();
         tempoEsperaPesado = new LinkedList<Integer>();
         this.idAtendimento = idAtendimento;
+        valorTotalGanho = 0d;
         estatisticas = "Cabine," + idCabine + "\n" +
                        "Tempo,Tempo médio de espera dos veiculos leves," +
                        "Tempo médio de espera dos veiculos pesados," +
@@ -331,5 +333,24 @@ public class Cabine {
     */
     public boolean vazia() {
         return filaVeiculos.isEmpty();
+    }
+
+    /**
+     * Método que computa uma cobrança gerada no momento que um veículo
+     * é atendido pela cabine em questão.
+     * @param novoValor um double que será somado ao total ganho pela
+     * cabine.
+     */
+     public void computaCobranca(double novoValor) {
+        valorTotalGanho += valor;
+    }
+
+    /**
+     * Método que retorna o valor total ganho pela cabine até o momento
+     * no qual é chamado.
+     * @return double - representando o valor total ganho pela cabine.
+     */
+    public double getValorTotalGanho() {
+        return valorTotalGanho;
     }
 }

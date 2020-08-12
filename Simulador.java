@@ -256,8 +256,10 @@ public class Simulador {
     }
 
     /**
-    * Método que retorna o tamanho da maior fila.
-    * @param idCabine código da cabine a ser comparada.
+    * Método que retorna o tamanho da maior fila no contexto geral ou
+    * de uma Cabine expecífica.
+    * @param idCabine código da cabine a ser considerada, caso seja o
+    * o valor 0, irá considerar todas as cabines juntas.
     * @return int - contendo o tamanho da fila de maior tamanho.
     */
     private int getTamanhoMaiorFila(int idCabine) {
@@ -286,8 +288,10 @@ public class Simulador {
     }
 
     /**
-    * Método que retorna o tamnho médio de todas as filas.
-    * @param idCabine código da cabine a ser comparada.
+    * Método que retorna o tamnho médio de todas as filas ou de uma
+    * fila de Cabine específica.
+    * @param idCabine código da cabine a ser considerada, caso seja o
+    * o valor 0, irá considerar todas as cabines juntas.
     * @return int - contendo a média do tamanho das filas.
     */
     private int getTamanhoMedioFilaGeral(int idCabine) {
@@ -322,7 +326,8 @@ public class Simulador {
     /**
     * Método que retorna o tempo médio geral de espera na fila.
     * Podendo considerar as listas para veículos leves, pesados ou ambos.
-    * @param idCabine código da cabine a ser comparada.
+    * @param idCabine código da cabine a ser considerada, caso seja o
+    * o valor 0, irá considerar todas as cabines juntas.
     * @param abordagem String simbolizando o tipo do veículo.
     * @return int - valor do tempo médio geral de espera.
     */
@@ -347,6 +352,36 @@ public class Simulador {
             try {
                 cabineAtual = cabines.get(idCabine);
                 return cabineAtual.getMediaTempoEspera(abordagem);
+            }
+            catch (Exception e) {
+                System.out.println("Cabine inexistente!");
+                return -1;
+            }
+        }
+    }
+
+    /**
+    * Método que retorna o valor total ganho por uma cabine expecífica
+    * ou pelo pedágio no geral, dependendo do Id que recebe como
+    * parâmetro, sendo o Id 0(zero) que referencia todas as cabines.
+    * @param idCabine código da cabine a ser considerada, caso seja o
+    * o valor 0, irá considerar todas as cabines juntas.
+    * @return double - valor que representa o total ganho por uma cabine
+    * expecífica ou pelo pedágio no geral.
+    */
+    private double getValorTotalGanhoGeral(int idCabine) {
+        Cabine cabineAtual = null;
+        if (idCabine == 0) {
+            double somatorioTotal = 0d;
+            for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
+                cabineAtual = cabine.getValue();
+                somatorioTotal += cabineAtual.getValorTotalGanho();
+            }
+        }
+        else {
+            try {
+                cabineAtual = cabines.get(idCabine);
+                return cabineAtual.getValorTotalGanho();
             }
             catch (Exception e) {
                 System.out.println("Cabine inexistente!");
@@ -459,13 +494,10 @@ public class Simulador {
     private void executarEvento(Evento eventoAtual) {
         try {
             if (eventoAtual instanceof Chegada) {
-                //Chegada c = (Chegada)eventoAtual;
-                //System.out.println("Chegada, " + eventoAtual.getTempoEvento() + ", Veiculo: " + c.getIdVeiculo() + ", Cabine: " + eventoAtual.getIdCabine());
                 executarChegada((Chegada)eventoAtual);
             }
             else {
                 executarSaida((Saida)eventoAtual);
-                //System.out.println("Saida, " + eventoAtual.getTempoEvento() + ", Veiculo: " + idVeiculo + ", Cabine: " + eventoAtual.getIdCabine());
             }
             incrementaNumeroEventos();
         }
@@ -523,6 +555,7 @@ public class Simulador {
             Cabine cabineParaRemover = getCabine(eventoAtual.getIdCabine());
             idVeiculoRemovido = cabineParaRemover.desenfileirarVeiculo();
             Veiculo veiculoRemovido = getVeiculo(idVeiculoRemovido);
+            cabineParaRemover.computaCobranca(veiculoRemovido.calcularTarifa());
 
             String tipoVeiculo = (veiculoRemovido instanceof VeiculoLeve) ? "Leve" : "Pesado";
             cabineParaRemover.armazenaTempo(tipoVeiculo, veiculoRemovido.getTempoEspera());
