@@ -51,31 +51,31 @@ public class Cabine {
         this.idAtendimento = idAtendimento;
         valorTotalGanho = 0d;
         estatisticas = "Cabine," + idCabine + "\n" +
-                       "Tempo,Tempo médio de espera dos veiculos leves," +
-                       "Tempo médio de espera dos veiculos pesados," +
-                       "Tempo médio de espera dos veiculos," +
+                       "Tempo,Tempo médio de espera dos veículos leves," +
+                       "Tempo médio de espera dos veículos pesados," +
+                       "Tempo médio de espera dos veículos," +
                        "Tamanho médio da fila da cabine," +
-                       "Tamanho maxímo da fila da cabine\n";
+                       "Tamanho máximo da fila da cabine\n";
     }
 
     /**
      * Método que concatena as estatisticas da cabine em um instante da
      * execução:
-     * - Tempo médio de espera dos veiculos leves.
-     * - Tempo médio de espera dos veiculos pesados.
-     * - Tempo médio de espera dos veiculos.
+     * - Tempo médio de espera dos veículos leves.
+     * - Tempo médio de espera dos veículos pesados.
+     * - Tempo médio de espera dos veículos.
      * - Tamanho médio da fila da cabine.
-     * - Tamanho maxímo da fila da cabine.
+     * - Tamanho máximo da fila da cabine.
      * @param tempo inteiro que representa o tempo atual da execução.
      */
     public void concatenarEstatisticas(int tempo) {
         int TMVL, TMVP, TMV, TMedFC, TMaxFC;
 
-        TMVL = getMediaTempoEspera("Leve"); // Tempo médio de espera dos veiculos leves
-        TMVP = getMediaTempoEspera("Pesado"); // Tempo médio de espera dos veiculos pesados
-        TMV = getMediaTempoEspera("Total"); // Tempo médio de espera dos veiculos
+        TMVL = getMediaTempoEspera("Leve"); // Tempo médio de espera dos veículos leves
+        TMVP = getMediaTempoEspera("Pesado"); // Tempo médio de espera dos veículos pesados
+        TMV = getMediaTempoEspera("Total"); // Tempo médio de espera dos veículos
         TMedFC = getTamanhoMedioFila(); // Tamanho médio da fila da cabine
-        TMaxFC = getTamanhoMaxFila(); // Tamanho maxímo da fila da cabine
+        TMaxFC = getTamanhoMaxFila(); // Tamanho máximo da fila da cabine
 
         estatisticas += String.format("%d,%d,%d,%d,%d,%d\n", tempo, TMVL, TMVP, TMV, TMedFC, TMaxFC);
     }
@@ -89,8 +89,8 @@ public class Cabine {
     }
 
     /**
-    * Método que retorna indentificador do Atendimento.
-    * @return Atendimento - retorna o indentificador do Atendimento.
+    * Método que retorna o identificador do Atendimento.
+    * @return Atendimento - retorna o identificador do Atendimento.
     */
     public int getIdAtendimento(){
         return idAtendimento;
@@ -98,7 +98,7 @@ public class Cabine {
 
     /**
     * Método que retorna o identificador único de uma cabine.
-    * @return int - contendo o número que representa o ID da cabine.
+    * @return int - contendo o número que representa a ID da cabine.
     */
     public int getIdCabine() {
         return idCabine;
@@ -115,9 +115,9 @@ public class Cabine {
     }
 
     /**
-    * Método que retorna o númerador da fração do cálculo da média
+    * Método que retorna o numerador da fração do cálculo da média
     * ponderada dos tamanhos da fila da cabine.
-    * @return int - valor que representa o númerador da fração da média ponderada
+    * @return int - valor que representa o numerador da fração da média ponderada
     * dos tamanhos da fila da cabine em questão.
     */
     public int getNumeradorMediaPonderadaTamanhos() {
@@ -148,7 +148,9 @@ public class Cabine {
     }
 
     /**
-    * Método que retorna o tamanho médio da fila.
+    * Método que retorna o tamanho médio da fila. Cria uma variável que chama
+    * a função getNumeradorMediaPonderadaTamanhos() e getDenominadorMediaPonderadaTamanhos();
+    * para calcular a média.
     * @return int - valor do tamanho médio da fila.
     */
     public int getTamanhoMedioFila() {
@@ -163,8 +165,8 @@ public class Cabine {
     }
 
     /**
-     * Método que encontra e retorna o tamanho da maior fila.
-     * @return int - valor que representa o tamanho da maior fila.
+     * Método que encontra e retorna o tamanho máximo da fila dessa cabine.
+     * @return int - valor que representa o tamanho máximo da fila dessa Cabine.
      */
     public int getTamanhoMaxFila() {
         Set<Integer> conjunto = tamanhosFila.keySet();
@@ -183,7 +185,10 @@ public class Cabine {
     /**
     * Método que retorna o tamanho da lista que possui os tempos de espera.
     * Podendo considerar as listas para veículos leves, pesados ou ambos.
-    * @param tipoVeiculo String simbolizando o tipo do veiculo.
+    * @param tipoVeiculo String simbolizando o tipo do veículo. "Pesado", obtem
+    * o tamanho da lista de espera dos veículos pesados; "Leve", obtem o
+    * tamanho da lista de espera dos veículos leves; qualquer outra String,
+    * o método retornará a soma de ambos os tamanhos.
     * @return int - tamanho da lista de tempos de espera.
     */
     public int getTamanhosListasEspecificas(String tipoVeiculo) {
@@ -201,10 +206,13 @@ public class Cabine {
     }
 
     /**
-    * Método que retorna a soma dos tempos de espera, baseado em um tipo de abordagem.
+    * Método que retorna a soma dos tempos de espera, baseado em um tipo de veículo.
     * Podendo considerar as listas para veículos leves, pesados ou ambos.
-    * @param tipoVeiculo String simbolizando o tipo do veiculo.
-    * @return int - tamanho da lista de tempos de espera.
+    * @param tipoVeiculo String simbolizando o tipo do veículo. "Pesado", obtem
+    * soma dos tempos na lista de espera dos veículos pesados; "Leve", obtem
+    * soma dos tempos na lista de espera dos veículos leves; qualquer outra String,
+    * o método retornará a soma de ambas as listas.
+    * @return int - soma dos tempos na lista de tempos de espera.
     */
     public int getSomasTempoEspera(String tipoVeiculo) {
         int soma = 0;
@@ -224,8 +232,11 @@ public class Cabine {
     * Método que informa o tempo médio de espera, utilizando os métodos
     * getSomasTempoEspera(tipoVeiculo) e getTamanhosListasEspecificas(tipoVeiculo).
     * Podendo considerar as listas para veículos leves, pesados ou ambos.
-    * @param tipoVeiculo String simbolizando o tipo do veiculo.
-    * @return int - retorna a média do tepo de espera
+    * Sendo definido pela String que recebe, sendo "Leve", "Pesado" ou qualquer
+    * outra String. Caso receba essa String qualquer, irá considerar tanto
+    * veículos leves quanto pesados.
+    * @param tipoVeiculo String simbolizando o tipo do veículo.
+    * @return int - retorna a média do tempo de espera.
     */
     public int getMediaTempoEspera(String tipoVeiculo) {
         int tempos = getSomasTempoEspera(tipoVeiculo);
@@ -240,18 +251,13 @@ public class Cabine {
     }
 
     /**
-    * Método que informa o tempo médio de espera, utilizando os métodos
-    * getSomasTempoEspera(tipoVeiculo) e getTamanhosListasEspecificas(tipoVeiculo).
-    * Podendo considerar as listas para veículos leves, pesados ou ambos.
-    * @param lista lista com os tempos.
-    * @return int - retorna a média do tempo de espera.
-    */
-    private int getSomaLista(LinkedList<Integer> lista) {
-        int somador = 0;
-        for (int tempo : lista) {
-            somador += tempo;
-        }
-        return somador;
+     * Método que retorna o valor total ganho pela cabine até o momento
+     * no qual é chamado.
+     * @return double - representando o valor total ganho por uma cabine
+     * específica.
+     */
+    public double getValorTotalGanho() {
+        return valorTotalGanho;
     }
 
     /**
@@ -271,16 +277,18 @@ public class Cabine {
         else {
             tamanhosFila.put(novoTamanho, 1);
         }
-
     }
 
     /**
-    * Método que adiciona o tempo na LinkedList de tempos de espera específico
+    * Método que adiciona o tempo na lista de tempos de espera específico
     * de um tipo de veículo e tempo de espera.
-    * @param tipoVeiculo String simbolizando o tipo do veiculo.
-    * @param tempo tempo de espera de um tipo veiculo.
+    * @param tipoVeiculo String simbolizando o tipo do veículo, "Leve" ou
+    * "Pesado".
+    * @param tempo tempo de espera de um tipo veículo.
+    * @throws RuntimeException mensagem de erro informando que uma String
+    * de parâmetro incorreta foi recebida.
     */
-    public void armazenaTempo(String tipoVeiculo, int tempo) {
+    public void armazenaTempo(String tipoVeiculo, int tempo) throws RuntimeException {
         if (tipoVeiculo.equals("Leve")) {
             tempoEsperaLeve.add(tempo);
         }
@@ -327,9 +335,9 @@ public class Cabine {
     }
 
     /**
-    * Método que verifica se a fila de veículos esta vazia.
-    * @return boolean - true se a fila de veículos esta vazia, false caso
-    * contario.
+    * Método que verifica se a fila de veículos está vazia.
+    * @return boolean - true se a fila de veículos está vazia, false caso
+    * contrário.
     */
     public boolean vazia() {
         return filaVeiculos.isEmpty();
@@ -342,15 +350,20 @@ public class Cabine {
      * cabine.
      */
      public void computaCobranca(double novoValor) {
-        valorTotalGanho += valor;
-    }
+        valorTotalGanho += novoValor;
+     }
 
-    /**
-     * Método que retorna o valor total ganho pela cabine até o momento
-     * no qual é chamado.
-     * @return double - representando o valor total ganho pela cabine.
+     /**
+     * Método que retorna o somatório dos tempos de espera de determinada lista.
+     * @param lista lista com os tempos de espera.
+     * @return int - contendo o somatório dos tempos de espera da lista
+     * passada por parâmetro.
      */
-    public double getValorTotalGanho() {
-        return valorTotalGanho;
-    }
+     private int getSomaLista(LinkedList<Integer> lista) {
+         int somador = 0;
+         for (int tempo : lista) {
+             somador += tempo;
+         }
+         return somador;
+     }
 }

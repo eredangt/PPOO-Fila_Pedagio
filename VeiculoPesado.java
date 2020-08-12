@@ -12,7 +12,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 
 /**
  * Classe que representa um veículo pesado em uma fila de pedágio.
- * Sendo também uma subclasse de veículo.
+ * Sendo também uma subclasse de Veículo.
  */
 class VeiculoPesado extends Veiculo {
 	private int numEixos;

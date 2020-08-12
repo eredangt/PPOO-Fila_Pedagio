@@ -13,20 +13,15 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 import java.util.ArrayList;
 
 /**
- * Classe responsável pelo gerenciamento de dados do pedágio.
+ * Classe abstrata responsável pelo gerenciamento de dados do pedágio.
  */
 public abstract class GerenciadorDeDados {
 
     /**
-     * Construtor da classe GerenciadorDeDados.
-     */
-    public GerenciadorDeDados() {}
-
-    /**
-     * Método responsável criação dos objetos a partir dos Campos
+     * Método responsável pela criação dos objetos a partir dos Campos
      * lidos do arquivo de dados.
-     * @param nomeArquivo nome do arquivo texto que contem os dados
-     * dos veículos e atendimentos.
+     * @param nomeArquivo nome do arquivo texto que contém os dados
+     * utilizados na simulação.
      * @return ArrayList - lista com todos os objetos criados a
      * partir dos campos lidos do arquivo.
      * @throws Exception exceção indicando alguma falha de leitura.
@@ -94,10 +89,10 @@ public abstract class GerenciadorDeDados {
      * arquivo de dados.
      * @param campos um vetor de campos de texto que compõem um
      * atendimento.
-     * @return char - um caracter que representa um fila ('F'), intervalo ('I'),
-     * veículo ('V'), tarifa ('T'), atendimento ('A') ou espaco em branco (' ').
+     * @return char - um caracter que representa uma fila ('F'), intervalo ('I'),
+     * veículo ('V'), tarifa ('T'), atendimento ('A') ou espaço em branco (' ').
      * @throws Exception alguma exceção indicando que algum dos
-     * campos é invalido.
+     * campos é inválido.
      */
     public static char validarCampos(String[] campos) throws Exception {
         try {
@@ -175,7 +170,7 @@ public abstract class GerenciadorDeDados {
 	}
 
     /**
-    * Método que retorna o modo da fila rand validado.
+    * Método que retorna o modo (aleatoria ou menor fila) da fila rand validado.
     * @param campos campos de uma linha já validados.
     * @return Boolean - modo da fila rand criado a partir dos compos
     * lidos do arquivo.
@@ -185,7 +180,7 @@ public abstract class GerenciadorDeDados {
 	}
 
     /**
-    * Método que retorna o intervalo entre as chegadas do veículos validado.
+    * Método que retorna o intervalo entre as chegadas dos veículos validado.
     * @param campos campos de uma linha já validados.
     * @return Integer - intervalo criado a partir dos compos
     * lidos do arquivo.
@@ -208,9 +203,10 @@ public abstract class GerenciadorDeDados {
 	}
 
     /**
-    * Método que retorna o tipo de veículo validado.
+    * Método que cria o objeto da classe Veiculo sendo do tipo Veiculoleve ou
+    * VeiculoPesado, e o retorna.
     * @param campos campos de uma linha já validados.
-    * @return Veiculo - novo veiculo criado a partir dos compos
+    * @return Veiculo - novo veículo criado a partir dos campos
     * lidos do arquivo.
     */
 	private static Veiculo criarVeiculo(String[] campos) {
@@ -227,8 +223,8 @@ public abstract class GerenciadorDeDados {
 
     /**
     * Método que retorna uma nova cabine.
-    * @param idAtendimento código do idAtendimento.
-    * @return Cabine - nova cabine criado a partir do id de um
+    * @param idAtendimento identificador do Atendimento.
+    * @return Cabine - nova cabine criada a partir do ID de um
     * atendimento.
     */
 	private static Cabine criarCabine(int idAtendimento) {
@@ -238,7 +234,8 @@ public abstract class GerenciadorDeDados {
 	}
 
     /**
-    * Método que retorna o tipo de atendimento validado.
+    * Método que cria o objeto da classe Atendimento, sendo do tipo Funcionario
+    * ou Automatico, e o retorna.
     * @param campos campos de uma linha já validados.
     * @return Atendimento - novo atendimento criado a partir dos compos
     * lidos do arquivo.
@@ -260,7 +257,7 @@ public abstract class GerenciadorDeDados {
      * @param campos um vetor de campos de texto que compõem um
      * tipo de fila.
      * @throws Exception alguma exceção indicando que algum dos
-     * campos e invalido.
+     * campos é inválido.
      */
     private static void validarTipoFila(String[] campos) throws Exception {
         String log = "";
@@ -282,7 +279,7 @@ public abstract class GerenciadorDeDados {
      * @param campos um vetor de campos de texto que compõem o
      * intervalo de chegada.
      * @throws Exception alguma exceção indicando que algum dos
-     * campos e inválido.
+     * campos é inválido.
      */
     private static void validarIntervaloChegada(String[] campos) throws Exception {
         String log = "";
@@ -310,7 +307,7 @@ public abstract class GerenciadorDeDados {
      * @param campos um vetor de campos de texto que compõem uma
      * tarifa.
      * @throws Exception alguma exceção indicando que algum dos
-     * campos e invalido.
+     * campos é inválido.
      */
     private static void validarTarifa(String[] campos) throws Exception {
         String log = "";
@@ -335,11 +332,11 @@ public abstract class GerenciadorDeDados {
     }
 
     /**
-     * Método responsável pela validação de um veiculo.
+     * Método responsável pela validação de um veículo.
      * @param campos um vetor de campos de texto que compõem um
      * veiculo.
      * @throws Exception alguma exceção indicando que algum dos
-     * campos e invalido.
+     * campos é inválido.
      */
     private static void validarVeiculo(String[] campos) throws Exception {
         String log = "";
@@ -378,7 +375,7 @@ public abstract class GerenciadorDeDados {
      * @param campos um vetor de campos de texto que compõem um
      * atendimento.
      * @throws Exception alguma exceção indicando que algum dos
-     * campos e invalido.
+     * campos é inválido.
      */
     private static void validarAtendimento(String[] campos) throws Exception {
         String log = "";

@@ -27,11 +27,12 @@ public class Funcionario extends Atendimento {
 	}
 
 	/**
-	* Método que retorna o tempo de operação daquele atendimento.
-	* @return int - contendo o número o tempo.
+	* Método que retorna o tempo de operação de determinado atendimento.
+	* @return int - contendo o número representando o tempo.
 	*/
 	@Override
 	public int getTempoAtendimento() {
-		return super.getTempoAtendimento() * (1 + Random.nextInt(10) / 10);
+		Random random = new Random();
+		return super.getTempoAtendimento() * (1 + random.nextInt(10) / 10);
 	}
 }

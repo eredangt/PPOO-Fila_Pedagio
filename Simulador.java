@@ -21,13 +21,14 @@ import java.util.ArrayList;
 /**
 * Classe que realiza a Simulação da Fila do Pedágio.
 * A classe possui atributos que correspondem a fila aleatória ou não
-* (filaRand), inicializa os arquivos de Entrada e de Relatorio.
+* (filaRand), inicializa os arquivos de Entrada.
 * Cria as Listas de Cabine, Veículos e Atendimentos, e também, a FilaEventos
 * de Eventos.
 */
 public class Simulador {
     private boolean filaRand;
     private String nomeArquivoEntrada;
+    private String nomeArquivosSaida;
     private int tempoTotalSimulado;
     private int intervaloChegada;
     private int numeroEventosTratados;
@@ -41,14 +42,14 @@ public class Simulador {
     /**
     * Construtor cria as listas de: Lista Cabines, Lista Veículos,
     * Lista Atendimentos e, cria a Fila de Eventos.
-    * Incializo os atributos da minha classe com o valor 0.
-    * Além de nomear o Arquivo de Entrada e o Arquivo de Relatório.
-    * Também, cria um objeto que gerencia o arquivo.
+    * Incializo os atributos da classe com o valor 0.
+    * Além de nomear o Arquivo de Entrada.
     */
     public Simulador() {
         numeroEventosTratados = 0;
         tempoTotalSimulado = 0;
-        nomeArquivoEntrada = "Dados.txt";
+        nomeArquivoEntrada = "dadosEntrada.txt";
+        nomeArquivosSaida = "estatisticas";
         filaEventos = new PriorityQueue<Evento>();
         temposEventos = new LinkedHashSet<Integer>();
         cabines = new HashMap<Integer, Cabine>();
@@ -64,8 +65,8 @@ public class Simulador {
 
     /**
     * Método que concatena as estatisticas do simulador em certo tempo de
-    * execução.
-    * Método que serve para debugar os dados, também será utilizada no arquivo texto.
+    * execução. Serve também, para debugar os dados, também será utilizada
+    *  no arquivo texto.
     * @param tempo instante de tempo da execução.
     */
     private void concatenarEstatisticas(int tempo) {
@@ -81,7 +82,7 @@ public class Simulador {
 
     /**
     * Método que inicia a Simulação.
-    * Inicializa a filaRand, intervaloChegada, Atendimento, os Veículos e as Cabines.
+    * Inicializa a filaRand, intervaloChegada, os atendimentos, os Veículos e as Cabines.
     * O método enfileirarChegadas() verifica se a fila será aleatória ou não.
     * O método executarSimulacao() retira os eventos da fila.
     * @throws Exception erros durante a inicialização dos dados do
@@ -144,9 +145,9 @@ public class Simulador {
     }
 
     /**
-    * Método que gera as Estatisticas da fila de Pegágio.
-    * Método que serve para debugar os dados, também será utilizada no arquivo texto.
-    * @return String - retorna a saída final da fila.
+    * Método que gera as Estatisticas da fila de Pegágio, as quais serão salvas
+    * no arquivo texto.
+    * @return String - retorna as estatísticas ao final da simulação.
     */
     public String gerarEstatisticas() {
         String texto;
@@ -173,9 +174,9 @@ public class Simulador {
     * veículos leves, caso o parâmetro seja "Pesado" irá considerar apenas os
     * veículos pesados, caso seja qualquer outra String irá levar ambos os
     * tipos em consideração.
-    * Método que serve para debugar os dados, também será utilizada no arquivo texto.
-    * @param abordagem String simbolizando o tipo do veiculo, podendo ser
-    * "Leve", "Pesado", ou qualquer outra coisa.
+    * Método que serve para debugar os dados, também será utilizado no arquivo texto.
+    * @param abordagem String simbolizando o tipo do veículo, podendo ser
+    * "Leve", "Pesado", ou qualquer outra String.
     * @return String - mensagem informando o tempo médio de espera dos tipos de veículo.
     */
     public String getTextoMedioAtendimentos(String abordagem) {
@@ -249,7 +250,7 @@ public class Simulador {
 
     /**
      * Método que retorna o total de eventos tratados.
-     * @return int - contendo o númeno de eventos tratados.
+     * @return int - contendo o número de eventos tratados.
      */
     private int getNumeroEventosTratados() {
         return numeroEventosTratados;
@@ -257,9 +258,9 @@ public class Simulador {
 
     /**
     * Método que retorna o tamanho da maior fila no contexto geral ou
-    * de uma Cabine expecífica.
+    * de uma Cabine específica.
     * @param idCabine código da cabine a ser considerada, caso seja o
-    * o valor 0, irá considerar todas as cabines juntas.
+    * o valor 0 irá considerar todas as cabines juntas.
     * @return int - contendo o tamanho da fila de maior tamanho.
     */
     private int getTamanhoMaiorFila(int idCabine) {
@@ -290,7 +291,7 @@ public class Simulador {
     /**
     * Método que retorna o tamnho médio de todas as filas ou de uma
     * fila de Cabine específica.
-    * @param idCabine código da cabine a ser considerada, caso seja o
+    * @param idCabine ID da cabine a ser considerada, caso seja o
     * o valor 0, irá considerar todas as cabines juntas.
     * @return int - contendo a média do tamanho das filas.
     */
@@ -327,7 +328,7 @@ public class Simulador {
     * Método que retorna o tempo médio geral de espera na fila.
     * Podendo considerar as listas para veículos leves, pesados ou ambos.
     * @param idCabine código da cabine a ser considerada, caso seja o
-    * o valor 0, irá considerar todas as cabines juntas.
+    * o valor 0 irá considerar todas as cabines juntas.
     * @param abordagem String simbolizando o tipo do veículo.
     * @return int - valor do tempo médio geral de espera.
     */
@@ -361,13 +362,13 @@ public class Simulador {
     }
 
     /**
-    * Método que retorna o valor total ganho por uma cabine expecífica
-    * ou pelo pedágio no geral, dependendo do Id que recebe como
-    * parâmetro, sendo o Id 0(zero) que referencia todas as cabines.
-    * @param idCabine código da cabine a ser considerada, caso seja o
+    * Método que retorna o valor total ganho por uma cabine específica
+    * ou pelo pedágio no geral, dependendo do ID que recebe como
+    * parâmetro, sendo o ID 0(zero) que referencia todas as cabines.
+    * @param idCabine ID da cabine a ser considerada, caso seja o
     * o valor 0, irá considerar todas as cabines juntas.
     * @return double - valor que representa o total ganho por uma cabine
-    * expecífica ou pelo pedágio no geral.
+    * específica ou pelo pedágio no geral.
     */
     private double getValorTotalGanhoGeral(int idCabine) {
         Cabine cabineAtual = null;
@@ -377,6 +378,7 @@ public class Simulador {
                 cabineAtual = cabine.getValue();
                 somatorioTotal += cabineAtual.getValorTotalGanho();
             }
+            return somatorioTotal;
         }
         else {
             try {
@@ -391,18 +393,18 @@ public class Simulador {
     }
 
     /**
-    * Método que captura a cabine através de uma ID.
-    * @param idCabine inteiro que representa a ID única da Cabine.
-    * @return Cabine - o objeto Cabine de acordo com a ID.
+    * Método que captura um objeto Cabine através de um ID.
+    * @param idCabine inteiro que representa o ID único da Cabine.
+    * @return Cabine - o objeto Cabine de acordo com o ID.
     */
     private Cabine getCabine(int idCabine) {
         return cabines.get(idCabine);
     }
 
     /**
-    * Método que captura o atendimento através de uma ID.
-    * @param idAtendimento inteiro que representa a ID única do Atendimento.
-    * @return Atendimento - o objeto Atendimento de acordo com a ID.
+    * Método que captura o atendimento através de um ID.
+    * @param idAtendimento inteiro que representa o ID único do Atendimento.
+    * @return Atendimento - o objeto Atendimento de acordo com o ID.
     */
     private Atendimento getAtendimento(int idAtendimento) {
         return atendimentos.get(idAtendimento);
@@ -427,7 +429,7 @@ public class Simulador {
 
     /**
     * Método que salva as estatisticas geradas durante a execução do
-    * simulador.
+    * simulador, em um arquivo "txt" e outro "csv".
     */
     private void salvarEstatisticas() {
         String estatisticas = this.estatisticas;
@@ -436,18 +438,18 @@ public class Simulador {
         }
 
         try {
-            GerenciadorDeArquivos.salvarArquivo("estatisticas.csv", estatisticas);
-            GerenciadorDeArquivos.salvarArquivo("estatisticas.txt", gerarEstatisticas());
+            GerenciadorDeArquivos.salvarArquivo(nomeArquivosSaida + ".csv", estatisticas);
+            GerenciadorDeArquivos.salvarArquivo(nomeArquivosSaida + ".txt", gerarEstatisticas());
         }
         catch (Exception e) {
-            System.out.println("Foi aqui " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
     /**
     * Método que executa a Simulação.
-    * Enquanto minha fila de Eventos não for vazia, realizo a retirada dos
-    * eventos na fila de Evento.
+    * Enquanto a fila de Eventos não for vazia, realizo a retirada dos
+    * eventos na fila de Eventos.
     */
     private void executarSimulacao() {
         int tempoUltimoEvento = -1;
@@ -488,7 +490,7 @@ public class Simulador {
     /**
     * Método que executa os Eventos de Chegada e Saída no pedágio.
     * Se o objeto é do tipo dinâmico Chegada, realizo o método executaChegada().
-    * Caso contrário, chamo o método executaSaida(e).
+    * Caso contrário, chamo o método executarSaida().
     * @param eventoAtual evento que será executado.
     */
     private void executarEvento(Evento eventoAtual) {
@@ -508,16 +510,14 @@ public class Simulador {
 
     /**
     * Método que executa a Chegada.
-    * Caleta o tempo gasto no Evento e o armazeno em uma variável.
-    * Ao enfileirar o evento, capturo a o retorno do método enfileirar(),
+    * Ao enfileirar o evento, captura o retorno do método enfileirar(),
     * através da variável Cabine.
-    * Assim que executo o método, crio um objeto de Saída e coloco na fila
+    * Assim que executo o método, cria um objeto de Saída e é colocada na fila
     * o evento passado por parâmetro.
     * @param eventoAtual evento de chegada que será executado.
     */
     private void executarChegada(Chegada eventoAtual) {
         try {
-
             int idVeiculo = eventoAtual.getIdVeiculo();
             Veiculo veiculoAtual = getVeiculo(idVeiculo);
             int tempoChegada = eventoAtual.getTempoEvento();
@@ -545,9 +545,9 @@ public class Simulador {
 
     /**
     * Método que executa a Saída.
-    * Assim que executo o método, retiro o elemento da fila.
+    * Assim que executa o método, retira o elemento da fila.
     * @param eventoAtual evento de saida que será executado.
-    * @return int - identificador do veiculo que estava no evento de saida.
+    * @return int - identificador do veículo que estava no evento de saída.
     */
     private int executarSaida(Saida eventoAtual) {
         int idVeiculoRemovido = -1;
@@ -576,11 +576,12 @@ public class Simulador {
     private void enfileirarChegadas() {
         int tempoChegada = 0;
         ArrayList<Integer> listaTemposUsados = new ArrayList<Integer>();
+        Random random = new Random();
 
         for (Map.Entry<Integer, Veiculo> veiculo : veiculos.entrySet()) {
             Veiculo veiculoAtual = veiculo.getValue();
 
-            tempoChegada += Random.nextInt(getIntervaloChegada());
+            tempoChegada += random.nextInt(getIntervaloChegada());
 
             while (listaTemposUsados.contains(tempoChegada)) {
                 tempoChegada += 1;
@@ -623,7 +624,7 @@ public class Simulador {
     }
 
     /**
-    * Método que atualiza a Média das filas de acordo com o novo tamanho.
+    * Método que atualiza a Média das filas, de acordo com o novo tamanho.
     */
     private void atualizaMediaFilas() {
         for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
@@ -633,7 +634,7 @@ public class Simulador {
     }
 
     /**
-    * Método que define o tempo total da simulacao.
+    * Método que define o tempo total da simulação.
     * @param tempo tempo final.
     */
     private void setTempoTotalSimulado(int tempo) {
@@ -644,7 +645,7 @@ public class Simulador {
     * Método que informa se uma cabine é automatica.
     * @param cabineAtual objeto cabine a ser verificado.
     * @return boolean - true se o atendimento da cabine for
-    * automatico.
+    * automático, false caso contrário.
     */
     private boolean ehAutomatico(Cabine cabineAtual) {
         return getAtendimento(cabineAtual.getIdAtendimento()) instanceof Automatico;
@@ -669,8 +670,9 @@ public class Simulador {
         int tempoAtendimento = atendimentoAtual.getTempoAtendimento(); // Tempo do atendimento
 
         Veiculo veiculoAtual = getVeiculo(eventoAtual.getIdVeiculo());
+        Random random = new Random();
 
-        int tempoLocomocao = (veiculoAtual instanceof VeiculoLeve) ? 2 + Random.nextInt(6) : 7 + Random.nextInt(9);
+        int tempoLocomocao = (veiculoAtual instanceof VeiculoLeve) ? 2 + random.nextInt(6) : 7 + random.nextInt(9);
 
         int tempoTotal = tempoChegada + tempoAtendimento + tempoLocomocao;
         while (temposEventos.contains(tempoTotal)) {
@@ -683,21 +685,22 @@ public class Simulador {
     /**
      * Método que pega uma cabine aleatoriamente.
      * @param automatico booleana que define se um veículo pode utilizar
-     * as cabines automaticas.
+     * as cabines automáticas.
      * @return Cabine - retorna a cabine aleatória.
      */
     private Cabine cabineAleatoria(boolean automatico) {
         Cabine aleatoria;
 
-        aleatoria = cabines.get(1 + Random.nextInt(cabines.size()));
+        Random random = new Random();
+        aleatoria = cabines.get(1 + random.nextInt(cabines.size()));
 
         if (automatico) {
             while (!ehAutomatico(aleatoria)) {
-                aleatoria = cabines.get(1 + Random.nextInt(cabines.size()));
+                aleatoria = cabines.get(1 + random.nextInt(cabines.size()));
             }
         } else {
             while (ehAutomatico(aleatoria)) {
-                aleatoria = cabines.get(1 + Random.nextInt(cabines.size()));
+                aleatoria = cabines.get(1 + random.nextInt(cabines.size()));
             }
         }
 
@@ -707,7 +710,7 @@ public class Simulador {
     /**
      * Método que busca a menor fila entre as cabines disponíveis.
      * @param automatico booleana que define se um veículo pode utilizar
-     * as cabines automaticas.
+     * as cabines automáticas.
      * @return Cabine - retorna a cabine com a menor fila encontrada.
      */
     private Cabine cabineMenorFila(boolean automatico) {

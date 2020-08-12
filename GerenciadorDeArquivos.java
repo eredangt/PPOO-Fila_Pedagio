@@ -17,21 +17,16 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 
 /**
- * Classe responsável pelo gerenciamento de arquivos do pedágio, fazendo
+ * Classe abstrata responsável pelo gerenciamento de arquivos do pedágio, fazendo
  * tanto a leitura quanto a escrita dos arquivos texto.
  */
 public abstract class GerenciadorDeArquivos {
 
     /**
-     * Construtor da classe GerenciadorDeArquivos.
-     */
-    public GerenciadorDeArquivos() {}
-
-    /**
-     * Método responsável pela leitura do arquivo de dados, fazendo validação dados
-     * linhas.
-     * @param nomeArquivo nome do arquivo texto que contem os dados
-     * dos veiculos e atendimentos.
+     * Método responsável pela leitura do arquivo de dados, fazendo a
+     * validação dos dados de cada linha.
+     * @param nomeArquivo nome do arquivo texto que contém os dados
+     * utilizados na simulação.
      * @return ArrayList - lista com todos os campos lidos a
      * partir do arquivo.
      * @throws IOException exceção indicando alguma falha de
@@ -81,10 +76,9 @@ public abstract class GerenciadorDeArquivos {
     }
 
     /**
-     * Método responsável por salvar um texto em um arquivo de tipo
+     * Método responsável por salvar um texto em um arquivo do tipo
      * texto.
-     * @param nomeArquivo nome do arquivo texto que contem os dados
-     * dos veiculos e atendimentos.
+     * @param nomeArquivo nome do arquivo que será salvo.
      * @param texto o texto com as informações que serão salvas.
      * @throws IOException exceção indicando alguma falha de
      * escrita.

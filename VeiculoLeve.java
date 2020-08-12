@@ -12,7 +12,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 
 /**
  * Classe que representa um veículo leve em uma fila de pedágio.
- * Sendo também uma subclasse de veículo.
+ * Sendo também uma subclasse de Veículo.
  */
 class VeiculoLeve extends Veiculo {
 	private static double tarifaReboque = -1d;
@@ -34,7 +34,7 @@ class VeiculoLeve extends Veiculo {
 	/**
 	 * Método que define a tarifa de reboque utilizada pelo pedágio.
      * @param tarifaReboque um double que define a tarifa de reboque
-     * que será utilizada no calculo da tarifa do veículo.
+     * que será utilizada no cálculo da tarifa do veículo.
 	 */
     public static void setTarifaReboque(double tarifaReboque) {
 		VeiculoLeve.tarifaReboque = tarifaReboque;
@@ -58,7 +58,7 @@ class VeiculoLeve extends Veiculo {
 	}
 
 	/**
-	 * Método que calcula a tarifa de um veiculo.
+	 * Método que calcula a tarifa de um veículo.
 	 * @return double - representando o valor da tarifa a
 	 * ser paga pelo veículo em questão.
 	 */
@@ -70,7 +70,7 @@ class VeiculoLeve extends Veiculo {
 		else if(getReboque()) {
 			return getTarifaFixa() + getTarifaReboque();
 		}
-		else{
+		else {
 			return getTarifaFixa();
 		}
 	}

@@ -14,7 +14,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
  * Classe que representa um veículo em uma fila de pedágio.
  * Ela gera um Identificador único para cada veículo e
  * fornece métodos para a manipulação de seus atributos.
- * Podendo ser um VeiculoLeve ou VeiculoPesado, sendo extendido por
+ * Podendo ser um VeiculoLeve ou VeiculoPesado, sendo estendido por
  * essas classes.
  */
 public abstract class Veiculo {
@@ -26,15 +26,16 @@ public abstract class Veiculo {
 
     /**
      * Construtor incrementa o contador de veículos e
-     * define os Id's de cada veículo a partir desse valor.
-     * @param automatico booleano que define se um veículo é
-     * automatico no atendimento da fila.
+     * define os ID's de cada veículo a partir desse valor, inicializando
+     * os atributos próprios da classe.
+     * @param automatico boolean que define se um veículo é
+     * automático no atendimento da fila.
      */
     public Veiculo(boolean automatico) {
         numeroVeiculos += 1;
         idVeiculo = numeroVeiculos;
         this.automatico = automatico;
-        this.tempoEspera = -1;
+        this.tempoEspera = 0;
     }
 
     /**
@@ -47,7 +48,7 @@ public abstract class Veiculo {
      /**
      * Método que define a tarifa fixa utilizada pelo pedágio.
      * @param tarifaFixa um double que define a tarifa que será
-     * utilizada no calculo da tarifa do veículo.
+     * utilizada no cálculo da tarifa do veículo.
      */
     public static void setTarifaFixa(double tarifaFixa) {
         Veiculo.tarifaFixa = tarifaFixa;
@@ -78,7 +79,7 @@ public abstract class Veiculo {
     }
 
     /**
-     * Método que retorna se um veículo é isento de tarifa.
+     * Método que retorna se um veículo tem acesso ao atendimento automático.
      * @return boolean - true se o veículo for ser atendido de
      * forma automática ou false caso contrário.
      */
@@ -98,7 +99,7 @@ public abstract class Veiculo {
 
     /**
      * Método que retorna o identificador único de um veículo.
-     * @return int - contendo o número que representa o Id.
+     * @return int - contendo o número que representa o ID.
      */
     protected int getIdVeiculo() {
         return idVeiculo;

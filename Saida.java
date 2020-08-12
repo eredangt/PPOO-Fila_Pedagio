@@ -19,7 +19,7 @@ public class Saida extends Evento {
 
     /**
      * Construtor da classe Saida.
-     * @param tempoEvento tempo do evento.
+     * @param tempoEvento tempo em que o veículo saiu da fila da cabine.
      * @param idCabine inteiro identificando a cabine que será relacionado
      * com o evento.
      */

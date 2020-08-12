@@ -35,7 +35,7 @@ public abstract class Atendimento {
 
 	/**
 	* Método que retorna o tempo de operação daquele atendimento.
-	* @return int - contendo o número o tempo.
+	* @return int - contendo o número representando o tempo.
 	*/
 	public int getTempoAtendimento() {
 		return tempoAtendimento;

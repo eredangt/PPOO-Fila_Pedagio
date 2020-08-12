@@ -12,7 +12,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 
 /**
 * Classe que representa a chegada de um veículo ao pedágio.
-* Ela enfileira cada veículo que chega a fila de uma cabine
+* Ela enfileira cada veículo que chega a fila de uma cabine,
 * de maneira aleatória ou o encaminha à fila de menor tamanho.
 * Sendo ela uma subclasse da classe Evento.
 */
@@ -21,7 +21,7 @@ public class Chegada extends Evento {
 
     /**
      * Construtor da classe Chegada.
-     * @param tempoEvento tempo do evento.
+     * @param tempoEvento tempo em que o veículo chegou na fila da cabine.
      * @param idVeiculo inteiro identificando o veículo que será relacionado
      * com o evento.
      */
@@ -31,7 +31,7 @@ public class Chegada extends Evento {
     }
 
     /**
-     * Método que retorna o identificador doveículo do evento.
+     * Método que retorna o identificador do veículo do evento.
      * @return int - identificador do veículo.
      */
     public int getIdVeiculo() {

@@ -12,15 +12,21 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 
 /**
 * Classe que representa os eventos que acontecem em um pedágio.
-* Podendo ser um evento do tipo de Chegada ou Saida, sendo extendido por essas
-* subclasses.
+* Podendo ser um evento do tipo de Chegada ou Saida.
 */
 public abstract class Evento implements Comparable<Evento> {
     private int tempoEvento;
-    protected int idCabine;
+    private int idCabine;
 
     /**
      * Construtor da classe Evento.
+     * Inicializa o ID da Cabine com -1, pois a Cabine não é selecionada
+     * no momento que o objeto Evento (subclasse Chegada) é instanciado,
+     * devido às diferentes abordagens do Simulador (podendo ser pela Cabine
+     * com menor fila ou aleatoriamente).
+     * Isso ocorre devido ao fato que no momento da criação dos eventos de
+     * chegada as filas estão vazias, logo apenas a abordagem aleatória
+     * funcionaria.
      * @param tempoEvento tempo atual do programa.
      */
     public Evento(int tempoEvento) {
@@ -55,7 +61,9 @@ public abstract class Evento implements Comparable<Evento> {
     /**
      * Método que faz a comparação entre o tempo de Evento.
      * @param eventoComparado evento a ser comparado.
-     * @return int - retorna o número para ordenar os dados.
+     * @return int - retorna um número inteiro negativo, zero, ou positivo
+     * se o objeto Evento é menor que, igual que, ou maior que o objeto passado
+     * por parâmetro.
      */
     @Override
     public int compareTo(Evento eventoComparado) {
