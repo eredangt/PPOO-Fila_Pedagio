@@ -13,8 +13,9 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 /**
  * Classe que representa um veículo em uma fila de pedágio.
  * Ela gera um Identificador único para cada veículo e
- * fornece métodos para a manipulação de seus atributos
- * pelas classes filhas.
+ * fornece métodos para a manipulação de seus atributos.
+ * Podendo ser um VeiculoLeve ou VeiculoPesado, sendo extendido por
+ * essas classes.
  */
 public abstract class Veiculo {
     private static int numeroVeiculos = 0;
@@ -37,20 +38,13 @@ public abstract class Veiculo {
     }
 
     /**
-     * Método utilizado apenas para fins de debug.
-     * @return String - uma cadeia de caracteres formatada
-     * com os atributos da classe.
-     */
-    public String toString() {
-        return String.format("\nVeículo: %s \nAutomático: %s", getIdVeiculo(), ((getAutomatico()) ? "Sim" : "Não"));
-    }
-
-    /**
      * Método abstrato que será sobreescrito nas classes filhas.
+     * @return double - representando o valor da tarifa a
+	 * ser paga pelo veículo em questão.
      */
     public abstract double calcularTarifa();
 
-         /**
+     /**
      * Método que define a tarifa fixa utilizada pelo pedágio.
      * @param tarifaFixa um double que define a tarifa que será
      * utilizada no calculo da tarifa do veículo.
@@ -59,24 +53,32 @@ public abstract class Veiculo {
         Veiculo.tarifaFixa = tarifaFixa;
     }
 
+    /**
+    * Método que define o tempo de espera do Veículo.
+    * @param tempo valor para definir o tempo de espera.
+    */
     public void setTempoEspera(int tempo) {
         tempoEspera = tempo;
     }
 
     /**
-     * Método que informa o valor de tarifa fixa utilizado pelo pedágio.
+     * Método que retorna o valor de tarifa fixa utilizado pelo pedágio.
      * @return double - contendo o valor da tarifa do pedágio.
      */
     public static double getTarifaFixa() {
         return tarifaFixa;
      }
 
+     /**
+     * Método que retorna o tempo de espera de um determinado veículo na fila.
+     * @return int - contendo o tempo de espera na fila.
+     */
     public int getTempoEspera() {
         return tempoEspera;
     }
 
     /**
-     * Método que informa se um veículo é isento de tarifa.
+     * Método que retorna se um veículo é isento de tarifa.
      * @return boolean - true se o veículo for ser atendido de
      * forma automática ou false caso contrário.
      */
@@ -85,7 +87,7 @@ public abstract class Veiculo {
     }
 
     /**
-     * Método que informa quantos objetos da classe veículo
+     * Método que retorna quantos objetos da classe veículo
      * foram instanciados.
      * @return int - contendo o número que representa
      * quantos veículos existem no sistema até o momento.
@@ -95,7 +97,7 @@ public abstract class Veiculo {
     }
 
     /**
-     * Método que informa o identificador único de um veículo.
+     * Método que retorna o identificador único de um veículo.
      * @return int - contendo o número que representa o Id.
      */
     protected int getIdVeiculo() {

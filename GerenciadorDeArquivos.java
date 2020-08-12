@@ -1,14 +1,8 @@
-import java.util.ArrayList;
-import java.io.IOException;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.BufferedReader;
-
 /*
 ---------------------------------------------------------------------------------
 Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 2020/01
 ----------------Grupo 05 - Fila de veículos em pedágio rodoviário----------------
-    Integrantes: 
+    Integrantes:
         Caio de Oliveira (10A - 201820267),
         Ismael Martins Silva (10A - 201820281),
         Layse Cristina Silva Garcia (10A - 201811177),
@@ -16,22 +10,31 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 ---------------------------------------------------------------------------------
 */
 
+import java.util.ArrayList;
+import java.io.IOException;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.BufferedReader;
+
 /**
  * Classe responsável pelo gerenciamento de arquivos do pedágio, fazendo
  * tanto a leitura quanto a escrita dos arquivos texto.
  */
 public abstract class GerenciadorDeArquivos {
-    
+
     /**
      * Construtor da classe GerenciadorDeArquivos.
      */
     public GerenciadorDeArquivos() {}
-    
+
     /**
-     * Método responsável pela leitura do arquivo de dados.
-     * @param nomeArquivo - nome do arquivo texto que contem os dados
+     * Método responsável pela leitura do arquivo de dados, fazendo validação dados
+     * linhas.
+     * @param nomeArquivo nome do arquivo texto que contem os dados
      * dos veiculos e atendimentos.
-     * @throws IOException - exceção indicando alguma falha de
+     * @return ArrayList - lista com todos os campos lidos a
+     * partir do arquivo.
+     * @throws IOException exceção indicando alguma falha de
      * leitura.
      */
     public static ArrayList<String[]> lerDados(String nomeArquivo) throws IOException {
@@ -46,12 +49,12 @@ public abstract class GerenciadorDeArquivos {
             while (texto_linha != null) {
                 String[] campos = texto_linha.split(",");
                 num_linha ++;
-                
+
                 try {
                     switch (GerenciadorDeDados.validarCampos(campos)) {
                         case ' ':
                             break;
-                        
+
                         default:
                             dados.add(campos);
 
@@ -61,14 +64,14 @@ public abstract class GerenciadorDeArquivos {
                 catch (Exception e) {
                     logs.add(String.format("Erro na linha: %d\n%s", num_linha, e.getMessage()));
                 }
-                
+
                 texto_linha = arqBF.readLine();
             }
         }
         catch (IOException e) {
             String log = String.format("Falhar ao ler os dados do arquivo: %s\n > %s", nomeArquivo, e.getMessage());
             logs.add(log);
-            
+
             throw new IOException(log);
         }
 
@@ -76,14 +79,14 @@ public abstract class GerenciadorDeArquivos {
 
         return dados;
     }
-    
+
     /**
      * Método responsável por salvar um texto em um arquivo de tipo
      * texto.
-     * @param nomeArquivo - nome do arquivo texto que contem os dados
+     * @param nomeArquivo nome do arquivo texto que contem os dados
      * dos veiculos e atendimentos.
-     * @param texto - o texto com as informações que serão salvas.
-     * @throws IOException - exceção indicando alguma falha de
+     * @param texto o texto com as informações que serão salvas.
+     * @throws IOException exceção indicando alguma falha de
      * escrita.
      */
     public static void salvarArquivo(String nomeArquivo, String texto) throws IOException {
@@ -94,10 +97,15 @@ public abstract class GerenciadorDeArquivos {
             throw new IOException(String.format("Falhar ao salvar os dados no arquivo: %s\n > %s", nomeArquivo, e.getMessage()));
         }
     }
-    
+
+    /**
+    * Método que gera o texto do log.
+    * @param logs lista contendo o log com os erros.
+    * @return String - texto completo do log.
+    */
     private static String mensagemLogs(ArrayList<String> logs) {
         String texto = "Log completo:\n";
-        
+
         if (logs.size() == 0) {
             texto += " > Sem logs";
         }
@@ -106,7 +114,7 @@ public abstract class GerenciadorDeArquivos {
                 texto += " " + log + "\n";
             }
         }
-        
+
         return texto;
     }
 }

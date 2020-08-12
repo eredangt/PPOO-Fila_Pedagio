@@ -10,52 +10,28 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 ---------------------------------------------------------------------------------
 */
 
+import java.util.Random;
+
 /**
 * Classe que representa o atendimento por Funcionário no pedágio.
 * Sendo uma subclasse de Atendimento.
 */
 public class Funcionario extends Atendimento {
-	private static int numeroFuncionarios = 0;
-	private int idFuncionario;
-
 	/**
-	* Construtor incrementa o contador de Funcionários e
-	* define os IDs para cada funcionário a partir desse valor.
-	* @param tempo atendimento double que define um tempo base
+	* Construtor da classe Funcionario.
+	* @param tempoAtendimento inteiro que define um tempo base
 	* para as operações naquele tipo de atendimento.
 	*/
-	public Funcionario(double tempoAtendimento) {
+	public Funcionario(int tempoAtendimento) {
 		super(tempoAtendimento);
-
-		numeroFuncionarios += 1;
-		idFuncionario = numeroFuncionarios;
 	}
 
 	/**
-	* Método utilizado apenas para fins de debug.
-	* @return String - uma cadeia de caracteres formatada
-	* com os atributos da classe.
+	* Método que retorna o tempo de operação daquele atendimento.
+	* @return int - contendo o número o tempo.
 	*/
 	@Override
-	public String toString() {
-		return super.toString() + "Identificação Funcionário: " + getIdFuncionario() + "\n";
-	}
-
-	/**
-	* Método que informa o identificador único de um funcionário.
-	* @return int - contendo o número que representa o ID.
-	*/
-	protected int getIdFuncionario() {
-		return idFuncionario;
-	}
-
-	/**
-	* Método que informa quantos objetos da classe Funcionario
-	* foram instanciados.
-	* @return int - contendo o número que representa
-	* quantos funcionario existem no sistema até o momento.
-	*/
-	protected int getNumeroFuncionarios() {
-		return numeroFuncionarios;
+	public int getTempoAtendimento() {
+		return super.getTempoAtendimento() * (1 + Random.nextInt(10) / 10);
 	}
 }

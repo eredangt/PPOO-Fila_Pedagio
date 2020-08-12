@@ -12,16 +12,19 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 
 /**
 * Classe que representa a saída de um veículo do pedágio.
+* Ela desenfileira o veículo da fila de uma cabine.
+* Sendo ela uma subclasse da classe Evento.
 */
 public class Saida extends Evento {
 
-    /*
+    /**
      * Construtor da classe Saida.
-     * @param tempoEvento tempo final do evento.
-     * @param cabine a qual o veiculo está.
+     * @param tempoEvento tempo do evento.
+     * @param idCabine inteiro identificando a cabine que será relacionado
+     * com o evento.
      */
     public Saida(int tempoEvento, int idCabine) {
         super(tempoEvento);
-        this.idCabine = idCabine;
+        super.setIdCabine(idCabine);
     }
 }

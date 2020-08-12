@@ -19,8 +19,10 @@ class VeiculoLeve extends Veiculo {
 	private boolean reboque;
 
 	/**
-	* @param automatico booleano que define se um veículo é
-	* automatico no atendimento da fila.
+	 * Construtor da subclasse VeiculoLeve herda da classe Veiculo
+	 * e atribui um booleano indicando se o veículo possui reboque ou não.
+	 * @param automatico booleano que define se um veículo é
+	 * automatico no atendimento da fila.
      * @param reboque booleano que define se um veículo
      * possui reboque ou não.
      */
@@ -39,7 +41,7 @@ class VeiculoLeve extends Veiculo {
 	}
 
 	/**
-     * Método que informa o valor de tarifa de reboque utilizado pelo pedágio.
+     * Método que retorna o valor de tarifa de reboque utilizado pelo pedágio.
      * @return double - contendo o valor da tarifa de reboque do pedágio.
      */
      public static double getTarifaReboque() {
@@ -47,22 +49,12 @@ class VeiculoLeve extends Veiculo {
 	 }
 
     /**
-     * Método que informa se um veículo possui reboque ou não.
+     * Método que retorna se um veículo possui reboque ou não.
      * @return boolean - true se o veículo possuir reboque
      * ou false caso contrário.
      */
 	public boolean getReboque() {
 		return reboque;
-	}
-
-    /**
-     * Método utilizado apenas para fins de debug.
-     * @return String - uma cadeia de caracteres formatada
-     * com os atributos da classe.
-     */
-	@Override
-	public String toString() {
-		return String.format("%s\nReboque: %s\n", super.toString(), ( getReboque() ) ? "Sim" : "Não");
 	}
 
 	/**

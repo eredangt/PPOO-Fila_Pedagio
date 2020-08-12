@@ -10,6 +10,9 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 ---------------------------------------------------------------------------------
 */
 
+/**
+* Classe Principal que instancia o simulador de eventos e inicia sua simulação.
+*/
 public class Principal {
 	public static void main(String[] args) {
 		Simulador pedagio = new Simulador();

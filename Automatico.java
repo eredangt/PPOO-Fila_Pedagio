@@ -10,52 +10,28 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 ---------------------------------------------------------------------------------
 */
 
+import java.util.Random;
+
 /**
 * Classe que representa o atendimento por Cobrança Automática no pedágio.
 * Sendo uma subclasse de Atendimento.
 */
 public class Automatico extends Atendimento {
-	private static int numeroAutomaticos = 0;
-	private int idAutomatico;
-
 	/**
-	* Construtor incrementa o contador de Cobrança Automática e
-	* define os IDs para cada cobrança automática a partir desse valor.
-	* @param tempo atendimento double que define um tempo base
+	* Construtor da classe Automática.
+	* @param tempoAtendimento int que define um tempo base
 	* para as operações naquele tipo de atendimento.
 	*/
-	public Automatico(double tempoAtendimento) {
+	public Automatico(int tempoAtendimento) {
 		super(tempoAtendimento);
-
-		numeroAutomaticos += 1;
-		idAutomatico = numeroAutomaticos;
 	}
 
 	/**
-	* Método utilizado apenas para fins de debug.
-	* @return String - uma cadeia de caracteres formatada
-	* com os atributos da classe.
+	* Método que retorna o tempo de operação daquele atendimento.
+	* @return int - contendo o número o tempo.
 	*/
 	@Override
-	public String toString() {
-		return super.toString() + "Identificação Cobrança Automática: " + getIdAutomatico() + "\n";
-	}
-
-	/**
-	* Método que informa o identificador único de uma cobrança automática.
-	* @return int - contendo o número que representa o ID.
-	*/
-	protected int getIdAutomatico() {
-		return idAutomatico;
-	}
-
-	/**
-	* Método que informa quantos objetos da classe Automatico
-	* foram instanciados.
-	* @return int - contendo o número que representa
-	* quantas cobranças automáticas existem no sistema até o momento.
-	*/
-	protected int getNumeroAutomaticos() {
-		return numeroAutomaticos;
+	public int getTempoAtendimento() {
+		return super.getTempoAtendimento() * (1 + Random.nextInt(10) / 20);
 	}
 }

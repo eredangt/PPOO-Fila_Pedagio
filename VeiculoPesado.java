@@ -18,8 +18,9 @@ class VeiculoPesado extends Veiculo {
 	private int numEixos;
 
 	/**
-	* @param automatico booleano que define se um veículo é
-	* automatico no atendimento da fila.
+	 * Construtor da subclasse VeiculoPesado herda da classe Veiculo.
+	 * @param automatico booleano que define se um veículo é
+	 * automatico no atendimento da fila.
      * @param numEixos inteiro que define quantos eixos tem
      * um veículo pesado.
      */
@@ -35,16 +36,6 @@ class VeiculoPesado extends Veiculo {
      */
 	public int getNumEixos() {
 		return numEixos;
-	}
-
-    /**
-     * Método utilizado apenas para fins de debug.
-     * @return String - uma cadeia de caracteres formatada
-     * com os atributos da classe.
-     */
-	@Override
-	public String toString() {
-		return String.format("%s\nNúmero de Eixos: %d\n", super.toString(), getNumEixos());
 	}
 
 	/**
