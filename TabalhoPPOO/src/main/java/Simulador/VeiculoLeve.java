@@ -10,6 +10,8 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 ---------------------------------------------------------------------------------
 */
 
+package Simulador;
+
 /**
  * Classe que representa um veículo leve em uma fila de pedágio.
  * Sendo também uma subclasse de Veículo.

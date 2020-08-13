@@ -10,6 +10,8 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 ---------------------------------------------------------------------------------
 */
 
+package Simulador;
+
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.FileWriter;

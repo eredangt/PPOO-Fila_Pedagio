@@ -10,18 +10,12 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 ---------------------------------------------------------------------------------
 */
 
-/**
-* Classe Principal que instancia o simulador de eventos e inicia sua simulação.
-*/
+package Plotador;
+
 public class Principal {
 	public static void main(String[] args) {
-		Simulador pedagio = new Simulador();
-
-		try {
-			pedagio.iniciarSimulacao();
-		}
-		catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+		JanelaGraficos janela = new JanelaGraficos("estatisticas.csv");
+		
+		janela.exibir();
 	}
 }

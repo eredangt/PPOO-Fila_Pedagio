@@ -64,7 +64,7 @@ veiculo,leve,true,true
 veiculo,leve,true,false
 veiculo,pesado,true,3
 veiculo,pesado,false,4
-atendimento,automatico,3.75
-atendimento,automatico,1.6
+atendimento,automatico,3
+atendimento,automatico,1
 atendimento,funcionario,5
 atendimento,funcionario,5

@@ -10,6 +10,8 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 ---------------------------------------------------------------------------------
 */
 
+package Simulador;
+
 /**
  * Classe que representa um veículo em uma fila de pedágio.
  * Ela gera um Identificador único para cada veículo e

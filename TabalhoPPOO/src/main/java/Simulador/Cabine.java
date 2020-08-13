@@ -10,6 +10,8 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 ---------------------------------------------------------------------------------
 */
 
+package Simulador;
+
 import java.util.Set;
 import java.util.HashMap;
 import java.util.Queue;
