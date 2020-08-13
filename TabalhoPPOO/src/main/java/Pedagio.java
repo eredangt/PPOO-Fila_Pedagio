@@ -13,6 +13,11 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 import Simulador.Simulador;
 import Plotador.JanelaGraficos;
 
+/**
+ * Classe que instancia o Simulador de Eventos e inicia sua simulação.
+ * Também instancia e exibe a janela contendo os gráficos com as
+ * estatisticas.
+ */
 public class Pedagio {
 	public static void main(String[] args) {
 		Simulador pedagio = new Simulador();
@@ -23,9 +28,9 @@ public class Pedagio {
 		catch (Exception e) {
 			System.out.println(e.getMessage());
         }
-        
+
 		JanelaGraficos janela = new JanelaGraficos("estatisticas.csv");
-		
+
 		janela.exibir();
 	}
 }

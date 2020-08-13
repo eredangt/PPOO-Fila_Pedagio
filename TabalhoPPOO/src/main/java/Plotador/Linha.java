@@ -16,17 +16,32 @@ import java.util.ArrayList;
 
 import org.jfree.data.xy.XYSeries;
 
+/**
+ * Classe responsável por criar uma linha de representação no gráfico.
+ */
 public class Linha {
 	private ArrayList<Integer> valoresEixoY;
-	
+
+	/**
+	 * Construtor da classe Linha, instancia uma lista.
+	 */
 	public Linha() {
 		valoresEixoY = new ArrayList<Integer>();
 	}
-	
+
+	/**
+	 * Método que adiciona um valor ao eixo Y.
+	 * @param valor que será inserido no eixo Y.
+	 */
 	public void addValor(int valor) {
 		valoresEixoY.add(valor);
 	}
-	
+
+	/**
+	 * Método que retorna uma linha do gráfico contendo cada ponto (X,Y).
+	 * @param nome String que representa a legenda do gráfico.
+	 * @return XYSeries - linha contendo cada ponto (X,Y).
+	 */
 	public XYSeries creatXYSeries(String nome) {
 		XYSeries linha = new XYSeries(nome);
 		int tamanho = valoresEixoY.size();
@@ -34,7 +49,7 @@ public class Linha {
 			int valor = valoresEixoY.remove(0);
 			linha.add(x, valor);
 		}
-		
+
 		return linha;
 	}
 }

@@ -13,9 +13,13 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 package Simulador;
 
 /**
-* Classe Principal que instancia o simulador de eventos e inicia sua simulação.
+* Classe Principal que instancia o Simulador de Eventos e inicia sua simulação.
 */
 public class Principal {
+
+	/**
+	 * Método que inicia a simulação da fila de pedágio.
+	 */
 	public static void main(String[] args) {
 		Simulador pedagio = new Simulador();
 

@@ -12,10 +12,19 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 
 package Plotador;
 
+/**
+ * Classe que instancia e exibe a janela contendo os gráficos com as
+ * estatisticas.
+ */
 public class Principal {
+
+	/**
+	 * Método que inicia a criação do gráfico através das estatísticas coletadas
+	 * na Fila de Pedágio.
+	 */
 	public static void main(String[] args) {
 		JanelaGraficos janela = new JanelaGraficos("estatisticas.csv");
-		
+
 		janela.exibir();
 	}
 }

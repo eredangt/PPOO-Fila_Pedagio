@@ -20,15 +20,28 @@ import java.util.HashMap;
 
 import org.jfree.chart.JFreeChart;
 
+/**
+ * Classe responsável por gerenciar os gráficos, inicializando seus dados
+ * e os retornando quando solicitados.
+ */
 public class GerenciadorDeGraficos {
 	private String nomeArquivo;
 	private HashMap<String, Grafico> graficos;
-	
+
+	/**
+	 * Construtor da classe GerenciadorDeGraficos.
+	 * @param nomeArquivo nome do arquivo com os dados dos gráficos.
+	 */
 	public GerenciadorDeGraficos(String nomeArquivo) {
 		this.nomeArquivo = nomeArquivo;
 		graficos = new HashMap<String, Grafico>();
 	}
-	
+
+	/**
+	 * Método que cria e armazena todos os gráficos inicializados, e retorna
+	 * a lista que os armazena.
+	 * @return ArrayList - lista contendo os gráficos já inicializados.
+	 */
 	public ArrayList<JFreeChart> getGraficos() {
 		inicializarDadosGraficos();
 		ArrayList<JFreeChart> graficos = new ArrayList<JFreeChart>();
@@ -38,20 +51,39 @@ public class GerenciadorDeGraficos {
 			Grafico grafico = this.graficos.remove(titulo);
 			graficos.add(grafico.creatJFreeChart(titulo));
 		}
-		
+
 		return graficos;
 	}
-	
+
+	/**
+	 * Método que adiciona um novo gráfico. Caso seu título não tenha sido
+	 * utilizado por outro gráfico, então é acrescentado, contendo uma legenda
+	 * para o eixo X e Y.
+	 * @param titulo String que representa o titulo do grafico.
+	 * @param labelX String que representa a legenda do eixo X.
+	 * @param labelY String que representa a legenda do eixo Y.
+	 */
 	private void addGrafico(String titulo, String labelX, String labelY) {
 		if (!graficos.containsKey(titulo))
 			graficos.put(titulo, new Grafico(labelX, labelY));
 	}
-	
+
+	/**
+	 * Método que adiciona um valor no eixo Y de uma linha do gráfico, caso
+	 * exista um gráfico com este título.
+	 * @param titulo String que representa o título do grafico.
+	 * @param nome String que representa o nome de uma linha do gráfico.
+	 * @param valor número inteiro que representa um valor do eixo Y.
+	 */
 	private void addValorGrafico(String titulo, String nome, int valor) {
 		if (graficos.containsKey(titulo))
 			graficos.get(titulo).addValorLinha(nome, valor);
 	}
-	
+
+	/**
+	 * Método que faz a leitura do arquivo texto.
+	 * @return ArrayList - os dados lidos do arquivo.
+	 */
 	private ArrayList<String[]> lerDadosDoArquivo() {
 		try (BufferedReader br = new BufferedReader(new FileReader(nomeArquivo))) {
 			ArrayList<String[]> dados = new ArrayList<String[]>();
@@ -61,15 +93,18 @@ public class GerenciadorDeGraficos {
 
 				linha = br.readLine();
 			}
-			
+
 			return dados;
 		} catch (Exception e) {
 			e.printStackTrace();
-			
-			throw new RuntimeException("Diretorio de trabalho: " + System.getProperty("user.dir"));
+
+			throw new RuntimeException("Diretório de trabalho: " + System.getProperty("user.dir"));
 		}
 	}
-	
+
+	/**
+	 * Método que inicializa os dados dos gráficos.
+	 */
 	private void inicializarDadosGraficos() {
 		ArrayList<String[]> dados = lerDadosDoArquivo();
 		String labelX = null,
@@ -77,11 +112,11 @@ public class GerenciadorDeGraficos {
 		   	   labelY[] = null,
 			   titulo[] = null;
 		int tamanho;
-		
+
 		for (String[] campos: dados) {
 			try {
 				Integer.parseInt(campos[0]);
-				
+
 				tamanho = campos.length - 1;
 				for (int i = 0; i < tamanho; i ++) {
 					addValorGrafico(titulo[i], nome, Integer.parseInt(campos[i + 1]));
@@ -94,7 +129,7 @@ public class GerenciadorDeGraficos {
 					titulo = null;
 					nome = null;
 				}
-				
+
 				if (nome == null) {
 					nome = campos[0];
 					for (int i = 1; i < campos.length; i ++) {
@@ -103,7 +138,7 @@ public class GerenciadorDeGraficos {
 				}
 				else if (titulo == null) {
 					tamanho = campos.length - 1;
-					
+
 					labelX = campos[0];
 					labelY = new String[tamanho];
 					titulo = new String[tamanho];

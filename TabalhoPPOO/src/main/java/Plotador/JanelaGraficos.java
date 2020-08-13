@@ -27,15 +27,26 @@ import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 
+
+/**
+* Classe responsável pela construção e exibição da janela, a qual conterá
+* os gráficos.
+*/
 public class JanelaGraficos {
 	private JFrame janela;
-	
+
+	/**
+	* Construtor da classe JanelaGraficos.
+	*/
 	public JanelaGraficos(String nomeArquivo) {
 		janela = new JFrame();
-		
+
 		montarJanela(new GerenciadorDeGraficos(nomeArquivo).getGraficos());
 	}
-	
+
+	/**
+	 * Método que exibe a janela que contém os gráficos.
+	 */
 	public void exibir() {
 		janela.setSize(1280, 720);
 		janela.pack();
@@ -43,11 +54,15 @@ public class JanelaGraficos {
 		janela.setDefaultCloseOperation(ChartFrame.EXIT_ON_CLOSE);
 		janela.setVisible(true);
 	}
-	
+
+	/**
+	 * Método que renderiza um gráfico definindo fatores visuais.
+	 * @param grafico contendo as estatísticas gerados pela simulação.
+	 */
 	private void inicializaGrafico(JFreeChart grafico) {
 		XYPlot plot = grafico.getXYPlot();
 		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-		
+
 		plot.setRenderer(renderer);
 		plot.setBackgroundPaint(Color.white);
 		plot.setForegroundAlpha(0.9f);
@@ -58,7 +73,12 @@ public class JanelaGraficos {
 
 		grafico.getLegend().setFrame(BlockBorder.NONE);
 	}
-	
+
+	/**
+	 * Método que monta a janela que conterá os gráficos, definindo o layout
+	 * da mesma.
+	 * @param graficos lista contendo os gráficos.
+	 */
 	private void montarJanela(ArrayList<JFreeChart> graficos) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 0));
@@ -69,7 +89,7 @@ public class JanelaGraficos {
 			inicializaGrafico(grafico);
 			panel.add(new ChartPanel(grafico));
 		}
-		
+
 		janela.getContentPane().add(jScrollPane);
 	}
 }
