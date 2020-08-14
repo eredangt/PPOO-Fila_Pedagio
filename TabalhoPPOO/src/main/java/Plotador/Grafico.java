@@ -44,9 +44,9 @@ public class Grafico {
 	 * Método que adiciona um valor no eixo X de uma linha do gráfico.
 	 * Se o grafico não possuir uma linha com este nome, ela é criada.
 	 * @param nome String que representa o nome da linha.
-	 * @param valor inteiro que representa o eixo Y.
+	 * @param valor flutuante que representa o eixo Y.
 	 */
-	public void addValorLinha(String nome, int valor) {
+	public void addValorLinha(String nome, double valor) {
 		if (!linhas.containsKey(nome))
 			putLinha(nome);
 

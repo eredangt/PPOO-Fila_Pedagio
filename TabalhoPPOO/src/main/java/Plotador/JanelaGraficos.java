@@ -37,6 +37,7 @@ public class JanelaGraficos {
 
 	/**
 	* Construtor da classe JanelaGraficos.
+	* @param nomeArquivo nome do arquivo com os dados de entrada.
 	*/
 	public JanelaGraficos(String nomeArquivo) {
 		janela = new JFrame();

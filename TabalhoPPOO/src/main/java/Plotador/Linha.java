@@ -20,20 +20,20 @@ import org.jfree.data.xy.XYSeries;
  * Classe responsável por criar uma linha de representação no gráfico.
  */
 public class Linha {
-	private ArrayList<Integer> valoresEixoY;
+	private ArrayList<Double> valoresEixoY;
 
 	/**
 	 * Construtor da classe Linha, instancia uma lista.
 	 */
 	public Linha() {
-		valoresEixoY = new ArrayList<Integer>();
+		valoresEixoY = new ArrayList<Double>();
 	}
 
 	/**
 	 * Método que adiciona um valor ao eixo Y.
 	 * @param valor que será inserido no eixo Y.
 	 */
-	public void addValor(int valor) {
+	public void addValor(double valor) {
 		valoresEixoY.add(valor);
 	}
 
@@ -46,7 +46,7 @@ public class Linha {
 		XYSeries linha = new XYSeries(nome);
 		int tamanho = valoresEixoY.size();
 		for (int x = 0; x < tamanho; x ++) {
-			int valor = valoresEixoY.remove(0);
+			double valor = valoresEixoY.remove(0);
 			linha.add(x, valor);
 		}
 

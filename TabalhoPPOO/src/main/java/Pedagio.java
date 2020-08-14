@@ -20,7 +20,10 @@ import Plotador.JanelaGraficos;
  */
 public class Pedagio {
 	public static void main(String[] args) {
-		Simulador pedagio = new Simulador();
+        String nomeArquivoEntrada = "dadosEntrada.txt";
+		String nomeArquivosSaida = "estatisticas";
+		
+		Simulador pedagio = new Simulador(nomeArquivoEntrada, nomeArquivosSaida);
 
 		try {
 			pedagio.iniciarSimulacao();
@@ -29,7 +32,7 @@ public class Pedagio {
 			System.out.println(e.getMessage());
         }
 
-		JanelaGraficos janela = new JanelaGraficos("estatisticas.csv");
+		JanelaGraficos janela = new JanelaGraficos(nomeArquivosSaida + ".csv");
 
 		janela.exibir();
 	}

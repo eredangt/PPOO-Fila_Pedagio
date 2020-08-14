@@ -47,11 +47,6 @@ class VeiculoPesado extends Veiculo {
 	 */
 	@Override
 	public double calcularTarifa() {
-		if(getAutomatico()) {
-			return 0d;
-		}
-		else{
-			return getTarifaFixa() + (getNumEixos() * getTarifaFixa() * 0.6);
-		}
+		return getTarifaFixa() + (getNumEixos() * getTarifaFixa() * 0.6);
 	}
 }

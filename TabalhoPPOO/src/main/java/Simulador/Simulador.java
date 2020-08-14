@@ -44,14 +44,18 @@ public class Simulador {
     /**
     * Construtor cria as listas de: Lista Cabines, Lista Veículos,
     * Lista Atendimentos e, cria a Fila de Eventos.
-    * Incializo os atributos da classe com o valor 0.
+    * Incializa os atributos da classe com o valor 0.
     * Além de nomear o Arquivo de Entrada.
+    * @param nomeArquivoEntrada nome do arquivo texto com os dados
+    * de entrada.
+    * @param nomeArquivosSaida nome do arquivo texto que conterá as
+    * estatísticas. Um ".txt" e outro ".csv".
     */
-    public Simulador() {
+    public Simulador(String nomeArquivoEntrada, String nomeArquivosSaida) {
         numeroEventosTratados = 0;
         tempoTotalSimulado = 0;
-        nomeArquivoEntrada = "dadosEntrada.txt";
-        nomeArquivosSaida = "estatisticas";
+        this.nomeArquivoEntrada = nomeArquivoEntrada;
+        this.nomeArquivosSaida = nomeArquivosSaida;
         filaEventos = new PriorityQueue<Evento>();
         temposEventos = new LinkedHashSet<Integer>();
         cabines = new HashMap<Integer, Cabine>();
@@ -62,24 +66,8 @@ public class Simulador {
                        "Tempo médio de espera geral dos veiculos pesados," +
                        "Tempo médio de espera geral dos veiculos," +
                        "Tamanho médio geral das filas," +
-                       "Tamanho maxímo da maior fila\n";
-    }
-
-    /**
-    * Método que concatena as estatisticas do simulador em certo tempo de
-    * execução. Serve também, para debugar os dados, também será utilizada
-    *  no arquivo texto.
-    * @param tempo instante de tempo da execução.
-    */
-    private void concatenarEstatisticas(int tempo) {
-        int TMGVL, TMGVP, TMGV, TMedF, TMaxF;
-        TMGVL = getTempoMedioEsperaGeral(0, "Leve"); // Tempo médio de espera geral dos veiculos leves
-        TMGVP = getTempoMedioEsperaGeral(0, "Pesado"); // Tempo médio de espera geral dos veiculos pesados
-        TMGV = getTempoMedioEsperaGeral(0, "Total"); // Tempo médio de espera geral dos veiculos
-        TMedF = getTamanhoMedioFilaGeral(0); // Tamanho médio geral das filas
-        TMaxF = getTamanhoMaiorFila(0); // Tamanho maxímo da maior fila
-
-        estatisticas += String.format("%d,%d,%d,%d,%d,%d\n", tempo, TMGVL, TMGVP, TMGV, TMedF, TMaxF);
+                       "Tamanho maxímo da maior fila," +
+                       "Valor total ganho geral das cabines\n";
     }
 
     /**
@@ -251,6 +239,34 @@ public class Simulador {
     }
 
     /**
+    * Método que concatena as estatisticas do simulador em certo tempo de
+    * execução. Serve também, para debugar os dados, também será utilizada
+    *  no arquivo texto.
+    * @param tempo instante de tempo da execução.
+    */
+    private void concatenarEstatisticas(int tempo) {
+        double TMGVL, TMGVP, TMGV, TMedF, TMaxF, VTGGC;
+
+        TMGVL = getTempoMedioEsperaGeral(0, "Leve"); // Tempo médio de espera geral dos veiculos leves
+        TMGVP = getTempoMedioEsperaGeral(0, "Pesado"); // Tempo médio de espera geral dos veiculos pesados
+        TMGV = getTempoMedioEsperaGeral(0, "Total"); // Tempo médio de espera geral dos veiculos
+        TMedF = getTamanhoMedioFilaGeral(0); // Tamanho médio geral das filas
+        TMaxF = getTamanhoMaiorFila(0); // Tamanho maxímo da maior fila
+        VTGGC = getValorTotalGanhoGeral(); // Valor total ganho geral das cabines
+
+        estatisticas += String.format(
+            "%s,%s,%s,%s,%s,%s,%s\n",
+            Double.toString(tempo),
+            Double.toString(TMGVL),
+            Double.toString(TMGVP),
+            Double.toString(TMGV),
+            Double.toString(TMedF),
+            Double.toString(TMaxF),
+            Double.toString(VTGGC)
+        );
+    }
+
+    /**
      * Método que retorna o total de eventos tratados.
      * @return int - contendo o número de eventos tratados.
      */
@@ -364,34 +380,20 @@ public class Simulador {
     }
 
     /**
-    * Método que retorna o valor total ganho por uma cabine específica
-    * ou pelo pedágio no geral, dependendo do ID que recebe como
-    * parâmetro, sendo o ID 0(zero) que referencia todas as cabines.
-    * @param idCabine ID da cabine a ser considerada, caso seja o
-    * o valor 0, irá considerar todas as cabines juntas.
-    * @return double - valor que representa o total ganho por uma cabine
-    * específica ou pelo pedágio no geral.
+    * Método que retorna o valor total ganho geral do pedágio,
+    * referencia todas as cabines.
+    * @return double - valor que representa o total ganho geral do pedágio.
     */
-    private double getValorTotalGanhoGeral(int idCabine) {
+    private double getValorTotalGanhoGeral() {
         Cabine cabineAtual = null;
-        if (idCabine == 0) {
-            double somatorioTotal = 0d;
-            for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
-                cabineAtual = cabine.getValue();
-                somatorioTotal += cabineAtual.getValorTotalGanho();
-            }
-            return somatorioTotal;
+
+        double somatorioTotal = 0d;
+        for (Map.Entry<Integer, Cabine> cabine : cabines.entrySet()) {
+            cabineAtual = cabine.getValue();
+            somatorioTotal += cabineAtual.getValorTotalGanho();
         }
-        else {
-            try {
-                cabineAtual = cabines.get(idCabine);
-                return cabineAtual.getValorTotalGanho();
-            }
-            catch (Exception e) {
-                System.out.println("Cabine inexistente!");
-                return -1;
-            }
-        }
+
+        return somatorioTotal;
     }
 
     /**

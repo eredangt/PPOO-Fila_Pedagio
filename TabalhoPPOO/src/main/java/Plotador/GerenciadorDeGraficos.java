@@ -73,9 +73,9 @@ public class GerenciadorDeGraficos {
 	 * exista um gráfico com este título.
 	 * @param titulo String que representa o título do grafico.
 	 * @param nome String que representa o nome de uma linha do gráfico.
-	 * @param valor número inteiro que representa um valor do eixo Y.
+	 * @param valor número flutuante que representa um valor do eixo Y.
 	 */
-	private void addValorGrafico(String titulo, String nome, int valor) {
+	private void addValorGrafico(String titulo, String nome, double valor) {
 		if (graficos.containsKey(titulo))
 			graficos.get(titulo).addValorLinha(nome, valor);
 	}
@@ -115,11 +115,11 @@ public class GerenciadorDeGraficos {
 
 		for (String[] campos: dados) {
 			try {
-				Integer.parseInt(campos[0]);
+				Double.parseDouble(campos[0]);
 
 				tamanho = campos.length - 1;
 				for (int i = 0; i < tamanho; i ++) {
-					addValorGrafico(titulo[i], nome, Integer.parseInt(campos[i + 1]));
+					addValorGrafico(titulo[i], nome, Double.parseDouble(campos[i + 1]));
 				}
 			}
 			catch (Exception e) {

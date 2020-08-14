@@ -57,7 +57,8 @@ public class Cabine {
                        "Tempo médio de espera dos veículos pesados," +
                        "Tempo médio de espera dos veículos," +
                        "Tamanho médio da fila da cabine," +
-                       "Tamanho máximo da fila da cabine\n";
+                       "Tamanho máximo da fila da cabine," +
+                       "Valor total ganho por uma cabine\n";
     }
 
     /**
@@ -68,18 +69,29 @@ public class Cabine {
      * - Tempo médio de espera dos veículos.
      * - Tamanho médio da fila da cabine.
      * - Tamanho máximo da fila da cabine.
+     * - Valor total ganho por uma cabine.
      * @param tempo inteiro que representa o tempo atual da execução.
      */
     public void concatenarEstatisticas(int tempo) {
-        int TMVL, TMVP, TMV, TMedFC, TMaxFC;
+        double TMVL, TMVP, TMV, TMedFC, TMaxFC, VTGPUC;
 
         TMVL = getMediaTempoEspera("Leve"); // Tempo médio de espera dos veículos leves
         TMVP = getMediaTempoEspera("Pesado"); // Tempo médio de espera dos veículos pesados
         TMV = getMediaTempoEspera("Total"); // Tempo médio de espera dos veículos
         TMedFC = getTamanhoMedioFila(); // Tamanho médio da fila da cabine
         TMaxFC = getTamanhoMaxFila(); // Tamanho máximo da fila da cabine
+        VTGPUC = getValorTotalGanho(); // Valor total ganho por uma cabine
 
-        estatisticas += String.format("%d,%d,%d,%d,%d,%d\n", tempo, TMVL, TMVP, TMV, TMedFC, TMaxFC);
+        estatisticas += String.format(
+            "%s,%s,%s,%s,%s,%s,%s\n",
+            Double.toString(tempo),
+            Double.toString(TMVL),
+            Double.toString(TMVP),
+            Double.toString(TMV),
+            Double.toString(TMedFC),
+            Double.toString(TMaxFC),
+            Double.toString(VTGPUC)
+        );
     }
 
     /**

@@ -66,10 +66,7 @@ class VeiculoLeve extends Veiculo {
 	 */
 	@Override
 	public double calcularTarifa() {
-		if(getAutomatico()) {
-			return 0d;
-		}
-		else if(getReboque()) {
+		if(getReboque()) {
 			return getTarifaFixa() + getTarifaReboque();
 		}
 		else {
