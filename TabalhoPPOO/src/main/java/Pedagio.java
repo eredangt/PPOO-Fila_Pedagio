@@ -10,6 +10,7 @@ Trabalho Prático - Práticas de Programação Orientada a Objetos - GCC178 - 20
 ---------------------------------------------------------------------------------
 */
 
+import Simulador.GerenciadorDeDados;
 import Simulador.Simulador;
 import Plotador.JanelaGraficos;
 
@@ -26,6 +27,7 @@ public class Pedagio {
 		Simulador pedagio = new Simulador(nomeArquivoEntrada, nomeArquivosSaida);
 
 		try {
+			GerenciadorDeDados.gerarArquivoDeFormatacao();
 			pedagio.iniciarSimulacao();
 		}
 		catch (Exception e) {
